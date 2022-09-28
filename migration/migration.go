@@ -1,11 +1,11 @@
 package migration
 
-// import (
-// 	userModel "rozhok/features/user/data"
+import (
+	clientModel "rozhok/features/client/data"
 
-// 	"gorm.io/gorm"
-// )
+	"gorm.io/gorm"
+)
 
-// func InitMigrate(db *gorm.DB) {
-// 	db.AutoMigrate(&userModel.User{})
-// }
+func InitMigrate(db *gorm.DB) {
+	db.AutoMigrate(&clientModel.Client{})
+}
