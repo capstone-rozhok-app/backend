@@ -25,6 +25,5 @@ func main() {
 	}))
 	migration.InitMigrate(db)
 	factory.InitFactory(e, db)
-
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", cfg.SERVER_PORT)))
 }
