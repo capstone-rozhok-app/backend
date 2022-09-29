@@ -35,20 +35,25 @@ func (usecase *clientUsecase) PutClient(newData client.Core, id int) (int, error
 func (usecase *clientUsecase) LoginAuthorized(email, password string) (string, string, string) {
 
 	if email == "" || password == "" {
-		return "please input email and password", "", ""
+		return "email dan password tidak boleh kosong", "", ""
 	}
 
 	results, errEmail := usecase.clientData.LoginClient(email)
 	if errEmail != nil {
-		return "email not found", "", ""
+		return "email tidak ditemukan", "", ""
 	}
 
 	token, errToken := middlewares.CreateToken(int(results.ID), results.Role, "") // coba
 
 	if errToken != nil {
-		return "error to created token", "", ""
+		return "gagal membuat token", "", ""
 	}
 
 	return token, results.Role, results.Username
 
+}
+
+func (usecase *clientUsecase) DeleteClient(id int) (int, error) {
+	row, err := usecase.clientData.DeleteDataClient(id)
+	return row, err
 }
