@@ -20,7 +20,6 @@ func New(e *echo.Echo, usecase client.UsecaseInterface) {
 	e.POST("/register/client", handler.PostClient)
 	e.PUT("client", handler.UpdateClient, middlewares.JWTMiddleware())
 	e.DELETE("client", handler.DeleteAkun, middlewares.JWTMiddleware())
-	e.POST("/login/client", handler.Auth)
 }
 
 func (deliv *Delivery) PostClient(c echo.Context) error {
@@ -69,23 +68,4 @@ func (deliv *Delivery) DeleteAkun(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal menghapus akun"))
 	}
 	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Berhasil menghapus akun"))
-}
-
-func (deliv *Delivery) Auth(c echo.Context) error {
-
-	var req AuthRequest
-	errBind := c.Bind(&req)
-	if errBind != nil {
-		return c.JSON(400, helper.FailedResponseHelper("wrong request"))
-	}
-
-	str, role, username := deliv.clientUsecase.LoginAuthorized(req.Email, req.Password)
-	if str == "email dan password tidak boleh kosong" || str == "email tidak ditemukan" || str == "password salah" {
-		return c.JSON(400, helper.FailedResponseHelper(str))
-	} else if str == "failed to created token" {
-		return c.JSON(500, helper.FailedResponseHelper(str))
-	} else {
-		return c.JSON(200, helper.SuccessDataResponseHelper("Berhasil masuk", fromLoginCore(str, role, username)))
-	}
-
 }
