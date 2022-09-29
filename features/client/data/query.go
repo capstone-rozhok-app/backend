@@ -30,7 +30,7 @@ func (repo *clientData) InsertClient(client client.Core) (int, error) {
 
 func (repo *clientData) LoginClient(email string) (client.Core, error) {
 
-	var data Client
+	var data User
 	txEmail := repo.db.Where("email = ?", email).First(&data)
 	if txEmail.Error != nil {
 		return client.Core{}, txEmail.Error
@@ -47,7 +47,7 @@ func (repo *clientData) LoginClient(email string) (client.Core, error) {
 }
 
 func (repo *clientData) UpdateClient(data client.Core, id int) (row int, err error) {
-	tx := repo.db.Model(&Client{}).Where("id = ?", id).Updates(fromCore(data))
+	tx := repo.db.Model(&User{}).Where("id = ?", id).Updates(fromCore(data))
 	if tx.Error != nil {
 		return -1, tx.Error
 	}
@@ -58,7 +58,7 @@ func (repo *clientData) UpdateClient(data client.Core, id int) (row int, err err
 }
 
 func (repo *clientData) DeleteDataClient(id int) (row int, err error) {
-	tx := repo.db.Delete(&Client{}, id)
+	tx := repo.db.Delete(&User{}, id)
 	if tx.Error != nil {
 		return -1, tx.Error
 	}
