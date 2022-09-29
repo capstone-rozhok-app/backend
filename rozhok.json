@@ -1,0 +1,4334 @@
+{
+    "openapi": "3.0.9",
+    "info": {
+        "title": "Capstone Rozhok App",
+        "version": "1.0.0",
+        "contact": {
+            "email": "none@gmail.com",
+            "name": "Project Capstone: Group 3"
+        },
+        "description": "Open Api specification for Capstone Project - Rozhok"
+    },
+    "servers": [
+        {
+            "url": "https://virtserver.swaggerhub.com/vizucode/capstone-rozhok/1.0.0",
+            "description": "SwaggerHub API Auto Mocking"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Login",
+            "description": "login endpoint"
+        },
+        {
+            "name": "Client",
+            "description": "Client endpoint"
+        },
+        {
+            "name": "Alamat",
+            "description": "Alamat endpoint"
+        },
+        {
+            "name": "Cart",
+            "description": "Cart Endpoint"
+        },
+        {
+            "name": "Payment",
+            "description": "Payment Endpoint"
+        },
+        {
+            "name": "Penjualan Client",
+            "description": "Penjualan Client Endpoint"
+        },
+        {
+            "name": "Transaksi Client",
+            "description": "Transaksi Client Endpoint"
+        },
+        {
+            "name": "Tagihan",
+            "description": "Tagihan Endpoint"
+        },
+        {
+            "name": "Pengambilan Rosok",
+            "description": "pengambilan Rosok Endpoint"
+        },
+        {
+            "name": "Transaksi Porter",
+            "description": "Transaksi Porter Endpoint"
+        },
+        {
+            "name": "Junk Station",
+            "description": "Junk Station Endpoint"
+        },
+        {
+            "name": "Junk Station Dashboard",
+            "description": "Junk Station Endpoint"
+        },
+        {
+            "name": "Pembelian Junk Station",
+            "description": "Pembelian Junk Station Endpoint"
+        },
+        {
+            "name": "Transaksi Junk Station",
+            "description": "Transaksi Junk Station Endpoint"
+        },
+        {
+            "name": "Admin Dashboard",
+            "description": "Admin Dashboard Endpoint"
+        },
+        {
+            "name": "kategori",
+            "description": "kategori Endpoint"
+        },
+        {
+            "name": "Porter",
+            "description": "Porter Endpoint"
+        },
+        {
+            "name": "Product",
+            "description": "Product Endpoint"
+        },
+        {
+            "name": "Kemitraan",
+            "description": "Kemitraan Endpoint"
+        },
+        {
+            "name": "Transaksi Admin",
+            "description": "Transaksi Admin Endpoint"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/loginRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/loginResponseSuccess"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/register/client": {
+            "post": {
+                "tags": [
+                    "Client"
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/registerClientRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/registerResponseSuccess"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/client": {
+            "get": {
+                "tags": [
+                    "Client"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseClientSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Client"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/updateClientRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/updateResponseSusccess"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Client"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/deleteResponseSusccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/alamats": {
+            "get": {
+                "description": "untuk get tidak perlu extrak token / validasi role",
+                "tags": [
+                    "Alamat"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseAlamatClientList"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/alamat": {
+            "post": {
+                "tags": [
+                    "Alamat"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/AlamatRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/createResponseSuccess"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/alamat/{alamat_id}": {
+            "put": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Alamat"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idAlamat"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/AlamatRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/updateResponseSusccess"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "get": {
+                "description": "untuk get tidak perlu extrak token / validasi role",
+                "tags": [
+                    "Alamat"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idAlamat"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseAlamatClient"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Alamat"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idAlamat"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/deleteResponseSusccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/carts": {
+            "get": {
+                "tags": [
+                    "Cart"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseCartList"
+                    }
+                }
+            }
+        },
+        "/cart": {
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/createCartRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/createResponseSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/cart/{cart_id}": {
+            "put": {
+                "tags": [
+                    "Cart"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idCart"
+                    }
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/putCartRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/updateResponseSusccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idCart"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/deleteResponseSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/payment": {
+            "post": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/createPaymentRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponsePayment"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/penjualan/client": {
+            "post": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Penjualan Client"
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/PenjualanClientRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/createResponseSuccess"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "get": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Penjualan Client"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponsePenjualanRosokClient"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/penjualan/client/{penjualan_id}": {
+            "put": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Penjualan Client"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idPenjualanClient"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/PenjualanClientRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/updateResponseSusccess"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Penjualan Client"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idPenjualanClient"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/deleteResponseSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/transaksi/client": {
+            "get": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Transaksi Client"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/filterTypeTransaksi"
+                    },
+                    {
+                        "$ref": "#/components/parameters/filterStatus"
+                    },
+                    {
+                        "$ref": "#/components/parameters/filterStartDate"
+                    },
+                    {
+                        "$ref": "#/components/parameters/filterEndDate"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseListTransaksiClient"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/transaksi/client/{transaction_id}/penjualan": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idTransaksi"
+                    }
+                ],
+                "tags": [
+                    "Transaksi Client"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseDetailTransaksiPenjualanClient"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/transaksi/client/{transaction_id}/pembelian": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idTransaksi"
+                    }
+                ],
+                "tags": [
+                    "Transaksi Client"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseDetailTransaksiPembelianClient"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/tagihan/{transaction_id}": {
+            "get": {
+                "tags": [
+                    "Tagihan"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idTransaksi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseTagihan"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/porter/dashboard": {
+            "get": {
+                "description": "Tidak perlu di ekstrak token dan validasi role",
+                "tags": [
+                    "Porter"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/filterDayMonthYear"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseDashboardPorter"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/pengambilan/porter": {
+            "get": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Pengambilan Rosok"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponsePenjualanPorterList"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Pengambilan Rosok"
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/pengambilanPorterRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/createResponseSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/pengambilan/porter/{penjualan_id}": {
+            "get": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Pengambilan Rosok"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idPenjualanClient"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponsePenjualanPorter"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/transaksi/porter": {
+            "get": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Transaksi Porter"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/filterTypeTransaksi"
+                    },
+                    {
+                        "$ref": "#/components/parameters/filterStatus"
+                    },
+                    {
+                        "$ref": "#/components/parameters/filterStartDate"
+                    },
+                    {
+                        "$ref": "#/components/parameters/filterEndDate"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseListTransaksiPorter"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/transaksi/porter/{transaction_id}/penjualan": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idTransaksi"
+                    }
+                ],
+                "tags": [
+                    "Transaksi Porter"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseDetailTransaksiPenjualanPorter"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/transaksi/porter/{transaction_id}/pembelian": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idTransaksi"
+                    }
+                ],
+                "tags": [
+                    "Transaksi Porter"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseDetailTransaksiPembelianPorter"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/transaksi/porter/{transaction_id}": {
+            "post": {
+                "tags": [
+                    "Transaksi Porter"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idTransaksi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/createResponseSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Transaksi Porter"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idTransaksi"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/putPembelianPorterRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/updateResponseSusccess"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/junk-station": {
+            "get": {
+                "description": "tidak perlu ekstrak token dan validasi role",
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Junk Station"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/filterProvinsi"
+                    },
+                    {
+                        "$ref": "#/components/parameters/filterKota"
+                    },
+                    {
+                        "$ref": "#/components/parameters/filterKecamatan"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseJunkStationList"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Junk Station"
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/registerJSRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/createResponseSuccess"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/junk-station/{junk_station_id}": {
+            "get": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Junk Station"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idJunkStation"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseJunkStation"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Junk Station"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idJunkStation"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/updateJSRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/updateResponseSusccess"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/junk-station/dashboard": {
+            "get": {
+                "tags": [
+                    "Junk Station Dashboard"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/filterDayMonthYear"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseDashboardJS"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/pembelian/junk-station": {
+            "post": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Pembelian Junk Station"
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/PembelianJSRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/createResponseSuccess"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "get": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Pembelian Junk Station"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponsePembelianJS"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/pembelian/junk-station/{id_pembelian}": {
+            "put": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Pembelian Junk Station"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idPembelian"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/PembelianJSRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/updateResponseSusccess"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Response400"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Pembelian Junk Station"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idPembelian"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/deleteResponseSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/transaksi/junk-station": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idTransaksi"
+                    }
+                ],
+                "tags": [
+                    "Transaksi Junk Station"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseListTransaksiJunkStation"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/transaksi/junk-station/{transaction_id}": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idTransaksi"
+                    }
+                ],
+                "tags": [
+                    "Transaksi Junk Station"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseDetailTransaksiPembelianJS"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/admin": {
+            "get": {
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": [
+                    "Admin Dashboard"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseAdminDashboard"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/categories": {
+            "get": {
+                "description": "Tidak perlu di ekstrak token dan validasi role",
+                "tags": [
+                    "kategori"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseKategoriList"
+                    }
+                }
+            }
+        },
+        "/category": {
+            "post": {
+                "tags": [
+                    "kategori"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/createKategoriRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/createResponseSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/category/{category_id}": {
+            "put": {
+                "tags": [
+                    "kategori"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idCategory"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/createKategoriRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/updateResponseSusccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "kategori"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idCategory"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/deleteResponseSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/porters": {
+            "get": {
+                "tags": [
+                    "Porter"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponsePorterList"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/porter": {
+            "post": {
+                "tags": [
+                    "Porter"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/createPorterRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/createResponseSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/porter/{porter_id}": {
+            "put": {
+                "tags": [
+                    "Porter"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idPorter"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/putPorterRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/updateResponseSusccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Porter"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idPorter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/deleteResponseSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Porter"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idPorter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponsePorterDetail"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/porter/pendapatan/{porter_id}": {
+            "get": {
+                "tags": [
+                    "Porter"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idPorter"
+                    },
+                    {
+                        "$ref": "#/components/parameters/filterStartDate"
+                    },
+                    {
+                        "$ref": "#/components/parameters/filterEndDate"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponsePendapatanPorter"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseProductList"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/product/favourite": {
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseProductList"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/product": {
+            "post": {
+                "tags": [
+                    "Product"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/createProductRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/createResponseSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/product/{product_id}": {
+            "put": {
+                "tags": [
+                    "Product"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idProduct"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/createProductRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/updateResponseSusccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Product"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idProduct"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/deleteResponseSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idProduct"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseProductDetail"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/kemitraan/{junk_station_id}": {
+            "put": {
+                "tags": [
+                    "Kemitraan"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idJunkStation"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/putKemitraanRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/updateResponseSusccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/transaksi/admin": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/filterStatus"
+                    },
+                    {
+                        "$ref": "#/components/parameters/filterEndDate"
+                    },
+                    {
+                        "$ref": "#/components/parameters/filterStartDate"
+                    }
+                ],
+                "tags": [
+                    "Transaksi Admin"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseListTransaksiAdmin"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
+        "/transaksi/admin/{transaction_id}": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idTransaksi"
+                    }
+                ],
+                "tags": [
+                    "Transaksi Admin"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/getResponseDetailTransaksiPenjualanAdmin"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Transaksi Admin"
+                ],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/idTransaksi"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/putTransaksiAdminRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/updateResponseSusccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "JWTAuth": {
+                "description": "jwt authentication",
+                "type": "http",
+                "scheme": "bearer"
+            }
+        },
+        "parameters": {
+            "idAlamat": {
+                "description": "parameters for alamat_id",
+                "name": "alamat_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "idCart": {
+                "description": "parameters for cart_id",
+                "name": "cart_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "idPorter": {
+                "description": "parameters for porter_id",
+                "name": "porter_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "idProduct": {
+                "description": "parameters for product_id",
+                "name": "product_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "idCategory": {
+                "description": "parameters for category_id",
+                "name": "category_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "idTransaksi": {
+                "description": "parameters for transaction_id",
+                "name": "transaction_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "idPembelian": {
+                "description": "parameters for id_pembelian",
+                "name": "id_pembelian",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "idPenjualanClient": {
+                "description": "penjualan client",
+                "name": "penjualan_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "idJunkStation": {
+                "description": "id junk station",
+                "name": "junk_station_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "filterTypeTransaksi": {
+                "description": "filter tipe transaksi",
+                "name": "type_transaction",
+                "in": "query",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "filterStatus": {
+                "description": "filter status transaksi",
+                "name": "status",
+                "in": "query",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "filterStartDate": {
+                "description": "filter start date",
+                "name": "start_date",
+                "in": "query",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "filterEndDate": {
+                "description": "filter end date",
+                "name": "end_date",
+                "in": "query",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "filterDayMonthYear": {
+                "description": "filter day, month, year",
+                "name": "filter",
+                "in": "query",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "filterProvinsi": {
+                "description": "filter Provinsi",
+                "name": "provinsi",
+                "in": "query",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "filterKota": {
+                "description": "filter Kota",
+                "name": "kota",
+                "in": "query",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "filterKecamatan": {
+                "description": "filter kecamatan",
+                "name": "kecamatan",
+                "in": "query",
+                "schema": {
+                    "type": "string"
+                }
+            }
+        },
+        "schemas": {
+            "ResponseSchema": {
+                "type": "object",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "requestBodies": {
+            "loginRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "email": "usop@gmail.com",
+                            "password": "usooop123"
+                        }
+                    }
+                }
+            },
+            "registerClientRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "username": {
+                                    "type": "string"
+                                },
+                                "no_telp": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "email": "usooop@gmail.com",
+                            "password": "usoop123",
+                            "username": "usoop",
+                            "no_telp": "09971250057"
+                        }
+                    }
+                }
+            },
+            "updateClientRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "username": "usoop"
+                        }
+                    }
+                }
+            },
+            "AlamatRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "provinsi": {
+                                    "type": "string"
+                                },
+                                "kota": {
+                                    "type": "string"
+                                },
+                                "kecamatan": {
+                                    "type": "string"
+                                },
+                                "status": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "provinsi": "Jawa Timur",
+                            "kota": "Kediri",
+                            "kecamatan": "ngadiluih",
+                            "status": "cadangan"
+                        }
+                    }
+                }
+            },
+            "createCartRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id_barang": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "example": {
+                            "id_barang": 1
+                        }
+                    }
+                }
+            },
+            "putCartRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "counter": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "counter": "increment"
+                        }
+                    }
+                }
+            },
+            "createPaymentRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "bank": {
+                                    "type": "string"
+                                },
+                                "kurir": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "bank": "mandiri",
+                            "kurir": "jnt"
+                        }
+                    }
+                }
+            },
+            "PenjualanClientRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "kategori": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "kategori": "kertas"
+                        }
+                    }
+                }
+            },
+            "pengambilanPorterRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id_pembelian": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "example": {
+                            "id_pembelian": 1
+                        }
+                    }
+                }
+            },
+            "putPembelianPorterRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "id_barang_rosok": {
+                                        "type": "integer"
+                                    },
+                                    "berat": {
+                                        "type": "integer"
+                                    },
+                                    "subtotal": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "barang_rosok": [
+                                {
+                                    "id_barang_rosok": 1,
+                                    "berat": 1,
+                                    "subtotal": 50000
+                                },
+                                {
+                                    "id_barang_rosok": 2,
+                                    "berat": 1,
+                                    "subtotal": 50000
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "registerJSRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "file_image": {
+                                    "type": "string"
+                                },
+                                "junk_station_name": {
+                                    "type": "string"
+                                },
+                                "junk_station_owner": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "no_telp": {
+                                    "type": "string"
+                                },
+                                "provinsi": {
+                                    "type": "string"
+                                },
+                                "kota": {
+                                    "type": "string"
+                                },
+                                "kecamatan": {
+                                    "type": "string"
+                                },
+                                "jalan": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "email": "usooop@gmail.com",
+                            "password": "usoop123",
+                            "junk_station_name": "TPA BENOWO",
+                            "junk_station_owner": "usopp",
+                            "provinsi": "Jawa Timur",
+                            "kota": "Surabaya",
+                            "kecamatan": "Benowo",
+                            "no_telp": "09971250057",
+                            "jalan": "jl.Doremi"
+                        }
+                    }
+                }
+            },
+            "updateJSRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "junk_station_name": {
+                                    "type": "string"
+                                },
+                                "junk_station_owner": {
+                                    "type": "string"
+                                },
+                                "no_telp": {
+                                    "type": "string"
+                                },
+                                "provinsi": {
+                                    "type": "string"
+                                },
+                                "kota": {
+                                    "type": "string"
+                                },
+                                "kecamatan": {
+                                    "type": "string"
+                                },
+                                "jalan": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "junk_station_name": "TPA BENOWO",
+                            "junk_station_owner": "usopp",
+                            "provinsi": "Jawa Timur",
+                            "kota": "Surabaya",
+                            "kecamatan": "Benowo",
+                            "no_telp": "09971250057",
+                            "jalan": "jl.Doremi"
+                        }
+                    }
+                }
+            },
+            "PembelianJSRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "kategori": {
+                                    "type": "string"
+                                },
+                                "berat": {
+                                    "type": "string"
+                                },
+                                "harga": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "kategori": "kertas",
+                            "berat": 1,
+                            "harga": 50000
+                        }
+                    }
+                }
+            },
+            "createKategoriRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "nama_kategori": {
+                                    "type": "string"
+                                },
+                                "harga_mitra": {
+                                    "type": "integer"
+                                },
+                                "harga_client": {
+                                    "type": "integer"
+                                },
+                                "desc": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "nama_kategori": "Kayu",
+                            "harga_mitra": 5000,
+                            "harga_client": 4500,
+                            "desc": "ini kayu"
+                        }
+                    }
+                }
+            },
+            "createPorterRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "no_telp": {
+                                    "type": "string"
+                                },
+                                "provinsi": {
+                                    "type": "string"
+                                },
+                                "kota": {
+                                    "type": "string"
+                                },
+                                "kecamatan": {
+                                    "type": "string"
+                                },
+                                "jalan": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "name": "usooop",
+                            "email": "usoop@gmail.com",
+                            "password": "usoopnami12",
+                            "no_telp": "087986955",
+                            "provinsi": "Jawa Timur",
+                            "kota": "Surabaya",
+                            "kecamatan": "Ketintang",
+                            "jalan": "jl.Doremi"
+                        }
+                    }
+                }
+            },
+            "putPorterRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "no_telp": {
+                                    "type": "string"
+                                },
+                                "provinsi": {
+                                    "type": "string"
+                                },
+                                "kota": {
+                                    "type": "string"
+                                },
+                                "kecamatan": {
+                                    "type": "string"
+                                },
+                                "jalan": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "name": "usooop",
+                            "no_telp": "087986955",
+                            "provinsi": "Jawa Timur",
+                            "kota": "Surabaya",
+                            "kecamatan": "Ketintang",
+                            "jalan": "jl.Doremi"
+                        }
+                    }
+                }
+            },
+            "createProductRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id_product": {
+                                    "type": "integer"
+                                },
+                                "image_file": {
+                                    "type": "string"
+                                },
+                                "nama_product": {
+                                    "type": "string"
+                                },
+                                "stok": {
+                                    "type": "string"
+                                },
+                                "harga": {
+                                    "type": "integer"
+                                },
+                                "desc": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "image_file": "https://www.sidomunculpupuknusantara.com/foto_berita/40Foto%20Produk%20Biofarm.jpg",
+                            "nama_product": "PUPUK BIO",
+                            "stok": 20,
+                            "harga": 10000,
+                            "desc": "bagus dan awet"
+                        }
+                    }
+                }
+            },
+            "putKemitraanRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status_kemitraan": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "status_kemitraan": "terverifikasi"
+                        }
+                    }
+                }
+            },
+            "putTransaksiAdminRequestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "example": {
+                            "status": "delivery"
+                        }
+                    }
+                }
+            }
+        },
+        "responses": {
+            "loginResponseSuccess": {
+                "description": "response login success",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "role": {
+                                            "type": "string"
+                                        },
+                                        "username": {
+                                            "type": "string"
+                                        },
+                                        "status_kemitraan": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "login success",
+                            "data": {
+                                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+                                "role": "client",
+                                "username": "usoop",
+                                "status_kemitraan": ""
+                            }
+                        }
+                    }
+                }
+            },
+            "Response400": {
+                "description": "return error 400 bad request",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ResponseSchema"
+                        },
+                        "example": {
+                            "success": false,
+                            "message": "400 bad request"
+                        }
+                    }
+                }
+            },
+            "Response500": {
+                "description": "return error 500 internal server error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ResponseSchema"
+                        },
+                        "example": {
+                            "success": false,
+                            "message": "500 internal server error"
+                        }
+                    }
+                }
+            },
+            "registerResponseSuccess": {
+                "description": "response success register",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ResponseSchema"
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success register"
+                        }
+                    }
+                }
+            },
+            "updateResponseSusccess": {
+                "description": "success update data",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ResponseSchema"
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success update"
+                        }
+                    }
+                }
+            },
+            "deleteResponseSusccess": {
+                "description": "success delete data",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ResponseSchema"
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success delete"
+                        }
+                    }
+                }
+            },
+            "getResponseClientSuccess": {
+                "description": "success get response client",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "total_penjualan": {
+                                    "type": "integer"
+                                },
+                                "bonus_terakhir": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "example": {
+                            "total_penjualan": 50000,
+                            "bonus_terakhir": 50
+                        }
+                    }
+                }
+            },
+            "getResponseAlamatClientList": {
+                "description": "get client alamat list",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "provinsi": {
+                                                "type": "string"
+                                            },
+                                            "kota": {
+                                                "type": "string"
+                                            },
+                                            "kecamatan": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get data alamat",
+                            "data": [
+                                {
+                                    "provinsi": "Jawa Timur",
+                                    "kota": "Kediri",
+                                    "kecamatan": "ngadiluih",
+                                    "status": "utama"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "createResponseSuccess": {
+                "description": "response success create data",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ResponseSchema"
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success create data"
+                        }
+                    }
+                }
+            },
+            "deleteResponseSuccess": {
+                "description": "response success delete data",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ResponseSchema"
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success delete data"
+                        }
+                    }
+                }
+            },
+            "getResponseAlamatClient": {
+                "description": "get client alamat single",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "provinsi": {
+                                            "type": "string"
+                                        },
+                                        "kota": {
+                                            "type": "string"
+                                        },
+                                        "kecamatan": {
+                                            "type": "string"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get data alamat",
+                            "data": {
+                                "provinsi": "Jawa Timur",
+                                "kota": "Kediri",
+                                "kecamatan": "ngadiluih",
+                                "status": "utama"
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponseCartList": {
+                "description": "response for list carts",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id_cart": {
+                                                "type": "integer"
+                                            },
+                                            "product_name": {
+                                                "type": "string"
+                                            },
+                                            "image_url": {
+                                                "type": "string"
+                                            },
+                                            "price": {
+                                                "type": "integer"
+                                            },
+                                            "qty": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get list cart",
+                            "data": [
+                                {
+                                    "id_cart": 1,
+                                    "product_name": "pupuk bio 100% alami",
+                                    "image_url": "https://www.sidomunculpupuknusantara.com/foto_berita/40Foto%20Produk%20Biofarm.jpg",
+                                    "price": 70000,
+                                    "qty": 1
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "getResponsePayment": {
+                "description": "payment response",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "no_virtual_account": {
+                                            "type": "string"
+                                        },
+                                        "payment_type": {
+                                            "type": "string"
+                                        },
+                                        "bank": {
+                                            "type": "string"
+                                        },
+                                        "grand_total": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get response detail",
+                            "data": {
+                                "no_virtual_account": "88857123773772",
+                                "payment_type": "Bank Transfer",
+                                "bank": "bank",
+                                "grand_total": 50000
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponsePenjualanRosokClient": {
+                "description": "response penjualan client",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "kategori": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get lits penjualan",
+                            "data": [
+                                {
+                                    "kategori": "besi"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "getResponseListTransaksiClient": {
+                "description": "response penjualan client",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "kode_transaksi": {
+                                                "type": "string"
+                                            },
+                                            "tipe_transaksi": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get lits transaksi",
+                            "data": [
+                                {
+                                    "kode_transaksi": "TF-192740",
+                                    "tipe_transaksi": "penjualan",
+                                    "status": "success"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "getResponseDetailTransaksiPembelianClient": {
+                "description": "response transaksi pembelian client",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "transaction_type": {
+                                            "type": "string"
+                                        },
+                                        "grand_total": {
+                                            "type": "integer"
+                                        },
+                                        "kurir": {
+                                            "type": "string"
+                                        },
+                                        "client": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "no_telp": {
+                                                    "type": "string"
+                                                },
+                                                "provinsi": {
+                                                    "type": "string"
+                                                },
+                                                "kota": {
+                                                    "type": "string"
+                                                },
+                                                "kecamatan": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "produk": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "image_url": {
+                                                        "type": "string"
+                                                    },
+                                                    "product_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "qty": {
+                                                        "type": "integer"
+                                                    },
+                                                    "subtotal": {
+                                                        "type": "integer"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get list transaksi pembelian",
+                            "data": {
+                                "grand_total": 50000,
+                                "status": "success",
+                                "transaction_type": "pembelian",
+                                "kurir": "jnt",
+                                "client": {
+                                    "name": "usoop",
+                                    "no_telp": "986969777",
+                                    "provinsi": "Jawa Timur",
+                                    "kota": "kediri",
+                                    "kecamatan": "ngadiluih"
+                                },
+                                "produk": [
+                                    {
+                                        "image_url": "https://www.sidomunculpupuknusantara.com/foto_berita/40Foto%20Produk%20Biofarm.jpg",
+                                        "product_name": "PUPUK BIO",
+                                        "qty": 1,
+                                        "subtotal": 50000
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponseDetailTransaksiPenjualanClient": {
+                "description": "response transaksi penjualan client",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "transaction_type": {
+                                            "type": "string"
+                                        },
+                                        "grand_total": {
+                                            "type": "integer"
+                                        },
+                                        "client": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "no_telp": {
+                                                    "type": "string"
+                                                },
+                                                "provinsi": {
+                                                    "type": "string"
+                                                },
+                                                "kota": {
+                                                    "type": "string"
+                                                },
+                                                "kecamatan": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "porter": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "no_telp": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "produk": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "kategori": {
+                                                        "type": "string"
+                                                    },
+                                                    "berat": {
+                                                        "type": "string"
+                                                    },
+                                                    "harga": {
+                                                        "type": "integer"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get list transaksi penjualan",
+                            "data": {
+                                "grand_total": 50000,
+                                "status": "pending",
+                                "transaction_type": "penjualan",
+                                "client": {
+                                    "name": "usoop",
+                                    "no_telp": "986969777",
+                                    "provinsi": "Jawa Timur",
+                                    "kota": "kediri",
+                                    "kecamatan": "ngadiluih"
+                                },
+                                "porter": {
+                                    "name": "mr.mihawk",
+                                    "no_telp": "08796897676"
+                                },
+                                "barang_rosok": [
+                                    {
+                                        "kategori": "plastik",
+                                        "berat": 1,
+                                        "harga": "50000"
+                                    },
+                                    {
+                                        "kategori": "besi",
+                                        "berat": 1,
+                                        "harga": "45000"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponseTagihan": {
+                "description": "response tagihan",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "no_akun_virtual": {
+                                            "type": "string"
+                                        },
+                                        "tipe_pembayaran": {
+                                            "type": "string"
+                                        },
+                                        "bank": {
+                                            "type": "string"
+                                        },
+                                        "grand_total": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get tagihan",
+                            "data": {
+                                "no_akun_virtual": "88857123773772",
+                                "tipe_pembayaran": "Bank Transfer",
+                                "bank": "bca",
+                                "grand_total": 50000
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponseDashboardPorter": {
+                "description": "dashboard porter",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "total_pembelian": {
+                                            "type": "integer"
+                                        },
+                                        "total_penjualan": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get dashboard porter",
+                            "data": {
+                                "total_pembelian": 50000,
+                                "total_penjualan": 50000
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponsePenjualanPorterList": {
+                "description": "response list request penjualan porter",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id_penjualan": {
+                                                "type": "integer"
+                                            },
+                                            "client_name": {
+                                                "type": "string"
+                                            },
+                                            "provinsi": {
+                                                "type": "string"
+                                            },
+                                            "kota": {
+                                                "type": "string"
+                                            },
+                                            "kecamatan": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get response penjualan porter",
+                            "data": [
+                                {
+                                    "id_penjualan": 1,
+                                    "nama_pembeli": "okabe",
+                                    "provinsi": "jawa timur",
+                                    "kota": "surabaya",
+                                    "kecamatan": "rungkut"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "getResponsePenjualanPorter": {
+                "description": "response penjualan porter",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "client_name": {
+                                            "type": "string"
+                                        },
+                                        "provinsi": {
+                                            "type": "string"
+                                        },
+                                        "kota": {
+                                            "type": "string"
+                                        },
+                                        "kecamatan": {
+                                            "type": "string"
+                                        },
+                                        "jalan": {
+                                            "type": "string"
+                                        },
+                                        "barang": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "kategori": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get penjualan porter",
+                            "data": {
+                                "client_name": "mr.Rudi",
+                                "provinsi": "Jawa Timur",
+                                "kota": "Surabaya",
+                                "kecamatan": "rungkut",
+                                "jalan": "jl.doremi",
+                                "barang": [
+                                    {
+                                        "kategori": "besi"
+                                    },
+                                    {
+                                        "kategori": "plastik"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponseJunkStationList": {
+                "description": "response junk station list",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id_junk_station": {
+                                                "type": "integer"
+                                            },
+                                            "junk_station_name": {
+                                                "type": "string"
+                                            },
+                                            "provinsi": {
+                                                "type": "string"
+                                            },
+                                            "kota": {
+                                                "type": "string"
+                                            },
+                                            "kecamatan": {
+                                                "type": "string"
+                                            },
+                                            "nama_pemilik": {
+                                                "type": "string"
+                                            },
+                                            "no_telp": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get junks station list",
+                            "data": [
+                                {
+                                    "id_junk_station": 1,
+                                    "junk_station_name": "TPA ABC",
+                                    "provinsi": "Jawa Timur",
+                                    "Kota": "Kediri",
+                                    "kecamatan": "ngadiluih",
+                                    "nama_pemilik": "usoop",
+                                    "no_telp": "0989869",
+                                    "status": "terverifikasi"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "getResponseJunkStation": {
+                "description": "response junk station",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "image_url": {
+                                            "type": "string"
+                                        },
+                                        "junk_station_name": {
+                                            "type": "string"
+                                        },
+                                        "pemilik": {
+                                            "type": "string"
+                                        },
+                                        "provinsi": {
+                                            "type": "string"
+                                        },
+                                        "kota": {
+                                            "type": "string"
+                                        },
+                                        "kecamatan": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get junks station list",
+                            "data": {
+                                "image_url": "https://statik.tempo.co/data/2019/09/13/id_872114/872114_720.jpg",
+                                "junk_station_name": "TPA BENOWO",
+                                "pemilik": "walkot",
+                                "provinsi": "Jawa Timur",
+                                "kota": "Surabaya",
+                                "kecamatan": "benowo"
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponseListTransaksiPorter": {
+                "description": "response transaksi list porter",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id_transaksi": {
+                                                "type": "integer"
+                                            },
+                                            "tipe_transaksi": {
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get lits transaksi",
+                            "data": [
+                                {
+                                    "id_transaksi": 1,
+                                    "tipe_transaksi": "pembelian",
+                                    "status": "unpaid"
+                                },
+                                {
+                                    "id_transaksi": 2,
+                                    "tipe_transaksi": "penjualan",
+                                    "status": "paid"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "getResponseDetailTransaksiPembelianPorter": {
+                "description": "response transaksi pembelian porter",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "transaction_type": {
+                                            "type": "string"
+                                        },
+                                        "grand_total": {
+                                            "type": "integer"
+                                        },
+                                        "client": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "no_telp": {
+                                                    "type": "string"
+                                                },
+                                                "provinsi": {
+                                                    "type": "string"
+                                                },
+                                                "kota": {
+                                                    "type": "string"
+                                                },
+                                                "kecamatan": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "barang_rosok": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "kategori": {
+                                                        "type": "string"
+                                                    },
+                                                    "berat": {
+                                                        "type": "string"
+                                                    },
+                                                    "harga": {
+                                                        "type": "integer"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get list transaksi pembelian",
+                            "data": {
+                                "grand_total": 50000,
+                                "status": "unpaid",
+                                "transaction_type": "pembelian",
+                                "client": {
+                                    "name": "usoop",
+                                    "no_telp": "986969777",
+                                    "provinsi": "Jawa Timur",
+                                    "kota": "kediri",
+                                    "kecamatan": "ngadiluih"
+                                },
+                                "barang_rosok": [
+                                    {
+                                        "id": 1,
+                                        "kategori": "plastik",
+                                        "berat": 1,
+                                        "harga": "50000"
+                                    },
+                                    {
+                                        "id": 2,
+                                        "kategori": "besi",
+                                        "berat": 1,
+                                        "harga": "45000"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponseDetailTransaksiPenjualanPorter": {
+                "description": "response transaksi penjualan porter",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "transaction_type": {
+                                            "type": "string"
+                                        },
+                                        "grand_total": {
+                                            "type": "integer"
+                                        },
+                                        "client": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "no_telp": {
+                                                    "type": "string"
+                                                },
+                                                "provinsi": {
+                                                    "type": "string"
+                                                },
+                                                "kota": {
+                                                    "type": "string"
+                                                },
+                                                "kecamatan": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "barang_rosok": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "kategori": {
+                                                        "type": "string"
+                                                    },
+                                                    "berat": {
+                                                        "type": "string"
+                                                    },
+                                                    "harga": {
+                                                        "type": "integer"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get list transaksi pembelian",
+                            "data": {
+                                "grand_total": 50000,
+                                "status": "paid",
+                                "transaction_type": "pembelian",
+                                "client": {
+                                    "name": "usoop",
+                                    "no_telp": "986969777",
+                                    "provinsi": "Jawa Timur",
+                                    "kota": "kediri",
+                                    "kecamatan": "ngadiluih"
+                                },
+                                "barang_rosok": [
+                                    {
+                                        "id": 1,
+                                        "kategori": "plastik",
+                                        "berat": 1,
+                                        "harga": "50000"
+                                    },
+                                    {
+                                        "id": 2,
+                                        "kategori": "besi",
+                                        "berat": 1,
+                                        "harga": "45000"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponseDashboardJS": {
+                "description": "dashboard junk station",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "total_pembelian": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get dashboard porter",
+                            "data": {
+                                "total_pembelian": 50000
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponsePembelianJS": {
+                "description": "response pembelian junk station",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id_pembelian": {
+                                                "type": "integer"
+                                            },
+                                            "kategori": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get lits penjualan",
+                            "data": [
+                                {
+                                    "id_pembelian": 1,
+                                    "kategori": "besi"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "getResponseListTransaksiJunkStation": {
+                "description": "response transaksi list junk station",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id_transaksi": {
+                                                "type": "integer"
+                                            },
+                                            "kode_tf": {
+                                                "type": "string"
+                                            },
+                                            "harga_transaksi": {
+                                                "type": "integer"
+                                            },
+                                            "tanggal_dibuat": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get lits transaksi",
+                            "data": [
+                                {
+                                    "id_transaksi": 1,
+                                    "kode_tf": "8887232922",
+                                    "harga_transaksi": 50000,
+                                    "tanggal_dibuat": "2022-02-01"
+                                },
+                                {
+                                    "id_transaksi": 2,
+                                    "kode_tf": "8887232922",
+                                    "harga_transaksi": 50000,
+                                    "tanggal_dibuat": "2022-02-01"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "getResponseDetailTransaksiPembelianJS": {
+                "description": "response transaksi penjualan porter",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "grand_total": {
+                                            "type": "integer"
+                                        },
+                                        "barang_rosok": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "kategori": {
+                                                        "type": "string"
+                                                    },
+                                                    "berat": {
+                                                        "type": "string"
+                                                    },
+                                                    "harga": {
+                                                        "type": "integer"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get list transaksi pembelian",
+                            "data": {
+                                "grand_total": 50000,
+                                "barang_rosok": [
+                                    {
+                                        "id": 1,
+                                        "kategori": "plastik",
+                                        "berat": 1,
+                                        "harga": "5000"
+                                    },
+                                    {
+                                        "id": 2,
+                                        "kategori": "besi",
+                                        "berat": 1,
+                                        "harga": "45000"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponseAdminDashboard": {
+                "description": "response admin dashboard",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "total_junk_station": {
+                                            "type": "integer"
+                                        },
+                                        "total_client": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get junks station list",
+                            "data": {
+                                "total_junk_station": 50,
+                                "total_client": 30,
+                                "grafik": [
+                                    {
+                                        "bulan": 1,
+                                        "jumlah_client": 30,
+                                        "jumlah_junk_station": 50
+                                    },
+                                    {
+                                        "bulan": 2,
+                                        "jumlah_client": 20,
+                                        "jumlah_junk_station": 10
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponseKategoriList": {
+                "description": "response for list kategori",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "harga_client": {
+                                                "type": "string"
+                                            },
+                                            "harga_mitra": {
+                                                "type": "integer"
+                                            },
+                                            "desc": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get list kategori",
+                            "data": [
+                                {
+                                    "id": 1,
+                                    "name": "Besi",
+                                    "harga_client": 5000,
+                                    "harga_mitra": 4000,
+                                    "desc": "Kategori besi"
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "Plastik",
+                                    "harga_client": 5000,
+                                    "harga_mitra": 4000,
+                                    "desc": "Kategori plastik"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "getResponsePorterList": {
+                "description": "response for list Porter",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "no_telp": {
+                                                "type": "string"
+                                            },
+                                            "email": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get list kategori",
+                            "data": [
+                                {
+                                    "id": 1,
+                                    "name": "Usoop",
+                                    "email": "usop@gmail.com",
+                                    "no_telp": "08779983834"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "getResponsePorterDetail": {
+                "description": "response for Porter",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "no_telp": {
+                                            "type": "string"
+                                        },
+                                        "provinsi": {
+                                            "type": "string"
+                                        },
+                                        "kota": {
+                                            "type": "string"
+                                        },
+                                        "kecamatan": {
+                                            "type": "string"
+                                        },
+                                        "jalan": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get porter",
+                            "data": {
+                                "name": "usoop",
+                                "email": "usopp@gmail.com",
+                                "no_telp": "098865858",
+                                "provinsi": "Jawa Timur",
+                                "kota": "Surabaya",
+                                "kecamatan": "Rungkut",
+                                "jalan": "jl.Doremi"
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponsePendapatanPorter": {
+                "description": "response for Pendapatan Porter",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "total_laba": {
+                                            "type": "integer"
+                                        },
+                                        "total_penjualan": {
+                                            "type": "integer"
+                                        },
+                                        "total_pembelian": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get porter",
+                            "data": {
+                                "total_laba": 50000,
+                                "total_penjualan": 10000,
+                                "total_pembelian": 50000
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponseProductList": {
+                "description": "response for list Product",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id_product": {
+                                                "type": "integer"
+                                            },
+                                            "image_url": {
+                                                "type": "string"
+                                            },
+                                            "nama_product": {
+                                                "type": "string"
+                                            },
+                                            "stok": {
+                                                "type": "string"
+                                            },
+                                            "harga": {
+                                                "type": "integer"
+                                            },
+                                            "desc": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get list kategori",
+                            "data": [
+                                {
+                                    "id": 1,
+                                    "image_url": "https://www.sidomunculpupuknusantara.com/foto_berita/40Foto%20Produk%20Biofarm.jpg",
+                                    "nama_product": "PUPUK BIO",
+                                    "stok": 20,
+                                    "harga": 10000,
+                                    "desc": "bagus dan awet"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "getResponseProductDetail": {
+                "description": "response for Product",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id_product": {
+                                            "type": "integer"
+                                        },
+                                        "image_url": {
+                                            "type": "string"
+                                        },
+                                        "nama_product": {
+                                            "type": "string"
+                                        },
+                                        "stok": {
+                                            "type": "string"
+                                        },
+                                        "harga": {
+                                            "type": "integer"
+                                        },
+                                        "desc": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get list kategori",
+                            "data": {
+                                "id": 1,
+                                "image_url": "https://www.sidomunculpupuknusantara.com/foto_berita/40Foto%20Produk%20Biofarm.jpg",
+                                "nama_product": "PUPUK BIO",
+                                "stok": 20,
+                                "harga": 10000,
+                                "desc": "bagus dan awet"
+                            }
+                        }
+                    }
+                }
+            },
+            "getResponseListTransaksiAdmin": {
+                "description": "response transaksi admin",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id_transaksi": {
+                                                "type": "integer"
+                                            },
+                                            "kode_tf": {
+                                                "type": "string"
+                                            },
+                                            "harga_transaksi": {
+                                                "type": "integer"
+                                            },
+                                            "status": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get lits transaksi",
+                            "data": [
+                                {
+                                    "id_transaksi": 1,
+                                    "kode_tf": "8887232922",
+                                    "harga_transaksi": 50000,
+                                    "status": "paid"
+                                },
+                                {
+                                    "id_transaksi": 2,
+                                    "kode_tf": "8887232922",
+                                    "harga_transaksi": 50000,
+                                    "status": "unpaid"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "getResponseDetailTransaksiPenjualanAdmin": {
+                "description": "response transaksi penjualan admin",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "kode_tf": {
+                                            "type": "string"
+                                        },
+                                        "grand_total": {
+                                            "type": "integer"
+                                        },
+                                        "kurir": {
+                                            "type": "string"
+                                        },
+                                        "client": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "no_telp": {
+                                                    "type": "string"
+                                                },
+                                                "provinsi": {
+                                                    "type": "string"
+                                                },
+                                                "kota": {
+                                                    "type": "string"
+                                                },
+                                                "kecamatan": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "produk": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "image_url": {
+                                                        "type": "string"
+                                                    },
+                                                    "product_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "qty": {
+                                                        "type": "integer"
+                                                    },
+                                                    "subtotal": {
+                                                        "type": "integer"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "example": {
+                            "success": true,
+                            "message": "success get list transaksi pembelian",
+                            "data": {
+                                "grand_total": 50000,
+                                "status": "success",
+                                "kode_tf": "TF-12397123",
+                                "kurir": "jnt",
+                                "client": {
+                                    "name": "usoop",
+                                    "no_telp": "986969777",
+                                    "provinsi": "Jawa Timur",
+                                    "kota": "kediri",
+                                    "kecamatan": "ngadiluih"
+                                },
+                                "produk": [
+                                    {
+                                        "image_url": "https://www.sidomunculpupuknusantara.com/foto_berita/40Foto%20Produk%20Biofarm.jpg",
+                                        "product_name": "PUPUK BIO",
+                                        "qty": 1,
+                                        "subtotal": 50000
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
