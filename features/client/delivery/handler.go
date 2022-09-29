@@ -1,7 +1,6 @@
 package delivery
 
 import (
-	"fmt"
 	"net/http"
 	"rozhok/features/client"
 	"rozhok/middlewares"
@@ -20,6 +19,7 @@ func New(e *echo.Echo, usecase client.UsecaseInterface) {
 	}
 	e.POST("/register/client", handler.PostClient)
 	e.PUT("client", handler.UpdateClient, middlewares.JWTMiddleware())
+	e.DELETE("client", handler.DeleteAkun, middlewares.JWTMiddleware())
 	e.POST("/login/client", handler.Auth)
 }
 
@@ -35,12 +35,12 @@ func (deliv *Delivery) PostClient(c echo.Context) error {
 
 	row, err := deliv.clientUsecase.CreateClient(toCore(dataRequest))
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("error insert data"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal membuat akun"))
 	}
 	if row != 1 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("error insert data"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal membuat akun"))
 	}
-	return c.JSON(http.StatusCreated, helper.SuccessResponseHelper("success insert data"))
+	return c.JSON(http.StatusCreated, helper.SuccessResponseHelper("Berhasil membuat akun"))
 }
 
 func (deliv *Delivery) UpdateClient(c echo.Context) error {
@@ -53,14 +53,22 @@ func (deliv *Delivery) UpdateClient(c echo.Context) error {
 	}
 
 	row, err := deliv.clientUsecase.PutClient(toCore(dataUpdate), idClient)
-	fmt.Println("Id client = ", idClient)
-	fmt.Println(errBind)
 	if err != nil || row == 0 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("failed to update data"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal memperbarui data"))
 	}
 
-	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("succes update data"))
+	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Berhasil memperbarui data"))
 
+}
+
+func (deliv *Delivery) DeleteAkun(c echo.Context) error {
+	idUser, _, _ := middlewares.ExtractToken(c)
+
+	row, err := deliv.clientUsecase.DeleteClient(idUser)
+	if err != nil || row == 0 {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal menghapus akun"))
+	}
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Berhasil menghapus akun"))
 }
 
 func (deliv *Delivery) Auth(c echo.Context) error {
@@ -72,12 +80,12 @@ func (deliv *Delivery) Auth(c echo.Context) error {
 	}
 
 	str, role, username := deliv.clientUsecase.LoginAuthorized(req.Email, req.Password)
-	if str == "please input email and password" || str == "email not found" || str == "wrong password" {
+	if str == "email dan password tidak boleh kosong" || str == "email tidak ditemukan" || str == "password salah" {
 		return c.JSON(400, helper.FailedResponseHelper(str))
 	} else if str == "failed to created token" {
 		return c.JSON(500, helper.FailedResponseHelper(str))
 	} else {
-		return c.JSON(200, helper.SuccessDataResponseHelper("Login Success", fromLoginCore(str, role, username)))
+		return c.JSON(200, helper.SuccessDataResponseHelper("Berhasil masuk", fromLoginCore(str, role, username)))
 	}
 
 }

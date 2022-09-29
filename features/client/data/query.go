@@ -52,7 +52,18 @@ func (repo *clientData) UpdateClient(data client.Core, id int) (row int, err err
 		return -1, tx.Error
 	}
 	if tx.RowsAffected == 0 {
-		return 0, errors.New("failed to update data")
+		return 0, errors.New("gagal meperbarui data")
+	}
+	return int(tx.RowsAffected), nil
+}
+
+func (repo *clientData) DeleteDataClient(id int) (row int, err error) {
+	tx := repo.db.Delete(&Client{}, id)
+	if tx.Error != nil {
+		return -1, tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return 0, errors.New("gagal menghapus akun")
 	}
 	return int(tx.RowsAffected), nil
 }
