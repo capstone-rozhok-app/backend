@@ -7,9 +7,6 @@ type Core struct {
 	Role     string
 	Username string
 	Status   string
-	ClientId int
-	PorterId int
-	JunkId   int
 }
 
 type UsecaseInterface interface {

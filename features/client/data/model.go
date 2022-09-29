@@ -6,30 +6,39 @@ import (
 	"gorm.io/gorm"
 )
 
-type Client struct {
+type User struct {
 	gorm.Model
-	Telp     string
-	Alamat   []Alamat
+	Email    string
+	Password string
+	Role     string
+	Username string
+	StatusKemitraan   string
+	Foto string
+	Provinsi string
+	Kota string
+	Kecamatan string
+	Jalan string
+	Telepon string
 }
 
 type Alamat struct {
 	gorm.Model
-	ClientID uint
+	UserID uint
 	Provinsi  string
 	Kota      string
 	Kecamatan string
 	Jalan     string
 	Status    string
-	Client    Client
+	User User
 }
 
-func fromCore(dataCore client.Core) Client {
-	return Client{
-		Telp:     dataCore.Telp,
+func fromCore(dataCore client.Core) User {
+	return User{
+		Telepon:     dataCore.Telp,
 	}
 }
 
-func toCore(data Client) client.Core {
+func toCore(data User) client.Core {
 	return client.Core{
 		ID:       int(data.ID),
 	}
