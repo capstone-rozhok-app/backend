@@ -18,13 +18,16 @@ type User struct {
 	Client   modelClient.Client `gorm:"foreignKey:ClientId"`
 }
 
-func toCore(user User) login.Core {
+func toCore(userModel User) login.Core {
 
 	core := login.Core{
-		ID:       int(user.ID),
-		Email:    user.Email,
-		Password: user.Password,
-		ClientId: int(user.ClientId),
+		ID:       int(userModel.ID),
+		Email:    userModel.Email,
+		Password: userModel.Password,
+		Username: userModel.Username,
+		Role: userModel.Role,
+		Status: userModel.Status,
+		ClientId: int(userModel.ClientId),
 	}
 	return core
 }

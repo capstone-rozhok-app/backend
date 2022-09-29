@@ -11,9 +11,9 @@ import (
 	clientData "rozhok/features/client/data"
 	clientDelivery "rozhok/features/client/delivery"
 	clientUsecase "rozhok/features/client/usecase"
-	// loginData "rozhok/features/login/data"
-	// loginDelivery "rozhok/features/login/delivery"
-	// loginUsecase "rozhok/features/login/usecase"
+	loginData "rozhok/features/login/data"
+	loginDelivery "rozhok/features/login/delivery"
+	loginUsecase "rozhok/features/login/usecase"
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {
@@ -25,8 +25,8 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	porterUsecaseFactory := porterUsecase.New(porterDataFactory)
 	porterDelivery.New(e, porterUsecaseFactory)
 
-	// loginDataFactory := loginData.New(db)
-	// loginUsecaseFactory := loginUsecase.New(loginDataFactory)
-	// loginDelivery.New(e, loginUsecaseFactory)
+	loginDataFactory := loginData.New(db)
+	loginUsecaseFactory := loginUsecase.New(loginDataFactory)
+	loginDelivery.New(e, loginUsecaseFactory)
 
 }

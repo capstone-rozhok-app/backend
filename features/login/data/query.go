@@ -19,7 +19,7 @@ func New(db *gorm.DB) login.DataInterface {
 func (repo *data) LoginUser(email string) (login.Core, error) {
 
 	var data User
-	txEmail := repo.db.Raw("SELECT * FROM Users INNER JOIN Clients ON email = ?", email)
+	txEmail := repo.db.Model(&User{}).Where("email = ?", email).First(&data)
 	if txEmail.Error != nil {
 		return login.Core{}, txEmail.Error
 	}
