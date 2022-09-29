@@ -39,3 +39,13 @@ func fromCore(dataCore client.Core) Client {
 		AlamatId: dataCore.AlamatId,
 	}
 }
+
+func toCore(data Client) client.Core {
+	return client.Core{
+		ID:       int(data.ID),
+		Email:    data.Email,
+		Password: data.Password,
+		Role:     data.Role,
+		Username: data.Username,
+	}
+}
