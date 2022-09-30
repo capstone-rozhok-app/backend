@@ -582,6 +582,22 @@
                 }
             }
         },
+        "/transaksi/penjualan/client": {
+            "post": {
+                "security": [{
+                    "JWTAuth": []
+                }],
+                "tags": ["Transaksi Client"],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/createResponseSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
+            }
+        },
         "/transaksi/{transaction_id}/client/penjualan": {
             "get": {
                 "parameters": [
@@ -1146,6 +1162,20 @@
                         "$ref": "#/components/responses/Response500"
                     }
                 }
+            },
+            "post": {
+                "security": [{
+                    "JWTAuth": []
+                }],
+                "tags": ["Transaksi Junk Station"],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/createResponseSuccess"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/Response500"
+                    }
+                }
             }
         },
         "/transaksi/{transaction_id}/junk-station": {
@@ -1455,6 +1485,7 @@
         },
         "/product/favourite": {
             "get": {
+                "description": "Tanpa Validasi Role",
                 "tags": [
                     "Product"
                 ],
