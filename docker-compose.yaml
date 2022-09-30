@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  apps: 
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: rozhok
+    image: rozhok
+    ports: 
+      - ${SERVER_PORT}:${SERVER_PORT}
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SERVER_PORT: ${SERVER_PORT}
+      AWS_REGION: ${AWS_REGION}
+      S3_KEY: ${S3_KEY}
+      S3_SECRET: ${S3_SECRET}
+      S3_BUCKET: ${S3_BUCKET}
+
