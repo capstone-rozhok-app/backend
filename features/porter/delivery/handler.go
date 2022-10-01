@@ -3,6 +3,7 @@ package delivery
 import (
 	"net/http"
 	"rozhok/features/porter"
+	"rozhok/middlewares"
 
 	"rozhok/utils/helper"
 
@@ -17,82 +18,99 @@ func New(e *echo.Echo, usecase porter.UsecaseInterface) {
 	handler := &Delivery{
 		porterUsecase: usecase,
 	}
-	e.POST("/register/porter", handler.PostClient)
-	// e.PUT("client", handler.UpdateClient, middlewares.JWTMiddleware())
-	// e.DELETE("client", handler.DeleteAkun, middlewares.JWTMiddleware())
-	// e.POST("/login/client", handler.Auth)
+	e.GET("/porter/:id", handler.GetPorter, middlewares.JWTMiddleware())
+	e.GET("/porters", handler.GetAllPorter, middlewares.JWTMiddleware(), middlewares.IsAdmin)
+	e.POST("/porter", handler.CreatePorter, middlewares.JWTMiddleware(), middlewares.IsAdmin)
+	e.PUT("/porter/:id", handler.UpdatePorter, middlewares.JWTMiddleware(), middlewares.IsAdmin)
+	e.DELETE("/porter/:id", handler.DeletePorter, middlewares.JWTMiddleware(), middlewares.IsAdmin)
 }
 
-func (deliv *Delivery) PostClient(c echo.Context) error {
-
-	// Code baris agar hanya admin yang bisa menambahkan porter
-	/*
-		_, role, _ := middlewares.ExtractToken(c)
-		if role != "admin" {
-			return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("Kamu tidak puya akses untuk fitur ini"))
-		}
-	*/
+func (deliv *Delivery) CreatePorter(c echo.Context) error {
 
 	var dataRequest PorterRequest
-	dataRequest.Role = "porter"
 	errBind := c.Bind(&dataRequest)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("error binding data"))
 	}
 
+	errValidate := c.Validate(&dataRequest)
+	if errValidate != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
+	}
+
 	row, err := deliv.porterUsecase.CreatePorter(toCore(dataRequest))
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal membuat akun"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
 	}
 	if row != 1 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal membuat akun"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("failed to create porter"))
 	}
-	return c.JSON(http.StatusCreated, helper.SuccessResponseHelper("Berhasil membuat akun"))
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("success create porter"))
 }
 
-// func (deliv *Delivery) UpdateClient(c echo.Context) error {
-// 	idClient, _, _ := middlewares.ExtractToken(c)
+func (deliv *Delivery) UpdatePorter(c echo.Context) error {
+	var dataRequest PorterRequest
+	errBind := c.Bind(&dataRequest)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("error binding data"))
+	}
 
-// 	var dataUpdate ClientRequest
-// 	errBind := c.Bind(&dataUpdate)
-// 	if errBind != nil {
-// 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("error binding data"))
-// 	}
+	id := helper.ParamInt(c)
+	if id < 0 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("parameter not valid"))
+	}
 
-// 	row, err := deliv.clientUsecase.PutClient(toCore(dataUpdate), idClient)
-// 	if err != nil || row == 0 {
-// 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal memperbarui data"))
-// 	}
+	coreRequest := toCore(dataRequest)
+	row, err := deliv.porterUsecase.UpdatePorter(coreRequest, id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
+	}
+	if row != 1 {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("failed to update porter"))
+	}
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("success update porter"))
+}
 
-// 	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Berhasil memperbarui data"))
+func (deliv *Delivery) DeletePorter(c echo.Context) error {
+	id := helper.ParamInt(c)
+	if id < 0 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("parameter not valid"))
+	}
 
-// }
+	row, err := deliv.porterUsecase.DeletePorter(uint(id))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
+	}
+	if row != 1 {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("failed to delete porter"))
+	}
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("success delete porter"))
+}
 
-// func (deliv *Delivery) DeleteAkun(c echo.Context) error {
-// 	idUser, _, _ := middlewares.ExtractToken(c)
+func (deliv *Delivery) GetAllPorter(c echo.Context) error {
+	rows, err := deliv.porterUsecase.GetAll()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
+	}
 
-// 	row, err := deliv.clientUsecase.DeleteClient(idUser)
-// 	if err != nil || row == 0 {
-// 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal menghapus akun"))
-// 	}
-// 	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Berhasil menghapus akun"))
-// }
+	responsePorters := []PorterResponse{}
+	for _, porter := range rows {
+		responsePorters = append(responsePorters, fromCore(porter))
+	}
 
-// func (deliv *Delivery) Auth(c echo.Context) error {
+	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("success get all porter", responsePorters))
+}
 
-// 	var req AuthRequest
-// 	errBind := c.Bind(&req)
-// 	if errBind != nil {
-// 		return c.JSON(400, helper.FailedResponseHelper("wrong request"))
-// 	}
+func (deliv *Delivery) GetPorter(c echo.Context) error {
+	id := helper.ParamInt(c)
+	if id < 0 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("parameter not valid"))
+	}
 
-// 	str, role, username := deliv.clientUsecase.LoginAuthorized(req.Email, req.Password)
-// 	if str == "email dan password tidak boleh kosong" || str == "email tidak ditemukan" || str == "password salah" {
-// 		return c.JSON(400, helper.FailedResponseHelper(str))
-// 	} else if str == "failed to created token" {
-// 		return c.JSON(500, helper.FailedResponseHelper(str))
-// 	} else {
-// 		return c.JSON(200, helper.SuccessDataResponseHelper("Berhasil masuk", fromLoginCore(str, role, username)))
-// 	}
+	row, err := deliv.porterUsecase.Get(uint(id))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
+	}
 
-// }
+	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("success get porter", fromCore(row)))
+}
