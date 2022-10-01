@@ -28,24 +28,6 @@ func (repo *clientData) InsertClient(client client.Core) (int, error) {
 	return int(tx.RowsAffected), nil
 }
 
-func (repo *clientData) LoginClient(email string) (client.Core, error) {
-
-	var data User
-	txEmail := repo.db.Where("email = ?", email).First(&data)
-	if txEmail.Error != nil {
-		return client.Core{}, txEmail.Error
-	}
-
-	if txEmail.RowsAffected != 1 {
-		return client.Core{}, txEmail.Error
-	}
-
-	var dataUser = toCore(data)
-
-	return dataUser, nil
-
-}
-
 func (repo *clientData) UpdateClient(data client.Core, id int) (row int, err error) {
 	tx := repo.db.Model(&User{}).Where("id = ?", id).Updates(fromCore(data))
 	if tx.Error != nil {
