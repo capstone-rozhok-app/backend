@@ -26,7 +26,6 @@ func (deliv *Delivery) PostClient(c echo.Context) error {
 
 	var dataRequest ClientRequest
 	dataRequest.Role = "client"
-	dataRequest.AlamatId = 1
 	errBind := c.Bind(&dataRequest)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("error binding data"))
