@@ -13,6 +13,7 @@ type User struct {
 	Role            string
 	Username        string
 	StatusKemitraan string
+	JunkStationName string
 	Foto            string
 	Provinsi        string
 	Kota            string
