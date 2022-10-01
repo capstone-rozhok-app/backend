@@ -8,17 +8,18 @@ import (
 
 type User struct {
 	gorm.Model
-	Email           string
+	Email           string `gorm:"unique"`
 	Password        string
 	Role            string
-	Username        string
+	Username        string `gorm:"unique"`
 	StatusKemitraan string
 	Foto            string
 	Provinsi        string
 	Kota            string
 	Kecamatan       string
 	Jalan           string
-	Telepon         string
+	Telepon         string `gorm:"unique"`
+	Bonus           int64
 }
 
 func fromCore(dataCore porter.Core) User {
@@ -27,7 +28,7 @@ func fromCore(dataCore porter.Core) User {
 		Telepon:   dataCore.Telp,
 		Email:     dataCore.Email,
 		Password:  dataCore.Password,
-		Role:      dataCore.Role,
+		Role:      "porter",
 		Provinsi:  dataCore.Provinsi,
 		Kota:      dataCore.Kota,
 		Kecamatan: dataCore.Kecamatan,
@@ -37,10 +38,14 @@ func fromCore(dataCore porter.Core) User {
 
 func toCore(data User) porter.Core {
 	return porter.Core{
-		ID:       int(data.ID),
-		Email:    data.Email,
-		Password: data.Password,
-		Role:     data.Role,
-		Username: data.Username,
+		ID:        data.ID,
+		Email:     data.Email,
+		Password:  data.Password,
+		Username:  data.Username,
+		Telp:      data.Telepon,
+		Provinsi:  data.Provinsi,
+		Kota:      data.Kota,
+		Kecamatan: data.Kecamatan,
+		Jalan:     data.Jalan,
 	}
 }

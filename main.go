@@ -7,9 +7,21 @@ import (
 	"rozhok/migration"
 	"rozhok/utils/database/mysql"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
+
+type CustomValidation struct {
+	validator *validator.Validate
+}
+
+func (cv *CustomValidation) Validate(i interface{}) error {
+	if err := cv.validator.Struct(i); err != nil {
+		return err
+	}
+	return nil
+}
 
 func main() {
 
@@ -17,6 +29,7 @@ func main() {
 	db := mysql.InitDBmySql(cfg)
 	e := echo.New()
 	e.Pre(middleware.RemoveTrailingSlash())
+	e.Validator = &CustomValidation{validator: validator.New()}
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},

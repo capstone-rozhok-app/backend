@@ -1,9 +1,9 @@
 package usecase
 
 import (
-	"errors"
 	"rozhok/features/porter"
-	// "rozhok/middlewares"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type porterUsecase struct {
@@ -17,42 +17,26 @@ func New(dataPorter porter.DataInterface) porter.UsecaseInterface {
 }
 
 func (usecase *porterUsecase) CreatePorter(porter porter.Core) (int, error) {
-	if porter.Email == "" || porter.Password == "" {
-		return -1, errors.New("email dan password tidak boleh kosong")
+	passwordHased, err := bcrypt.GenerateFromPassword([]byte(porter.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return 0, err
 	}
-
-	row, err := usecase.porterData.InsertPorter(porter)
-	return row, err
+	porter.Password = string(passwordHased)
+	return usecase.porterData.InsertPorter(porter)
 }
 
-// func (usecase *clientUsecase) PutClient(newData client.Core, id int) (int, error) {
+func (usecase *porterUsecase) UpdatePorter(porter porter.Core, id int) (row int, err error) {
+	return usecase.porterData.UpdatePorter(porter, uint(id))
+}
 
-// 	row, err := usecase.clientData.UpdateClient(newData, id)
-// 	return row, err
-// }
+func (usecase *porterUsecase) DeletePorter(id uint) (row int, err error) {
+	return usecase.porterData.DeletePorter(uint(id))
+}
 
-// func (usecase *clientUsecase) LoginAuthorized(email, password string) (string, string, string) {
+func (usecase *porterUsecase) GetAll() (rows []porter.Core, err error) {
+	return usecase.porterData.GetAll()
+}
 
-// 	if email == "" || password == "" {
-// 		return "email dan password tidak boleh kosong", "", ""
-// 	}
-
-// 	results, errEmail := usecase.clientData.LoginClient(email)
-// 	if errEmail != nil {
-// 		return "email tidak ditemukan", "", ""
-// 	}
-
-// 	token, errToken := middlewares.CreateToken(int(results.ID), results.Role, "") // coba
-
-// 	if errToken != nil {
-// 		return "gagal membuat token", "", ""
-// 	}
-
-// 	return token, results.Role, results.Username
-
-// }
-
-// func (usecase *clientUsecase) DeleteClient(id int) (int, error) {
-// 	row, err := usecase.clientData.DeleteDataClient(id)
-// 	return row, err
-// }
+func (usecase *porterUsecase) Get(id uint) (row porter.Core, err error) {
+	return usecase.porterData.Get(id)
+}
