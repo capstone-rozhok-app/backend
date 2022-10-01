@@ -1,26 +1,25 @@
 package data
 
 import (
-	// "errors"
 	"rozhok/features/porter"
 
 	"gorm.io/gorm"
 )
 
-type clientData struct {
+type porterData struct {
 	db *gorm.DB
 }
 
 func New(db *gorm.DB) porter.DataInterface {
-	return &clientData{
+	return &porterData{
 		db: db,
 	}
 }
 
-func (repo *clientData) InsertPorter(client porter.Core) (int, error) {
-	clientModel := fromCore(client)
+func (repo *porterData) InsertPorter(porter porter.Core) (int, error) {
+	porterModel := fromCore(porter)
 
-	tx := repo.db.Create(&clientModel)
+	tx := repo.db.Model(&User{}).Create(&porterModel)
 	if tx.Error != nil {
 		return 0, tx.Error
 	}
@@ -28,42 +27,53 @@ func (repo *clientData) InsertPorter(client porter.Core) (int, error) {
 	return int(tx.RowsAffected), nil
 }
 
-// func (repo *clientData) LoginClient(email string) (client.Core, error) {
+func (repo *porterData) UpdatePorter(porter porter.Core, id uint) (row int, err error) {
+	porterModel := fromCore(porter)
 
-// 	var data Client
-// 	txEmail := repo.db.Where("email = ?", email).First(&data)
-// 	if txEmail.Error != nil {
-// 		return client.Core{}, txEmail.Error
-// 	}
+	tx := repo.db.Model(&User{}).Where("id = ?", id).Updates(&porterModel)
 
-// 	if txEmail.RowsAffected != 1 {
-// 		return client.Core{}, txEmail.Error
-// 	}
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
 
-// 	var dataUser = toCore(data)
+	return int(tx.RowsAffected), nil
+}
 
-// 	return dataUser, nil
+func (repo *porterData) DeletePorter(id uint) (row int, err error) {
+	porterModel := User{}
+	porterModel.ID = id
+	tx := repo.db.Model(&User{}).Delete(&porterModel)
 
-// }
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
 
-// func (repo *clientData) UpdateClient(data client.Core, id int) (row int, err error) {
-// 	tx := repo.db.Model(&Client{}).Where("id = ?", id).Updates(fromCore(data))
-// 	if tx.Error != nil {
-// 		return -1, tx.Error
-// 	}
-// 	if tx.RowsAffected == 0 {
-// 		return 0, errors.New("gagal meperbarui data")
-// 	}
-// 	return int(tx.RowsAffected), nil
-// }
+	return int(tx.RowsAffected), nil
+}
 
-// func (repo *clientData) DeleteDataClient(id int) (row int, err error) {
-// 	tx := repo.db.Delete(&Client{}, id)
-// 	if tx.Error != nil {
-// 		return -1, tx.Error
-// 	}
-// 	if tx.RowsAffected == 0 {
-// 		return 0, errors.New("gagal menghapus akun")
-// 	}
-// 	return int(tx.RowsAffected), nil
-// }
+func (repo *porterData) GetAll() (rows []porter.Core, err error) {
+	porterModels := []User{}
+
+	tx := repo.db.Model(&User{}).Where("role = ?", "porter").Find(&porterModels)
+	if tx.Error != nil {
+		return []porter.Core{}, tx.Error
+	}
+
+	porterCores := []porter.Core{}
+	for _, porter := range porterModels {
+		porterCores = append(porterCores, toCore(porter))
+	}
+
+	return porterCores, nil
+}
+
+func (repo *porterData) Get(id uint) (row porter.Core, err error) {
+	porterModel := User{}
+
+	tx := repo.db.Model(&User{}).Where("role = ?", "porter").First(&porterModel)
+	if tx.Error != nil {
+		return porter.Core{}, tx.Error
+	}
+
+	return toCore(porterModel), nil
+}

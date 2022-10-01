@@ -8,17 +8,18 @@ import (
 
 type User struct {
 	gorm.Model
-	Email    string
-	Password string
-	Role     string
-	Username string
-	StatusKemitraan   string
-	Foto string
-	Provinsi string
-	Kota string
-	Kecamatan string
-	Jalan string
-	Telepon string
+	Email           string
+	Password        string
+	Role            string
+	Username        string
+	StatusKemitraan string
+	Foto            string
+	Provinsi        string
+	Kota            string
+	Kecamatan       string
+	Jalan           string
+	Telepon         string
+	Bonus           int64
 }
 
 func toCore(userModel User) login.Core {
@@ -28,8 +29,8 @@ func toCore(userModel User) login.Core {
 		Email:    userModel.Email,
 		Password: userModel.Password,
 		Username: userModel.Username,
-		Role: userModel.Role,
-		Status: userModel.StatusKemitraan,
+		Role:     userModel.Role,
+		Status:   userModel.StatusKemitraan,
 	}
 	return core
 }

@@ -1,16 +1,25 @@
 package delivery
 
-type LoginResponse struct {
-	Token    string `json:"token" form:"token"`
-	Role     string `json:"role" form:"role"`
-	Username string `json:"username" form:"username"`
+import "rozhok/features/porter"
+
+type PorterResponse struct {
+	Name      string `json:"name"`
+	Email     string `json:"email"`
+	NoTelp    string `json:"no_telp"`
+	Provinsi  string `json:"provinsi"`
+	Kota      string `json:"kota"`
+	Kecamatan string `json:"kecamatan"`
+	Jalan     string `json:"jalan"`
 }
 
-func fromLoginCore(token, role, username string) LoginResponse {
-	return LoginResponse{
-		Token:    token,
-		Role:     role,
-		Username: username,
+func fromCore(porterCore porter.Core) PorterResponse {
+	return PorterResponse{
+		Name:      porterCore.Username,
+		Email:     porterCore.Email,
+		NoTelp:    porterCore.Telp,
+		Provinsi:  porterCore.Provinsi,
+		Kota:      porterCore.Kota,
+		Kecamatan: porterCore.Kecamatan,
+		Jalan:     porterCore.Jalan,
 	}
-
 }

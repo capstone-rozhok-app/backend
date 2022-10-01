@@ -3,31 +3,22 @@ package delivery
 import "rozhok/features/porter"
 
 type PorterRequest struct {
-	Nama      string `json:"nama" form:"nama"`
-	Email     string `json:"email" form:"email"`
-	Password  string `json:"password" form:"password"`
-	Username  string `json:"username" form:"username"`
-	Telp      string `json:"no.telp" form:"no.telp"`
-	Role      string
-	Provinsi  string `json:"provinsi" form:"provinsi"`
-	Kota      string `json:"kota" form:"kota"`
-	Kecamatan string `json:"kecamatan" form:"kecamatan"`
-	Jalan     string `json:"jalan" form:"jalan"`
-}
-
-type AuthRequest struct {
-	Email    string `json:"email" form:"email"`
-	Password string `json:"password" form:"password"`
+	Email     string `json:"email" form:"email" validate:"required"`
+	Password  string `json:"password" form:"password" validate:"required"`
+	Name  string `json:"name" form:"name" validate:"required"`
+	NoTelp    string `json:"no_telp" form:"no_telp" validate:"required"`
+	Provinsi  string `json:"provinsi" form:"provinsi" validate:"required"`
+	Kota      string `json:"kota" form:"kota" validate:"required"`
+	Kecamatan string `json:"kecamatan" form:"kecamatan" validate:"required"`
+	Jalan     string `json:"jalan" form:"jalan" validate:"required"`
 }
 
 func toCore(dataRequest PorterRequest) porter.Core {
 	return porter.Core{
-		Nama:      dataRequest.Nama,
 		Email:     dataRequest.Email,
 		Password:  dataRequest.Password,
-		Username:  dataRequest.Username,
-		Telp:      dataRequest.Telp,
-		Role:      dataRequest.Role,
+		Username:  dataRequest.Name,
+		Telp:      dataRequest.NoTelp,
 		Provinsi:  dataRequest.Provinsi,
 		Kota:      dataRequest.Kota,
 		Kecamatan: dataRequest.Kecamatan,

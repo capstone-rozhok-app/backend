@@ -1,13 +1,11 @@
 package porter
 
 type Core struct {
-	ID        int
-	Nama      string
+	ID        uint
+	Username  string
 	Email     string
 	Password  string
-	Username  string
 	Telp      string
-	Role      string
 	Provinsi  string
 	Kota      string
 	Kecamatan string
@@ -15,15 +13,17 @@ type Core struct {
 }
 
 type UsecaseInterface interface {
-	CreatePorter(data Core) (row int, err error)
-	// PutClient(data Core, id int) (row int, err error)
-	// LoginAuthorized(email, password string) (string, string, string)
-	// DeleteClient(id int) (row int, err error)
+	CreatePorter(porter Core) (row int, err error)
+	UpdatePorter(porter Core, id int) (row int, err error)
+	DeletePorter(id uint) (row int, err error)
+	GetAll() (rows []Core, err error)
+	Get(id uint) (row Core, err error)
 }
 
 type DataInterface interface {
-	InsertPorter(data Core) (row int, err error)
-	// UpdateClient(data Core, id int) (row int, err error)
-	// LoginClient(email string) (Core, error)
-	// DeleteDataClient(id int) (row int, err error)
+	InsertPorter(porter Core) (row int, err error)
+	UpdatePorter(porter Core, id uint) (row int, err error)
+	DeletePorter(id uint) (row int, err error)
+	GetAll() (rows []Core, err error)
+	Get(id uint) (row Core, err error)
 }
