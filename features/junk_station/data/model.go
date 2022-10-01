@@ -7,6 +7,7 @@ import (
 type JunkStation struct{
 	gorm.Model
 	JunkStationName		string
+	Status				string
 	User				User
 }
 
