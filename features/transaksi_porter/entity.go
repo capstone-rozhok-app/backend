@@ -33,7 +33,7 @@ type DetailTransaksiPorter struct {
 type TransaksPorterData interface {
 	GetAll(TransaksiCore Core) (rows []Core, err error)
 	Get(TransaksiCore Core) (row Core, err error)
-	CreateTransaksiPenjualan() (row int, err error)
+	CreateTransaksiPenjualan(TransaksiCore Core) (row int, err error)
 	UpdateTransaksiPembelian(TransaksiCore Core) (row int, err error)
 }
 
