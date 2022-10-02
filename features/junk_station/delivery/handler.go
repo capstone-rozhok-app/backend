@@ -3,7 +3,6 @@ package delivery
 import (
 	js "rozhok/features/junk_station"
 	"rozhok/middlewares"
-	"rozhok/utils/helper"
 
 	"github.com/labstack/echo/v4"
 )
@@ -18,9 +17,12 @@ func NewHandller(handler js.UsecaseInterface) *JunkHandler {
 	}
 }
 
-// func (h *JunkHandler) CreateJunkStation(c echo.Context) error {
-// 	junkToken, errToken = middlewares.ExtractToken(c)
-// 	if junkToken == 0 || errToken != nil {
-// 		return c.JSON(400, helper.FailedResponseHelper("Token invalid !"))
-// 	}
-// }
+func (h *JunkHandler) CreateJunkStation(c echo.Context) error {
+	jsID, _, _ := middlewares.ExtractToken(c)
+
+	var JsRequest JsReq
+	errBind := c.Bind(&JsRequest)
+	if errBind != nil {
+		return c.JSON(400, helper)
+	}
+}
