@@ -1,9 +1,12 @@
 package junkstation
 
 type Core struct{
+	Email				string ``
+	Password			string
 	JunkStationID		int
 	JunkStationName		string
 	JunkStationOwner	string
+	Status				string
 	Provinsi			string
 	Kota				string
 	Kecamatan			string
