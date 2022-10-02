@@ -26,6 +26,11 @@ func (deliv *Delivery) PostClient(c echo.Context) error {
 
 	var dataRequest ClientRequest
 	dataRequest.Role = "client"
+
+	// errValidate := c.Validate(&dataRequest)
+	// if errValidate != nil {
+	// 	return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
+	// }
 	errBind := c.Bind(&dataRequest)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("error binding data"))
