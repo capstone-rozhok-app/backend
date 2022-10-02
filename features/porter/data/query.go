@@ -67,6 +67,17 @@ func (repo *porterData) GetAll() (rows []porter.Core, err error) {
 	return porterCores, nil
 }
 
+func (repo *porterData) GetPendapatan(id uint) (row porter.Core, err error) {
+	porterModel := User{}
+
+	tx := repo.db.Model(&User{}).Where("role = ?", "porter").First(&porterModel)
+	if tx.Error != nil {
+		return porter.Core{}, tx.Error
+	}
+
+	return toCore(porterModel), nil
+}
+
 func (repo *porterData) Get(id uint) (row porter.Core, err error) {
 	porterModel := User{}
 
