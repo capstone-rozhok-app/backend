@@ -135,6 +135,7 @@ func (repo *transaksiPorterRepo) UpdateTransaksiPembelian(TransaksiCore transaks
 
 	//looping untuk kalkulasi subtotal (harga kategori client * berat)
 	barangRosokList := []TransaksiPorterDetail{}
+	var grandTotal int64
 	for index, barangRosok := range transaksiPorterModel.TransaksiPorterDetail {
 		barangRosokList = append(barangRosokList, TransaksiPorterDetail{
 			TransaksiPorterID: barangRosok.TransaksiPorterID,
@@ -142,6 +143,7 @@ func (repo *transaksiPorterRepo) UpdateTransaksiPembelian(TransaksiCore transaks
 			Berat:             uint(TransaksiCore.DetailTransaksiPorter[index].Berat),
 			Subtotal:          barangRosok.KategoriRosok.HargaClient * int64(TransaksiCore.DetailTransaksiPorter[index].Berat),
 		})
+		grandTotal += barangRosok.KategoriRosok.HargaClient * int64(TransaksiCore.DetailTransaksiPorter[index].Berat)
 	}
 
 	//delete barang rosok by transaksi porter id
@@ -160,5 +162,17 @@ func (repo *transaksiPorterRepo) UpdateTransaksiPembelian(TransaksiCore transaks
 		return int(tx3.RowsAffected), errors.New("failed to insert data")
 	}
 
-	return int(tx3.RowsAffected), nil
+	//buat ulang barang rosok by transaksi porter id
+	transaksiPorterModel.GrandTotal = grandTotal
+	transaksiPorterModel.Status = "sudah_bayar"
+	tx4 := repo.DB.Model(&TransaksiPorter{}).Where("id =  ?", transaksiPorterModel.ID).Updates(&transaksiPorterModel)
+	if tx4.Error != nil {
+		return row, tx.Error
+	}
+
+	if tx4.RowsAffected < 1 {
+		return int(tx4.RowsAffected), errors.New("failed to insert data")
+	}
+
+	return int(tx4.RowsAffected), nil
 }

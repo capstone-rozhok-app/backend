@@ -25,7 +25,7 @@ type TransaksiPorterDetail struct {
 	Berat             uint
 	Subtotal          int64
 
-	KategoriRosok   KategoriRosok   `gorm:"foreignKey:KategoriID"`
+	KategoriRosok   KategoriRosok   `gorm:"constraint:OnUpdate:SET NULL,OnDelete:SET NULL;foreignKey:KategoriID"`
 	TransaksiPorter TransaksiPorter `gorm:"foreignKey:TransaksiPorterID"`
 }
 
