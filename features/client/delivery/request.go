@@ -6,7 +6,7 @@ type ClientRequest struct {
 	Email    string `json:"email" form:"email"`
 	Password string `json:"password" form:"password"`
 	Username string `json:"username" form:"username"`
-	Telp     string `json:"no.telp" form:"no.telp"`
+	Telp     string `json:"telepon" form:"telepon"`
 	Role     string
 }
 
