@@ -1,21 +1,23 @@
 package delivery
 
-import "rozhok/features/client"
+import "rozhok/features/alamat"
 
-type ClientRequest struct {
-	Email    string `json:"email" form:"email"`
-	Password string `json:"password" form:"password"`
-	Username string `json:"username" form:"username"`
-	Telp     string `json:"no.telp" form:"no.telp"`
-	Role     string
+type AlamatRequest struct {
+	Provinsi  string `json:"provinsi" form:"provinsi"`
+	Kota      string `json:"kota" form:"kota"`
+	Kecamatan string `json:"kecamatan" form:"kecamatan"`
+	Jalan     string `json:"jalan" form:"jalan"`
+	Status    string `json:"status" form:"status"`
+	UserId    uint
 }
 
-func toCore(dataRequest ClientRequest) client.Core {
-	return client.Core{
-		Email:    dataRequest.Email,
-		Password: dataRequest.Password,
-		Username: dataRequest.Username,
-		Telepon:  dataRequest.Telp,
-		Role:     dataRequest.Role,
+func toCore(dataRequest AlamatRequest) alamat.Core {
+	return alamat.Core{
+		Provinsi:  dataRequest.Provinsi,
+		Kota:      dataRequest.Kota,
+		Kecamatan: dataRequest.Kecamatan,
+		Jalan:     dataRequest.Jalan,
+		Status:    dataRequest.Status,
+		UserId:    dataRequest.UserId,
 	}
 }

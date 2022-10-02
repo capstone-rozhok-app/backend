@@ -2,35 +2,48 @@ package usecase
 
 import (
 	"errors"
-	"rozhok/features/client"
+	"rozhok/features/alamat"
 )
 
-type clientUsecase struct {
-	clientData client.DataInterface
+type addressUsecase struct {
+	addressData alamat.DataInterface
 }
 
-func New(dataClient client.DataInterface) client.UsecaseInterface {
-	return &clientUsecase{
-		clientData: dataClient,
+func New(dataAddress alamat.DataInterface) alamat.UsecaseInterface {
+	return &addressUsecase{
+		addressData: dataAddress,
 	}
 }
 
-func (usecase *clientUsecase) CreateClient(client client.Core) (int, error) {
-	if client.Email == "" || client.Password == "" {
-		return -1, errors.New("email dan password tidak boleh kosong")
+func (usecase *addressUsecase) CreateAddress(address alamat.Core) (int, error) {
+	if address.Provinsi == "" || address.Kota == "" || address.Kecamatan == "" || address.Jalan == "" {
+		return -1, errors.New("tidak boleh ada data yang kosong")
 	}
 
-	row, err := usecase.clientData.InsertClient(client)
+	row, err := usecase.addressData.InsertAddress(address)
 	return row, err
 }
 
-func (usecase *clientUsecase) PutClient(newData client.Core, id int) (int, error) {
+func (usecase *addressUsecase) PutAddress(newData alamat.Core, id, userId int) (int, error) {
 
-	row, err := usecase.clientData.UpdateClient(newData, id)
+	row, err := usecase.addressData.UpdateAdress(newData, id, userId)
 	return row, err
 }
 
-func (usecase *clientUsecase) DeleteClient(id int) (int, error) {
-	row, err := usecase.clientData.DeleteDataClient(id)
+func (usecase *addressUsecase) DeleteAddress(id, userId int) (int, error) {
+	row, err := usecase.addressData.DeleteDataAddress(id, userId)
 	return row, err
+}
+
+func (usecase *addressUsecase) GetAllAddress(userId int) (data []alamat.ResponseCore, err error) {
+	results, err := usecase.addressData.GetAllAddress(userId)
+	return results, err
+}
+
+func (usecase *addressUsecase) GetAddress(id int) (alamat.ResponseCore, error) {
+	result, err := usecase.addressData.GetAddress(id)
+	if err != nil {
+		return alamat.ResponseCore{}, err
+	}
+	return result, nil
 }
