@@ -105,10 +105,10 @@ func (deliv *TransaksiPorter) PutTransaksiPembelian(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errBind.Error()))
 	}
 
-	errValidate := c.Validate(&TransaksiRequestList)
-	if errValidate != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
-	}
+	// errValidate := c.Validate(&TransaksiRequestList)
+	// if errValidate != nil {
+	// 	return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
+	// }
 
 	BarangRosokList := []transaksiporter.DetailTransaksiPorter{}
 	for _, barangRosok := range TransaksiRequestList {

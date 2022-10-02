@@ -3,9 +3,9 @@ package delivery
 import transaksiporter "rozhok/features/transaksi_porter"
 
 type Request struct {
-	IdBarangRosok uint  `json:"id_barang_rosok" form:"id_barang_rosok" validate:"required"`
-	Berat         uint  `json:"berat" form:"berat" validate:"required"`
-	Subtotal      int64 `json:"subtotal" form:"subtotal" validate:"required"`
+	IdBarangRosok uint  `json:"id_barang_rosok" form:"id_barang_rosok" validate:"dive"`
+	Berat         uint  `json:"berat" form:"berat" validate:"dive"`
+	Subtotal      int64 `json:"subtotal" form:"subtotal" validate:"dive"`
 }
 
 func toCore(transaksiRequest Request) transaksiporter.DetailTransaksiPorter {
