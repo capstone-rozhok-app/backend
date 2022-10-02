@@ -67,15 +67,21 @@ func (repo *porterData) GetAll() (rows []porter.Core, err error) {
 	return porterCores, nil
 }
 
-func (repo *porterData) GetPendapatan(id uint) (row porter.Core, err error) {
+func (repo *porterData) GetPendapatan(porter porter.Core) (row porter.Core, err error) {
 	reportPorter := []struct {
 		TipeTransaksi string `json:"tipe_transaksi"`
 		GrandTotal    int64  `json:"grand_total"`
 	}{}
+	var tx = repo.db
 
-	tx := repo.db.Raw("SELECT tipe_transaksi, SUM(grand_total) grand_total FROM transaksi_porters tp WHERE porter_id  = ? GROUP BY tipe_transaksi", id).Scan(&reportPorter)
+	if porter.StartDate != "" && porter.EndDate != "" {
+		tx = repo.db.Raw("SELECT tipe_transaksi, SUM(grand_total) grand_total FROM transaksi_porters tp WHERE created_at >= ? AND WHERE created_at <= ? WHERE porter_id  = ? GROUP BY tipe_transaksi", porter.StartDate, porter.EndDate, porter.ID).Scan(&reportPorter)
+	} else {
+		tx = repo.db.Raw("SELECT tipe_transaksi, SUM(grand_total) grand_total FROM transaksi_porters tp WHERE porter_id  = ? GROUP BY tipe_transaksi", porter.ID).Scan(&reportPorter)
+	}
+
 	if tx.Error != nil {
-		return porter.Core{}, tx.Error
+		return row, tx.Error
 	}
 
 	for _, report := range reportPorter {
