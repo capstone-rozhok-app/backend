@@ -1,6 +1,7 @@
 package migration
 
 import (
+	addresModel "rozhok/features/alamat/data"
 	usermodel "rozhok/features/login/data"
 	transaksiportermodel "rozhok/features/transaksi_porter/data"
 
@@ -13,5 +14,6 @@ func InitMigrate(db *gorm.DB) {
 		new(transaksiportermodel.KategoriRosok),
 		new(transaksiportermodel.TransaksiPorter),
 		new(transaksiportermodel.TransaksiPorterDetail),
+		new(addresModel.Alamat),
 	)
 }

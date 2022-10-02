@@ -1,7 +1,31 @@
 package delivery
 
-type LoginResponse struct {
-	Token    string `json:"token" form:"token"`
-	Role     string `json:"role" form:"role"`
-	Username string `json:"username" form:"username"`
+import "rozhok/features/alamat"
+
+type AlamatResponse struct {
+	Provinsi  string `json:"provinsi" form:"provinsi"`
+	Kota      string `json:"kota" form:"kota"`
+	Kecamatan string `json:"kecamatan" form:"kecamatan"`
+	Jalan     string `json:"jalan" form:"jalan"`
+	Status    string `json:"status" form:"status"`
+	User      string `json:"user" form:"user"`
+}
+
+func fromCore(dataCore alamat.ResponseCore) AlamatResponse {
+	return AlamatResponse{
+		Provinsi:  dataCore.Provinsi,
+		Kota:      dataCore.Kota,
+		Kecamatan: dataCore.Kecamatan,
+		Jalan:     dataCore.Jalan,
+		Status:    dataCore.Status,
+		User:      dataCore.User,
+	}
+}
+
+func fromCoreList(dataCore []alamat.ResponseCore) []AlamatResponse {
+	var dataResponse []AlamatResponse
+	for _, v := range dataCore {
+		dataResponse = append(dataResponse, fromCore(v))
+	}
+	return dataResponse
 }
