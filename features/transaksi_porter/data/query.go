@@ -43,6 +43,10 @@ func (repo *transaksiPorterRepo) GetAll(TransaksiCore transaksiporter.Core) (row
 		return rows, tx.Error
 	}
 
+	if len(TransaksiPorterModel) < 1 {
+		return rows, errors.New("not found")
+	}
+
 	for _, model := range TransaksiPorterModel {
 		rows = append(rows, toCore(model))
 	}
@@ -53,7 +57,7 @@ func (repo *transaksiPorterRepo) GetAll(TransaksiCore transaksiporter.Core) (row
 func (repo *transaksiPorterRepo) Get(TransaksiCore transaksiporter.Core) (row transaksiporter.Core, err error) {
 	var transaksiPorterModel TransaksiPorter
 	transaksiPorterModel.ID = TransaksiCore.ID
-	tx := repo.DB.Model(&TransaksiPorter{}).Preload("UserClient").Preload("TransaksiPorterDetail").First(&transaksiPorterModel)
+	tx := repo.DB.Model(&TransaksiPorter{}).Preload("UserClient").Preload("TransaksiPorterDetail.KategoriRosok").Where("tipe_transaksi = ?", TransaksiCore.TipeTransaksi).First(&transaksiPorterModel)
 	if tx.Error != nil {
 		return row, tx.Error
 	}
@@ -63,25 +67,31 @@ func (repo *transaksiPorterRepo) Get(TransaksiCore transaksiporter.Core) (row tr
 
 func (repo *transaksiPorterRepo) CreateTransaksiPenjualan(TransaksiCore transaksiporter.Core) (row int, err error) {
 	var transaksiPorterModel TransaksiPorter
+
 	transaksiPorterModel.ID = TransaksiCore.ID
 
+	// ambil data transaksi porter by id transaksi
 	tx := repo.DB.Model(&TransaksiPorter{}).Preload("TransaksiPorterDetail.KategoriRosok").First(&transaksiPorterModel)
 	if tx.Error != nil {
 		return row, tx.Error
 	}
 
+	// kalkulasi harga mitra
 	var grandTotal int64
 	for _, barangRosok := range transaksiPorterModel.TransaksiPorterDetail {
 		grandTotal += int64(barangRosok.Berat) * barangRosok.KategoriRosok.HargaMitra
 	}
 
-	transaksiPorterModel.ID = 0
-	transaksiPorterModel.GrandTotal = grandTotal
-	transaksiPorterModel.TipeTransaksi = "penjualan"
-	transaksiPorterModel.Status = "terjual"
+	// buat ulang data transaksi kemudian ganti dengan status terjual
+	transaksiPorterModelAfter := TransaksiPorter{
+		PorterID:      transaksiPorterModel.PorterID,
+		ClientID:      transaksiPorterModel.ClientID,
+		GrandTotal:    grandTotal,
+		TipeTransaksi: "penjualan",
+		Status:        "terjual",
+	}
 
-	transaksiPorterModelBefore := transaksiPorterModel
-	tx1 := repo.DB.Model(&TransaksiPorter{}).Create(&transaksiPorterModel)
+	tx1 := repo.DB.Model(&TransaksiPorter{}).Create(&transaksiPorterModelAfter)
 	if tx1.Error != nil {
 		return row, tx.Error
 	}
@@ -90,10 +100,11 @@ func (repo *transaksiPorterRepo) CreateTransaksiPenjualan(TransaksiCore transaks
 		return int(tx1.RowsAffected), errors.New("failed to insert data")
 	}
 
+	// insert ulang juga data detail transaksi yang berkaitan, dan kalkulasi ulang dengan harga mitra.
 	barangRosokList := []TransaksiPorterDetail{}
-	for _, barangRosok := range transaksiPorterModelBefore.TransaksiPorterDetail {
+	for _, barangRosok := range transaksiPorterModel.TransaksiPorterDetail {
 		barangRosokList = append(barangRosokList, TransaksiPorterDetail{
-			TransaksiPorterID: transaksiPorterModel.ID,
+			TransaksiPorterID: transaksiPorterModelAfter.ID,
 			KategoriID:        barangRosok.KategoriID,
 			Berat:             barangRosok.Berat,
 			Subtotal:          barangRosok.KategoriRosok.HargaMitra * int64(barangRosok.Berat),
@@ -124,17 +135,17 @@ func (repo *transaksiPorterRepo) UpdateTransaksiPembelian(TransaksiCore transaks
 
 	//looping untuk kalkulasi subtotal (harga kategori client * berat)
 	barangRosokList := []TransaksiPorterDetail{}
-	for _, barangRosok := range transaksiPorterModel.TransaksiPorterDetail {
+	for index, barangRosok := range transaksiPorterModel.TransaksiPorterDetail {
 		barangRosokList = append(barangRosokList, TransaksiPorterDetail{
 			TransaksiPorterID: barangRosok.TransaksiPorterID,
 			KategoriID:        barangRosok.KategoriID,
-			Berat:             barangRosok.Berat,
-			Subtotal:          barangRosok.KategoriRosok.HargaClient * int64(barangRosok.Berat),
+			Berat:             uint(TransaksiCore.DetailTransaksiPorter[index].Berat),
+			Subtotal:          barangRosok.KategoriRosok.HargaClient * int64(TransaksiCore.DetailTransaksiPorter[index].Berat),
 		})
 	}
 
 	//delete barang rosok by transaksi porter id
-	tx2 := repo.DB.Model(&TransaksiPorterDetail{}).Where("transaksi_porter_id = ?", transaksiPorterModel.ID).Delete(TransaksiPorterDetail{})
+	tx2 := repo.DB.Model(&TransaksiPorterDetail{}).Where("transaksi_porter_id = ?", transaksiPorterModel.ID).Unscoped().Delete(barangRosokList)
 	if tx2.Error != nil {
 		return row, tx.Error
 	}

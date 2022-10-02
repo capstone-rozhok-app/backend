@@ -10,8 +10,8 @@ import (
 func InitMigrate(db *gorm.DB) {
 	db.AutoMigrate(
 		new(usermodel.User),
-		new(transaksiportermodel.TransaksiPorter),
 		new(transaksiportermodel.KategoriRosok),
+		new(transaksiportermodel.TransaksiPorter),
 		new(transaksiportermodel.TransaksiPorterDetail),
 	)
 }

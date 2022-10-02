@@ -25,8 +25,8 @@ type TransaksiPorterDetail struct {
 	Berat             uint
 	Subtotal          int64
 
-	KategoriRosok   KategoriRosok
-	TransaksiPorter TransaksiPorter
+	KategoriRosok   KategoriRosok   `gorm:"foreignKey:KategoriID"`
+	TransaksiPorter TransaksiPorter `gorm:"foreignKey:TransaksiPorterID"`
 }
 
 type KategoriRosok struct {
@@ -86,11 +86,12 @@ func toCore(transaksiPorterModel TransaksiPorter) transaksiporter.Core {
 		Status:        transaksiPorterModel.Status,
 		GrandTotal:    transaksiPorterModel.GrandTotal,
 		Client: transaksiporter.User{
-			Username: transaksiPorterModel.UserClient.Username,
-			Provinsi: transaksiPorterModel.UserClient.Provinsi,
-			Kota:     transaksiPorterModel.UserClient.Kota,
-			Jalan:    transaksiPorterModel.UserClient.Jalan,
-			Telepon:  transaksiPorterModel.UserClient.Telepon,
+			Username:  transaksiPorterModel.UserClient.Username,
+			Provinsi:  transaksiPorterModel.UserClient.Provinsi,
+			Kota:      transaksiPorterModel.UserClient.Kota,
+			Jalan:     transaksiPorterModel.UserClient.Jalan,
+			Telepon:   transaksiPorterModel.UserClient.Telepon,
+			Kecamatan: transaksiPorterModel.UserClient.Kecamatan,
 		},
 	}
 	transaksiPorterCore.ID = transaksiPorterModel.ID
