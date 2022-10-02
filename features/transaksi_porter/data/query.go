@@ -76,6 +76,10 @@ func (repo *transaksiPorterRepo) CreateTransaksiPenjualan(TransaksiCore transaks
 		return row, tx.Error
 	}
 
+	if transaksiPorterModel.Status != "sudah_bayar" {
+		return 0, errors.New("failed status not sudah_dibayar")
+	}
+
 	// kalkulasi harga mitra
 	var grandTotal int64
 	for _, barangRosok := range transaksiPorterModel.TransaksiPorterDetail {
