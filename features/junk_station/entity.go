@@ -15,7 +15,7 @@ type Core struct{
 }
 
 type UsecaseInterface interface{
-	CreateJunkStation (data Core) (row int, err error)
+	CreateJunkStation (data Core, id int) (row int, err error)
 	GetJunkStationAll () (data []Core, err error)
 	GetJunkStationById (id int) (data Core, err error)
 	PutJunkStation (id int, data Core) (row int, err error)
