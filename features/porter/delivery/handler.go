@@ -18,7 +18,8 @@ func New(e *echo.Echo, usecase porter.UsecaseInterface) {
 	handler := &Delivery{
 		porterUsecase: usecase,
 	}
-	e.GET("/porter/:id", handler.GetPorter, middlewares.JWTMiddleware())
+	e.GET("/porter/dashboard", handler.Dashboard, middlewares.JWTMiddleware(), middlewares.IsPorter)
+	e.GET("/porter/:id", handler.GetPorter, middlewares.JWTMiddleware(), middlewares.IsAdmin)
 	e.GET("/porters", handler.GetAllPorter, middlewares.JWTMiddleware(), middlewares.IsAdmin)
 	e.GET("/porter/:id/pendapatan", handler.GetPendapatan, middlewares.JWTMiddleware(), middlewares.IsAdmin)
 	e.POST("/porter", handler.CreatePorter, middlewares.JWTMiddleware(), middlewares.IsAdmin)
@@ -126,6 +127,29 @@ func (deliv *Delivery) GetPendapatan(c echo.Context) error {
 
 	porterCore.StartDate = c.QueryParam("start_date")
 	porterCore.EndDate = c.QueryParam("end_date")
+	porterCore.ID = uint(id)
+
+	row, err := deliv.porterUsecase.GetPendapatan(porterCore)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
+	}
+
+	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("success get porter report", PorterResponseReport{
+		TotalLaba:      row.Laba,
+		TotalPembelian: row.TotalPembelian,
+		TotalPenjualan: row.TotalPenjualan,
+	}))
+}
+
+func (deliv *Delivery) Dashboard(c echo.Context) error {
+	id, _, _ := middlewares.ExtractToken(c)
+	if id < 0 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("not valid porter"))
+	}
+
+	var porterCore porter.Core
+
+	porterCore.PeriodicFilter = c.QueryParam("filter")
 	porterCore.ID = uint(id)
 
 	row, err := deliv.porterUsecase.GetPendapatan(porterCore)
