@@ -37,8 +37,8 @@ func (usecase *porterUsecase) GetAll() (rows []porter.Core, err error) {
 	return usecase.porterData.GetAll()
 }
 
-func (usecase *porterUsecase) GetPendapatan(id uint) (row porter.Core, err error) {
-	return usecase.porterData.Get(id)
+func (usecase *porterUsecase) GetPendapatan(porterCore porter.Core) (row porter.Core, err error) {
+	return usecase.porterData.GetPendapatan(porterCore)
 }
 
 func (usecase *porterUsecase) Get(id uint) (row porter.Core, err error) {
