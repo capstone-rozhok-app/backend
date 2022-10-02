@@ -6,8 +6,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func ParamInt(c echo.Context) int {
-	id, err := strconv.Atoi(c.Param("id"))
+func ParamInt(c echo.Context, paramKey string) int {
+	id, err := strconv.Atoi(c.Param(paramKey))
 	if err != nil || id < 0 {
 		return -1
 	}

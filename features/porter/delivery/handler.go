@@ -55,7 +55,7 @@ func (deliv *Delivery) UpdatePorter(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("error binding data"))
 	}
 
-	id := helper.ParamInt(c)
+	id := helper.ParamInt(c, "id")
 	if id < 0 {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("parameter not valid"))
 	}
@@ -72,7 +72,7 @@ func (deliv *Delivery) UpdatePorter(c echo.Context) error {
 }
 
 func (deliv *Delivery) DeletePorter(c echo.Context) error {
-	id := helper.ParamInt(c)
+	id := helper.ParamInt(c, "id")
 	if id < 0 {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("parameter not valid"))
 	}
@@ -102,7 +102,7 @@ func (deliv *Delivery) GetAllPorter(c echo.Context) error {
 }
 
 func (deliv *Delivery) GetPorter(c echo.Context) error {
-	id := helper.ParamInt(c)
+	id := helper.ParamInt(c, "id")
 	if id < 0 {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("parameter not valid"))
 	}
