@@ -30,6 +30,11 @@ func (deliv *Delivery) PostAlamat(c echo.Context) error {
 	var dataRequest AlamatRequest
 	userId, _, _ := middlewares.ExtractToken(c)
 	dataRequest.UserId = uint(userId)
+
+	// errValidate := c.Validate(&dataRequest)
+	// if errValidate != nil {
+	// 	return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
+	// }
 	errBind := c.Bind(&dataRequest)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("error binding data"))
@@ -37,17 +42,21 @@ func (deliv *Delivery) PostAlamat(c echo.Context) error {
 
 	row, err := deliv.addressUsecase.CreateAddress(toCore(dataRequest))
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal memasukan alamat"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to insert address"))
 	}
 	if row != 1 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal memasukan alamat"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to insert address"))
 	}
 	return c.JSON(http.StatusCreated, helper.SuccessResponseHelper("Berhasil memasukan alamat"))
 }
 
 func (deliv *Delivery) UpdateAdress(c echo.Context) error {
 	id := c.Param("id")
-	idConv, _ := strconv.Atoi(id)
+	idConv, errConv := strconv.Atoi(id)
+
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("param must be a number"))
+	}
 	userId, _, _ := middlewares.ExtractToken(c)
 
 	var dataUpdate AlamatRequest
@@ -58,7 +67,7 @@ func (deliv *Delivery) UpdateAdress(c echo.Context) error {
 
 	row, err := deliv.addressUsecase.PutAddress(toCore(dataUpdate), idConv, userId)
 	if err != nil || row == 0 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal memperbarui data"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to update address"))
 	}
 
 	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Berhasil memperbarui data"))
@@ -67,12 +76,16 @@ func (deliv *Delivery) UpdateAdress(c echo.Context) error {
 
 func (deliv *Delivery) DeleteAddress(c echo.Context) error {
 	id := c.Param("id")
-	idConv, _ := strconv.Atoi(id)
+	idConv, errConv := strconv.Atoi(id)
+
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("param must be a number"))
+	}
 	userId, _, _ := middlewares.ExtractToken(c)
 
 	row, err := deliv.addressUsecase.DeleteAddress(idConv, userId)
 	if err != nil || row == 0 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal menghapus akun"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to delete address"))
 	}
 	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Berhasil menghapus akun"))
 }
@@ -97,7 +110,7 @@ func (deliv *Delivery) GetAddress(c echo.Context) error {
 
 	result, err := deliv.addressUsecase.GetAddress(idConv)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("failed to get data"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to get data"))
 	}
-	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("succes get data", fromCore(result)))
+	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("Succes get data", fromCore(result)))
 }

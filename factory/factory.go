@@ -23,6 +23,10 @@ import (
 	alamatData "rozhok/features/alamat/data"
 	alamatDelivery "rozhok/features/alamat/delivery"
 	alamatUsecase "rozhok/features/alamat/usecase"
+
+	produkData "rozhok/features/produk/data"
+	produkDelivery "rozhok/features/produk/delivery"
+	produkUsecase "rozhok/features/produk/usecase"
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {
@@ -45,5 +49,9 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	alamatDataFactory := alamatData.New(db)
 	alamatUsecaseFactory := alamatUsecase.New(alamatDataFactory)
 	alamatDelivery.New(e, alamatUsecaseFactory)
+
+	produkDataFactory := produkData.New(db)
+	produkUsecaseFactory := produkUsecase.New(produkDataFactory)
+	produkDelivery.New(e, produkUsecaseFactory)
 
 }
