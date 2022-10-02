@@ -16,7 +16,7 @@ func NewLogic(data js.DataInterface) js.UsecaseInterface {
 	}
 }
 
-func (u *Usecase) CreateJunkStation(junkCreate js.Core) (int, error) {
+func (u *Usecase) CreateJunkStation(junkCreate js.Core, id int) (int, error) {
 	if junkCreate.JunkStationName == "" || junkCreate.Status == ""{
 		return -1, errors.New("your data not fuel field")
 	}
