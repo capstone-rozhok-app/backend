@@ -75,7 +75,7 @@ func (repo *porterData) GetPendapatan(porter porter.Core) (row porter.Core, err 
 	var tx = repo.db
 
 	if porter.StartDate != "" && porter.EndDate != "" {
-		tx = repo.db.Raw("SELECT tipe_transaksi, SUM(grand_total) grand_total FROM transaksi_porters tp WHERE created_at >= ? AND WHERE created_at <= ? WHERE porter_id  = ? GROUP BY tipe_transaksi", porter.StartDate, porter.EndDate, porter.ID).Scan(&reportPorter)
+		tx = repo.db.Raw("SELECT tipe_transaksi, SUM(grand_total) grand_total FROM transaksi_porters tp WHERE created_at >= ? AND created_at <= ? AND porter_id  = ? GROUP BY tipe_transaksi", porter.StartDate, porter.EndDate, porter.ID).Scan(&reportPorter)
 	} else {
 		tx = repo.db.Raw("SELECT tipe_transaksi, SUM(grand_total) grand_total FROM transaksi_porters tp WHERE porter_id  = ? GROUP BY tipe_transaksi", porter.ID).Scan(&reportPorter)
 	}
