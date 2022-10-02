@@ -30,7 +30,7 @@ type DetailTransaksiPorter struct {
 	HargaKategori int64
 }
 
-type TransaksPorterData interface {
+type TransaksiPorterData interface {
 	GetAll(TransaksiCore Core) (rows []Core, err error)
 	Get(TransaksiCore Core) (row Core, err error)
 	CreateTransaksiPenjualan(TransaksiCore Core) (row int, err error)

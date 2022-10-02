@@ -3,10 +3,10 @@ package usecase
 import transaksiporter "rozhok/features/transaksi_porter"
 
 type TransaksiPorter struct {
-	Repo transaksiporter.TransaksPorterData
+	Repo transaksiporter.TransaksiPorterData
 }
 
-func New(repo transaksiporter.TransaksPorterData) *TransaksiPorter {
+func New(repo transaksiporter.TransaksiPorterData) *TransaksiPorter {
 	return &TransaksiPorter{
 		Repo: repo,
 	}
