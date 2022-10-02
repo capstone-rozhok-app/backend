@@ -13,7 +13,7 @@ type Alamat struct {
 	Kecamatan string
 	Jalan     string
 	UserId    uint
-	Status    string
+	Status    string `gorm:"unique"`
 	User      User
 }
 

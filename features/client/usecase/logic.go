@@ -3,6 +3,8 @@ package usecase
 import (
 	"errors"
 	"rozhok/features/client"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type clientUsecase struct {
@@ -19,6 +21,12 @@ func (usecase *clientUsecase) CreateClient(client client.Core) (int, error) {
 	if client.Email == "" || client.Password == "" {
 		return -1, errors.New("email dan password tidak boleh kosong")
 	}
+
+	passwordHased, err := bcrypt.GenerateFromPassword([]byte(client.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return 0, err
+	}
+	client.Password = string(passwordHased)
 
 	row, err := usecase.clientData.InsertClient(client)
 	return row, err

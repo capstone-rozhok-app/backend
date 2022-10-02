@@ -3,6 +3,7 @@ package delivery
 import "rozhok/features/alamat"
 
 type AlamatResponse struct {
+	Id        uint   `json:"id" form:"id"`
 	Provinsi  string `json:"provinsi" form:"provinsi"`
 	Kota      string `json:"kota" form:"kota"`
 	Kecamatan string `json:"kecamatan" form:"kecamatan"`
@@ -13,6 +14,7 @@ type AlamatResponse struct {
 
 func fromCore(dataCore alamat.ResponseCore) AlamatResponse {
 	return AlamatResponse{
+		Id:        dataCore.ID,
 		Provinsi:  dataCore.Provinsi,
 		Kota:      dataCore.Kota,
 		Kecamatan: dataCore.Kecamatan,
