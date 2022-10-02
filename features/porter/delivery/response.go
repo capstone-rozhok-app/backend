@@ -12,6 +12,12 @@ type PorterResponse struct {
 	Jalan     string `json:"jalan"`
 }
 
+type PorterResponseReport struct {
+	TotalLaba      int64 `json:"total_laba"`
+	TotalPembelian int64 `json:"total_pembelian"`
+	TotalPenjualan int64 `json:"total_penjualan"`
+}
+
 func fromCore(porterCore porter.Core) PorterResponse {
 	return PorterResponse{
 		Name:      porterCore.Username,

@@ -20,7 +20,7 @@ func New(e *echo.Echo, usecase porter.UsecaseInterface) {
 	}
 	e.GET("/porter/:id", handler.GetPorter, middlewares.JWTMiddleware())
 	e.GET("/porters", handler.GetAllPorter, middlewares.JWTMiddleware(), middlewares.IsAdmin)
-	e.DELETE("/porter/:id/pendapatan", handler.GetPendapatan, middlewares.JWTMiddleware(), middlewares.IsAdmin)
+	e.GET("/porter/:id/pendapatan", handler.GetPendapatan, middlewares.JWTMiddleware(), middlewares.IsAdmin)
 	e.POST("/porter", handler.CreatePorter, middlewares.JWTMiddleware(), middlewares.IsAdmin)
 	e.PUT("/porter/:id", handler.UpdatePorter, middlewares.JWTMiddleware(), middlewares.IsAdmin)
 	e.DELETE("/porter/:id", handler.DeletePorter, middlewares.JWTMiddleware(), middlewares.IsAdmin)
@@ -133,5 +133,9 @@ func (deliv *Delivery) GetPendapatan(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
 	}
 
-	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("success get porter", fromCore(row)))
+	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("success get porter report", PorterResponseReport{
+		TotalLaba:      row.Laba,
+		TotalPembelian: row.TotalPembelian,
+		TotalPenjualan: row.TotalPenjualan,
+	}))
 }
