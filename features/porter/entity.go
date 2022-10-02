@@ -13,6 +13,7 @@ type Core struct {
 	Laba           int64
 	TotalPenjualan int64
 	TotalPembelian int64
+	PeriodicFilter string
 	StartDate      string
 	EndDate        string
 }
