@@ -175,3 +175,36 @@ func TestGet(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 }
+
+func TestGetPendapatan(t *testing.T) {
+	responseData := porter.Core{
+		ID: 1,
+		TotalPenjualan: 7000,
+		TotalPembelian: 5000,
+		Laba: 2000,
+	}
+
+	t.Run("success get data", func(t *testing.T) {
+		repo := new(mocks.PorterRepo)
+		repo.On("GetPendapatan", mock.Anything).Return(responseData, nil).Once()
+
+		usecase := New(repo)
+		row, err := usecase.GetPendapatan(responseData)
+
+		assert.NoError(t, err)
+		assert.NotEqual(t, 1, row.ID)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("error get data", func(t *testing.T) {
+		repo := new(mocks.PorterRepo)
+		repo.On("GetPendapatan", mock.Anything).Return(porter.Core{}, errors.New("internal server error")).Once()
+
+		usecase := New(repo)
+		row, err := usecase.GetPendapatan(responseData)
+
+		assert.Error(t, err)
+		assert.Equal(t, uint(0), row.ID)
+		repo.AssertExpectations(t)
+	})
+}
