@@ -28,11 +28,11 @@ type DetailTransaksiClient struct {
 type TransaksiPorterData interface {
 	GetAll() (rows []Core, err error)
 	Get(TransaksiCore Core) (row Core, err error)
-	CreateTransaksiPenjualan(TransaksiCore Core) (row int, err error)
+	CreatePengambilanRosok(TransaksiCore Core) (row int, err error)
 }
 
 type TransaksiPorterUsecase interface {
 	GetAll() (rows []Core, err error)
 	Get(TransaksiCore Core) (row Core, err error)
-	PostTransaksiPenjualan(TransaksiCore Core) (row int, err error)
+	CreatePengambilanRosok(TransaksiCore Core) (row int, err error)
 }

@@ -51,7 +51,7 @@ type TransaksiClientDetail struct {
 	Subtotal          int64
 
 	KategoriRosok   KategoriRosok   `gorm:"constraint:OnUpdate:SET NULL,OnDelete:SET NULL;foreignKey:KategoriID"`
-	TransaksiPorter TransaksiPorter `gorm:"foreignKey:TransaksiPorterID"`
+	TransaksiClient TransaksiClient `gorm:"foreignKey:TransaksiClientID"`
 }
 
 type KategoriRosok struct {
@@ -81,9 +81,9 @@ type User struct {
 
 func FromCore(transaksiClientCore pengambilanrosok.Core) TransaksiClient {
 	transaksiClientModel := TransaksiClient{
-		ClientID:      transaksiClientCore.Client.ID,
-		PorterID:      transaksiClientCore.PorterID,
-		Status:        transaksiClientCore.Status,
+		ClientID: transaksiClientCore.Client.ID,
+		PorterID: transaksiClientCore.PorterID,
+		Status:   transaksiClientCore.Status,
 	}
 	transaksiClientModel.ID = transaksiClientCore.ID
 
@@ -91,7 +91,7 @@ func FromCore(transaksiClientCore pengambilanrosok.Core) TransaksiClient {
 	for _, detailTransaksiCore := range transaksiClientCore.DetailTransaksiClient {
 		barangRosok := TransaksiClientDetail{
 			TransaksiClientID: transaksiClientModel.ID,
-			KategoriID: detailTransaksiCore.IdKategori,
+			KategoriID:        detailTransaksiCore.IdKategori,
 		}
 		barangRosok.ID = detailTransaksiCore.Id
 		transaksiClientDetailModelList = append(transaksiClientDetailModelList, barangRosok)
@@ -118,15 +118,15 @@ func toCore(transaksiClientModel TransaksiClient) pengambilanrosok.Core {
 	}
 
 	transaksiClientCoreDetail := []pengambilanrosok.DetailTransaksiClient{}
-	for _, barangRosok := range transaksiClientModel.TransaksiClientDetail{
-		transaksiClientCoreDetail  = append(transaksiClientCoreDetail, pengambilanrosok.DetailTransaksiClient{
-			Id: barangRosok.ID,
+	for _, barangRosok := range transaksiClientModel.TransaksiClientDetail {
+		transaksiClientCoreDetail = append(transaksiClientCoreDetail, pengambilanrosok.DetailTransaksiClient{
+			Id:         barangRosok.ID,
 			IdKategori: barangRosok.KategoriID,
-			Nama: barangRosok.KategoriRosok.NamaKategori,
+			Nama:       barangRosok.KategoriRosok.NamaKategori,
 		})
 	}
 
-	transaksiClientCore.ID = transaksiClientCore.ID
+	transaksiClientCore.ID = transaksiClientModel.ID
 	transaksiClientCore.DetailTransaksiClient = transaksiClientCoreDetail
 	return transaksiClientCore
 }
