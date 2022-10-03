@@ -29,7 +29,7 @@ func (repo *pengambilanRosokRepo) GetAll(TransaksiCore pengambilanrosok.Core) (r
 	//ambil data transaksi client dengan status belum_bayar dan kecamatan,kota,provinsi sesuai porter
 	clientTransactionError := repo.DB.Model(&TransaksiClient{}).Where("status = ?", "belum_bayar").Preload("UserClient.Alamat", func(db *gorm.DB) *gorm.DB {
 		return db.Where("alamats.status", "utama").Where("alamats.provinsi", porter.Provinsi).Where("alamats.kota", porter.Kota).Where("alamats.kecamatan", porter.Kecamatan)
-	}).Preload("TransaksiClientDetail.KategoriRosok").Find(&pengambilanRosokModelList).Error
+	}).Find(&pengambilanRosokModelList).Error
 
 	if clientTransactionError != nil {
 		return rows, clientTransactionError
@@ -49,7 +49,9 @@ func (repo *pengambilanRosokRepo) Get(TransaksiCore pengambilanrosok.Core) (row 
 	var transaksiClientModel TransaksiClient
 	transaksiClientModel.ID = TransaksiCore.ID
 
-	if transaksiClientError := repo.DB.Model(&TransaksiClient{}).Preload("UserClient").Preload("TransaksiClientDetail.KategoriRosok").First(&transaksiClientModel).Error; transaksiClientError != nil {
+	if transaksiClientError := repo.DB.Model(&TransaksiClient{}).Preload("UserClient.Alamat", func(db *gorm.DB) *gorm.DB {
+		return db.Where("alamats.status", "utama")
+	}).Preload("TransaksiClientDetail.KategoriRosok").First(&transaksiClientModel).Error; transaksiClientError != nil {
 		return row, transaksiClientError
 	}
 
@@ -100,7 +102,7 @@ func (repo *pengambilanRosokRepo) CreatePengambilanRosok(TransaksiCore pengambil
 	}
 
 	// update data transaksi client "pending"
-	txTransaksiClient := repo.DB.Model(&TransaksiClient{}).Where("id = ?", TransaksiCore.ID).Update("status = ?", "dalam_perjalanan")
+	txTransaksiClient := repo.DB.Model(&TransaksiClient{}).Where("id = ?", TransaksiCore.ID).Update("status", "dalam_perjalanan")
 	if txTransaksiClient.Error != nil {
 		return row, txTransaksiClient.Error
 	}

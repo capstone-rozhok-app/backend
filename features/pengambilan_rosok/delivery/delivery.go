@@ -44,7 +44,7 @@ func (deliv *PengambilanRosok) GetAll(c echo.Context) error {
 }
 
 func (deliv *PengambilanRosok) Get(c echo.Context) error {
-	id := helper.ParamInt(c, "transaction_id")
+	id := helper.ParamInt(c, "penjualan_id")
 	idPorter, _, _ := middlewares.ExtractToken(c)
 
 	var PengambilanRosokCore pengambilanrosok.Core
@@ -60,7 +60,7 @@ func (deliv *PengambilanRosok) Get(c echo.Context) error {
 }
 
 func (deliv *PengambilanRosok) PostTransaksiPenjualan(c echo.Context) error {
-	id := helper.ParamInt(c, "transaction_id")
+	id := helper.ParamInt(c, "penjualan_id")
 	idPorter, _, _ := middlewares.ExtractToken(c)
 
 	var PengambilanRosokCore pengambilanrosok.Core
