@@ -101,7 +101,7 @@ func TestPost(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		repo := new(mocks.PengambilanRosokStruct)
 
-		repo.On("CreateTransaksiPenjualan", mock.Anything).Return(1, nil).Once()
+		repo.On("CreatePengambilanRosok", mock.Anything).Return(1, nil).Once()
 		usecase := New(repo)
 
 		row, err := usecase.CreatePengambilanRosok(PengambilanRosok)
@@ -115,7 +115,7 @@ func TestPost(t *testing.T) {
 	t.Run("failed", func(t *testing.T) {
 		repo := new(mocks.PengambilanRosokStruct)
 
-		repo.On("CreateTransaksiPenjualan", mock.Anything).Return(0, errors.New("error")).Once()
+		repo.On("CreatePengambilanRosok", mock.Anything).Return(0, errors.New("error")).Once()
 		usecase := New(repo)
 
 		row, err := usecase.CreatePengambilanRosok(PengambilanRosok)
