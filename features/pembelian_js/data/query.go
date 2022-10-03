@@ -47,7 +47,7 @@ func (q *DataPembelian) UpdatePembelian(id int, data pjs.PembelianCore)(int, err
 }
 
 func (q *DataPembelian) DeletePembelian(id int, data pjs.PembelianCore)(int, error){
- 	tx := q.db.Model(&PembelianJS{}).Where("id = ?", data.ID). Updates(FromCore(data))
+ 	tx := q.db.Model(&PembelianJS{}).Where("id = ?", data.ID). Delete(FromCore(data))
 	if tx.Error != nil {
 		return -1, tx.Error
 	}

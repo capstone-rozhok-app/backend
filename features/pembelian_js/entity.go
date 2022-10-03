@@ -4,7 +4,7 @@ type PembelianCore struct{
 	ID				int
 	Kategori		string
 	Berat			int
-	Harga			string
+	Harga			int
 }
 
 type UsecaseInterface interface{

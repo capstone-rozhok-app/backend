@@ -9,7 +9,7 @@ type PembelianJS struct{
 	gorm.Model
 	Kategori		string
 	Berat			int
-	Harga			string
+	Harga			int
 	JunkStation		JunkStation
 }
 

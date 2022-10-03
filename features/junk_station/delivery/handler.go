@@ -31,6 +31,10 @@ func (h *JunkHandler) CreateJunkStation(c echo.Context) error {
 	if errBind != nil {
 		return c.JSON(400, helper.FailedResponseHelper("failed to bind"))
 	}
+	if err := c.Validate(JsRequest); err != nil{
+		return c.JSON(400, helper.FailedResponseHelper(err.Error()))
+	}
+
 	row, err := h.JunkInterface.CreateJunkStation(ToCoreReq(JsRequest), jsID)
 	if err != nil || row != 1 {
 		return c.JSON(400, helper.FailedResponseHelper("failed to create"))
@@ -69,11 +73,18 @@ func (h *JunkHandler) PutJunkStation(c echo.Context)error  {
 	if errConv != nil || idConv == 0 {
 		return c.JSON(400, helper.FailedResponseHelper("error update by param"))
 	}
+
+
 	var JunkRequest JsReq
 	errBind := c.Bind(&JunkRequest)
 	if errBind != nil {
 		return c.JSON(400, helper.FailedResponseHelper("error bind JS"))
 	}
+
+	if err := c.Validate(JunkRequest); err != nil {
+		return c.JSON(400, helper.FailedResponseHelper(err.Error()))
+	}
+	
 	row, err := h.JunkInterface.PutJunkStation(idConv, ToCoreReq(JunkRequest))
 	if err != nil || row == 0 {
 		return c.JSON(400, helper.FailedResponseHelper("error Update JS"))
