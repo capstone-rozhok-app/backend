@@ -1,13 +1,11 @@
 package delivery
 
-import transaksiporter "rozhok/features/transaksi_porter"
+import (
+	pengambilanrosok "rozhok/features/pengambilan_rosok"
+)
 
 type Response struct {
-	IdTransaksi   uint   `json:"id_transaksi"`
-	TipeTransaksi string `json:"tipe_transaksi"`
-	Status        string `json:"status"`
-	GrandTotal    int64  `json:"grand_total"`
-
+	IdPenjualan uint          `json:"id_penjualan"`
 	Client      Client        `json:"client"`
 	BarangRosok []BarangRosok `json:"barang_rosok"`
 }
@@ -28,33 +26,25 @@ type BarangRosok struct {
 	HargaKategori int64  `json:"harga_kategori"`
 }
 
-func toResponse(TransaksiPorterCore transaksiporter.Core) Response {
+func toResponse(PengambilanRosokCore pengambilanrosok.Core) Response {
 	TransaksiPorterResponse := Response{
-		IdTransaksi:   TransaksiPorterCore.ID,
-		TipeTransaksi: TransaksiPorterCore.TipeTransaksi,
-		Status:        TransaksiPorterCore.Status,
-		GrandTotal:    TransaksiPorterCore.GrandTotal,
+		IdPenjualan: PengambilanRosokCore.ID,
 		Client: Client{
-			Name:      TransaksiPorterCore.Client.Username,
-			NoTelp:    TransaksiPorterCore.Client.Telepon,
-			Provinsi:  TransaksiPorterCore.Client.Provinsi,
-			Kota:      TransaksiPorterCore.Client.Kota,
-			Kecamatan: TransaksiPorterCore.Client.Kecamatan,
+			Name:      PengambilanRosokCore.Client.Username,
+			NoTelp:    PengambilanRosokCore.Client.Telepon,
+			Provinsi:  PengambilanRosokCore.Client.Provinsi,
+			Kota:      PengambilanRosokCore.Client.Kota,
+			Kecamatan: PengambilanRosokCore.Client.Kecamatan,
 		},
 	}
 
 	barangRosokList := []BarangRosok{}
-	for _, barangRosokCore := range TransaksiPorterCore.DetailTransaksiPorter {
+	for _, barangRosokCore := range PengambilanRosokCore.DetailTransaksiClient {
 		barangRosokList = append(barangRosokList, BarangRosok{
-			Id:            barangRosokCore.Id,
-			Kategori:      barangRosokCore.Nama,
-			Subtotal:      barangRosokCore.Subtotal,
-			Berat:         barangRosokCore.Berat,
-			HargaKategori: barangRosokCore.HargaKategori,
+			Kategori: barangRosokCore.Nama,
 		})
 	}
 
 	TransaksiPorterResponse.BarangRosok = barangRosokList
-
 	return TransaksiPorterResponse
 }
