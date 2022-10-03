@@ -39,7 +39,17 @@ func (h *JunkHandler) CreateJunkStation(c echo.Context) error {
 }
 
 func (h *JunkHandler) GetJunkStationAll(c echo.Context)error {
-	res, err := h.JunkInterface.GetJunkStationAll()
+	Provinsi := c.QueryParam("provinsi")
+	Kota := c.QueryParam("kota")
+	Kecamatam := c.QueryParam("kecamatan")
+
+	var JunkFilter js.Core
+
+	JunkFilter.Provinsi = Provinsi
+	JunkFilter.Kota = Kota
+	JunkFilter.Kecamatan = Kecamatam
+	
+	res, err := h.JunkInterface.GetJunkStationAll(JunkFilter)
 	if err != nil {
 		return c.JSON(400, helper.FailedResponseHelper("failed to get data"))
 	}

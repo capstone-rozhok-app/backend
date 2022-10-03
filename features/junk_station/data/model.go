@@ -38,7 +38,7 @@ func FromCore(dataCore js.Core) User {
 	return dataModel
 }
 
-func (dataCore *User)ToCore() js.Core {
+func (dataCore *User)ToCore(User) js.Core {
 	return js.Core{
 		JunkStationID: 				int(dataCore.ID),
 		Email: 					dataCore.Email,
@@ -56,8 +56,8 @@ func (dataCore *User)ToCore() js.Core {
 
 func CoreList(dataCore []User) []js.Core {
 	var data []js.Core
-	for key := range dataCore {
-		data = append(data, dataCore[key].ToCore())
+	for key, v := range dataCore {
+		data = append(data, dataCore[key].ToCore(v))
 	}
 	return data
 }
