@@ -9,12 +9,12 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type TransaksiPorter struct {
+type PengambilanRosok struct {
 	Usecase pengambilanrosok.PengambilanRosokUsecase
 }
 
 func New(e *echo.Echo, usecase pengambilanrosok.PengambilanRosokUsecase) {
-	handler := &TransaksiPorter{
+	handler := &PengambilanRosok{
 		Usecase: usecase,
 	}
 
@@ -23,7 +23,7 @@ func New(e *echo.Echo, usecase pengambilanrosok.PengambilanRosokUsecase) {
 	e.POST("/pengambilan/:penjualan_id/porter", handler.PostTransaksiPenjualan)
 }
 
-func (deliv *TransaksiPorter) GetAll(c echo.Context) error {
+func (deliv *PengambilanRosok) GetAll(c echo.Context) error {
 	idPorter, _, _ := middlewares.ExtractToken(c)
 
 	var pengambilanBarangRosok pengambilanrosok.Core
@@ -43,7 +43,7 @@ func (deliv *TransaksiPorter) GetAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("success get data", transaksiPorterResponses))
 }
 
-func (deliv *TransaksiPorter) Get(c echo.Context) error {
+func (deliv *PengambilanRosok) Get(c echo.Context) error {
 	id := helper.ParamInt(c, "transaction_id")
 	idPorter, _, _ := middlewares.ExtractToken(c)
 
@@ -59,7 +59,7 @@ func (deliv *TransaksiPorter) Get(c echo.Context) error {
 	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("success get data", toResponse(pengambilanRosokResult)))
 }
 
-func (deliv *TransaksiPorter) PostTransaksiPenjualan(c echo.Context) error {
+func (deliv *PengambilanRosok) PostTransaksiPenjualan(c echo.Context) error {
 	id := helper.ParamInt(c, "transaction_id")
 	idPorter, _, _ := middlewares.ExtractToken(c)
 
