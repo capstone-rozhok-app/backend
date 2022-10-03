@@ -16,17 +16,17 @@ type JSRes struct{
 	Jalan			string		`json:"jalan"`
 }
 
+
 func FromCore(data js.Core) JSRes {
 	return JSRes{
 		JunkStationID: data.JunkStationID,
 		JunkStationName: data.JunkStationName,
-		JunkStationOwner: data.JunkStationOwner,
-		Status: data.Status,
 		Provinsi: data.Provinsi,
 		Kota: data.Kota,
 		Kecamatan: data.Kecamatan,
+		JunkStationOwner: data.JunkStationOwner,
 		Telp: data.Telp,
-		Jalan: data.Jalan,
+		Status: data.Status,
 	}
 }
 
@@ -40,14 +40,14 @@ func CoreList(data []js.Core) []JSRes {
 
 func FromCoreToResponse(data js.Core) JSRes {
 	dataResponse := JSRes{
+		JunkStationID: data.JunkStationID,
 		JunkStationName: data.JunkStationName,
-		JunkStationOwner: data.JunkStationOwner,
-		Status: data.Status,
 		Provinsi: data.Provinsi,
 		Kota: data.Kota,
 		Kecamatan: data.Kecamatan,
+		JunkStationOwner: data.JunkStationOwner,
 		Telp: data.Telp,
-		Jalan: data.Jalan,
+		Status: data.Status,
 	}
 	return dataResponse
 }
