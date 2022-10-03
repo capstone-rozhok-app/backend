@@ -10,15 +10,7 @@ type PembelianJS struct{
 	Kategori		string
 	Berat			int
 	Harga			int
-	JunkStation		JunkStation
-}
-
-type JunkStation struct{
-	gorm.Model
-	JunkStationName		string
-	Status				string
-	User				User
-	PembelianJS			[]PembelianJS
+	User			User
 }
 
 type User struct {
@@ -27,6 +19,7 @@ type User struct {
 	Password 			string
 	Role    			string
 	Username 			string
+	JunkStationName		string
 	StatusKemitraan   	string
 	Foto 				string
 	Provinsi 			string
@@ -34,7 +27,7 @@ type User struct {
 	Kecamatan 			string
 	Jalan 				string
 	Telepon 			string
-	JunkStation			[]JunkStation
+	PembelianJS			[]PembelianJS
 }
 
 func FromCore(junkCore pjs.PembelianCore) PembelianJS {

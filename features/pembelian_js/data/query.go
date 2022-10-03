@@ -41,7 +41,7 @@ func (q *DataPembelian) UpdatePembelian(id int, data pjs.PembelianCore)(int, err
 		return -1, tx.Error
 	}
 	if tx.RowsAffected == 0 {
-		return 0, errors.New("Failed to update Pembelian")
+		return 0, errors.New("failed to update Pembelian")
 	}
 	return int(tx.RowsAffected), nil
 }
