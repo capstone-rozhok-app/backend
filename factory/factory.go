@@ -39,6 +39,10 @@ import (
 	pengambilanRosok "rozhok/features/pengambilan_rosok/data"
 	pengambilanRosokDelivery "rozhok/features/pengambilan_rosok/delivery"
 	pengambilanRosokUsecase "rozhok/features/pengambilan_rosok/usecase"
+
+	cartData "rozhok/features/cart/data"
+	cartDelivery "rozhok/features/cart/delivery"
+	cartUsecase "rozhok/features/cart/usecase"
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {
@@ -77,4 +81,9 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	pengambilanRosokDataFactory := pengambilanRosok.New(db)
 	pengambilanRosokUsecaseFactory := pengambilanRosokUsecase.New(pengambilanRosokDataFactory)
 	pengambilanRosokDelivery.New(e, pengambilanRosokUsecaseFactory)
+
+	cartDataFactory := cartData.New(db)
+	cartUsecaseFactory := cartUsecase.New(cartDataFactory)
+	cartDelivery.New(e, cartUsecaseFactory)
+
 }

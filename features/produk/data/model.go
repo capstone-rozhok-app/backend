@@ -11,7 +11,7 @@ type Produk struct {
 	Nama      string
 	Image_url string
 	Stok      int
-	Harga     string
+	Harga     int64
 	Desc      string
 }
 
