@@ -34,9 +34,12 @@ func (u *Usecase) GetJunkStationAll() ([]js.Core, error) {
 	return result, err
 }
 
-func (u *Usecase) GetJunkStationById(id int) (js.Core, error) {
-	getID, err := u.jsData.FindJunkStationById(id)
-	return getID, err
+func (u *Usecase) GetJunkStationById(id, token int) (data js.Core, err error) {
+	if data.JunkStationID == 0{
+		return data, errors.New("Id tidak ditemukan")
+	}
+	result, err:= u.jsData.FindJunkStationById(id)
+	return result, err
 }
 
 func (u *Usecase) PutJunkStation(id int, data js.Core) (int, error){
