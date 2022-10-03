@@ -4,7 +4,7 @@ import "rozhok/features/produk"
 
 type ProdukRequest struct {
 	Nama      string `json:"nama_product" form:"nama_product" validate:"required"`
-	Image_url string `json:"image_url" form:"image_url" validate:"required"`
+	Image_url string `json:"image_url" form:"image_url"`
 	Stok      int    `json:"stok" form:"stok" validate:"required"`
 	Harga     string `json:"harga" form:"harga" validate:"required"`
 	Desc      string `json:"desc" form:"desc" validate:"required"`
