@@ -4,12 +4,6 @@ import (
 	"gorm.io/gorm"
 	js "rozhok/features/junk_station"
 )
-type JunkStation struct{
-	gorm.Model
-	JunkStationName		string
-	Status				string
-	User				User
-}
 
 type User struct {
 	gorm.Model
@@ -17,6 +11,7 @@ type User struct {
 	Password 			string
 	Role    			string
 	Username 			string
+	JunkStationName		string
 	StatusKemitraan   	string
 	Foto 				string
 	Provinsi 			string
@@ -24,25 +19,24 @@ type User struct {
 	Kecamatan 			string
 	Jalan 				string
 	Telepon 			string
-	JunkStation			[]JunkStation
 }
 
-func FromCore(dataCore js.Core) JunkStation {
-	dataModel := JunkStation{
-		JunkStationName:  dataCore.JunkStationName,
-		Status: 		dataCore.Status,
+func FromCore(dataCore js.Core) User {
+	dataModel := User{
+		JunkStationName:  		dataCore.JunkStationName,
+		StatusKemitraan: 		dataCore.Status,
 	}
 	return dataModel
 }
 
-func (dataCore *JunkStation)ToCore() js.Core {
+func (dataCore *User)ToCore() js.Core {
 	return js.Core{
-		JunkStationID: 		int(dataCore.ID),
+		JunkStationID: 				int(dataCore.ID),
 		JunkStationName: 	dataCore.JunkStationName,
 	}
 }
 
-func CoreList(dataCore []JunkStation) []js.Core {
+func CoreList(dataCore []User) []js.Core {
 	var data []js.Core
 	for key := range dataCore {
 		data = append(data, dataCore[key].ToCore())

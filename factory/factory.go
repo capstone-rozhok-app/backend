@@ -19,6 +19,15 @@ import (
 	transaksiPorterData "rozhok/features/transaksi_porter/data"
 	transaksiPorterDelivery "rozhok/features/transaksi_porter/delivery"
 	transaksiPorterUsecase "rozhok/features/transaksi_porter/usecase"
+
+	JSData "rozhok/features/junk_station/data"
+	JSDelivery "rozhok/features/junk_station/delivery"
+	JSUsecase "rozhok/features/junk_station/usecase"
+
+	PJSData "rozhok/features/pembelian_js/data"
+	PJSDelivery "rozhok/features/pembelian_js/delivery"
+	PJSUsecase "rozhok/features/pembelian_js/usecase"
+
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {
@@ -37,4 +46,13 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	transaksiPorterDataFactory := transaksiPorterData.New(db)
 	transaksiPorterUsecaseFactory := transaksiPorterUsecase.New(transaksiPorterDataFactory)
 	transaksiPorterDelivery.New(e, transaksiPorterUsecaseFactory)
+
+	JSDataFactory := JSData.New(db)
+	JSUsecaseFactory := JSUsecase.NewLogic(JSDataFactory)
+	JSDelivery.NewHandller(e, JSUsecaseFactory)
+
+	PJSDataFactory := PJSData.New(db)
+	PJSUsecaseFactory := PJSUsecase.New(PJSDataFactory)
+	PJSDelivery.New(e, PJSUsecaseFactory)
+
 }
