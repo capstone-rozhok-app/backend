@@ -78,6 +78,27 @@ func (_m *PorterRepo) GetAll() ([]porter.Core, error) {
 	return r0, r1
 }
 
+// GetPendapatan provides a mock function with given fields: _a0
+func (_m *PorterRepo) GetPendapatan(_a0 porter.Core) (porter.Core, error) {
+	ret := _m.Called(_a0)
+
+	var r0 porter.Core
+	if rf, ok := ret.Get(0).(func(porter.Core) porter.Core); ok {
+		r0 = rf(_a0)
+	} else {
+		r0 = ret.Get(0).(porter.Core)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(porter.Core) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // InsertPorter provides a mock function with given fields: _a0
 func (_m *PorterRepo) InsertPorter(_a0 porter.Core) (int, error) {
 	ret := _m.Called(_a0)

@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"rozhok/features/porter"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -35,6 +36,26 @@ func (usecase *porterUsecase) DeletePorter(id uint) (row int, err error) {
 
 func (usecase *porterUsecase) GetAll() (rows []porter.Core, err error) {
 	return usecase.porterData.GetAll()
+}
+
+func (usecase *porterUsecase) GetPendapatan(porterCore porter.Core) (row porter.Core, err error) {
+
+	switch porterCore.PeriodicFilter {
+	case "harian":
+		porterCore.StartDate = time.Now().AddDate(0, 0, -1).Format("2006-01-02")
+		porterCore.EndDate = time.Now().AddDate(0, 0, 1).Format("2006-01-02")
+	case "mingguan":
+		porterCore.StartDate = time.Now().AddDate(0, 0, -7).Format("2006-01-02")
+		porterCore.EndDate = time.Now().AddDate(0, 0, 1).Format("2006-01-02")
+	case "bulanan":
+		porterCore.StartDate = time.Now().AddDate(0, -1, 0).Format("2006-01-02")
+		porterCore.EndDate = time.Now().AddDate(0, 0, 1).Format("2006-01-02")
+	case "tahunan":
+		porterCore.StartDate = time.Now().AddDate(-1, 0, 0).Format("2006-01-02")
+		porterCore.EndDate = time.Now().AddDate(0, 0, 1).Format("2006-01-02")
+	}
+
+	return usecase.porterData.GetPendapatan(porterCore)
 }
 
 func (usecase *porterUsecase) Get(id uint) (row porter.Core, err error) {

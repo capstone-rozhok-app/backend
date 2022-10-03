@@ -799,36 +799,14 @@
                 }
             }
         },
-        "/transaksi/{transaction_id}/porter/penjualan": {
+        "/transaksi/{transaction_id}/porter": {
             "get": {
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/idTransaksi"
-                    }
-                ],
-                "tags": [
-                    "Transaksi Porter"
-                ],
-                "security": [
-                    {
-                        "JWTAuth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/getResponseDetailTransaksiPenjualanPorter"
                     },
-                    "500": {
-                        "$ref": "#/components/responses/Response500"
-                    }
-                }
-            }
-        },
-        "/transaksi/{transaction_id}/porter/pembelian": {
-            "get": {
-                "parameters": [
                     {
-                        "$ref": "#/components/parameters/idTransaksi"
+                        "$ref": "#/components/parameters/filterTypeTransaksi"
                     }
                 ],
                 "tags": [
@@ -847,9 +825,7 @@
                         "$ref": "#/components/responses/Response500"
                     }
                 }
-            }
-        },
-        "/transaksi/{transaction_id}/porter": {
+            },
             "post": {
                 "tags": [
                     "Transaksi Porter"
@@ -3488,10 +3464,13 @@
                                                     "kategori": {
                                                         "type": "string"
                                                     },
+                                                    "harga_kategori": {
+                                                      "type": "integer"
+                                                    },
                                                     "berat": {
                                                         "type": "string"
                                                     },
-                                                    "harga": {
+                                                    "subtotal": {
                                                         "type": "integer"
                                                     }
                                                 }
@@ -3520,13 +3499,15 @@
                                         "id": 1,
                                         "kategori": "plastik",
                                         "berat": 1,
-                                        "harga": "50000"
+                                        "subtotal": 50000,
+                                        "harga_kategori": 50000
                                     },
                                     {
                                         "id": 2,
                                         "kategori": "besi",
                                         "berat": 1,
-                                        "harga": "45000"
+                                        "subtotal": 45000,
+                                        "harga_kategori": 50000
                                     }
                                 ]
                             }
