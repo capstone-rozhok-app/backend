@@ -2,7 +2,7 @@ package data
 
 import (
 	"gorm.io/gorm"
-	js "rozhok/features/pembelian_js"
+	pjs "rozhok/features/pembelian_js"
 )
 
 type PembelianJS struct{
@@ -37,7 +37,7 @@ type User struct {
 	JunkStation			[]JunkStation
 }
 
-func FromCore(junkCore js.PembelianCore) PembelianJS {
+func FromCore(junkCore pjs.PembelianCore) PembelianJS {
 	junkModel := PembelianJS{
 		Kategori: junkCore.Kategori,
 		Berat: junkCore.Berat,
@@ -46,8 +46,8 @@ func FromCore(junkCore js.PembelianCore) PembelianJS {
 	return junkModel
 }
 
-func (junkCore *PembelianJS) ToCore() js.PembelianCore {
-	return js.PembelianCore{
+func (junkCore *PembelianJS) ToCore() pjs.PembelianCore {
+	return pjs.PembelianCore{
 		ID: 	int(junkCore.ID),	
 		Kategori: junkCore.Kategori,
 		Berat: junkCore.Berat,
@@ -55,8 +55,8 @@ func (junkCore *PembelianJS) ToCore() js.PembelianCore {
 	}
 }
 
-func CoreList(junkCore []PembelianJS) []js.PembelianCore {
-	var junk []js.PembelianCore
+func CoreList(junkCore []PembelianJS) []pjs.PembelianCore {
+	var junk []pjs.PembelianCore
 	for key := range junkCore {
 		junk = append(junk, junkCore[key].ToCore())
 	}
