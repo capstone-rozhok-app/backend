@@ -16,7 +16,7 @@ type PenjualanClientData interface {
 
 type PenjualanClientUsecase interface {
 	GetAll(PenjualanClientCore Core) ([]Core, error)
-	update(PenjualanClientCore Core) (int, error)
+	Update(PenjualanClientCore Core) (int, error)
 	Store(PenjualanClientCore Core) (int, error)
 	Delete(PenjualanClientCore Core) (int, error)
 }
