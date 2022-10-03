@@ -17,7 +17,7 @@ func New(db *gorm.DB) js.DataInterface {
 }
 
 func (junk *DataJS) FindJunkStationAll() ([]js.Core, error) {
-	var data []JunkStation
+	var data []User
 	tx := junk.db.Find(&data)
 	if tx.Error != nil {
 		return nil, tx.Error
@@ -27,7 +27,7 @@ func (junk *DataJS) FindJunkStationAll() ([]js.Core, error) {
 }
 
 func (junk *DataJS) FindJunkStationById(id int) (js.Core, error){
-	var data JunkStation
+	var data User
 	tx := junk.db.First(&data, id)
 	if tx.Error != nil{
 		return js.Core{}, tx.Error
@@ -46,7 +46,7 @@ func (junk *DataJS) InsertJunkStation(data js.Core)(int , error) {
 }
 
 func (junk *DataJS) UpdateJunkStation(id int, data js.Core) (int, error) {
-	tx := junk.db.Model(&JunkStation{}).Where("id = ?", id).Updates(FromCore(data))
+	tx := junk.db.Model(&User{}).Where("id = ?", id).Updates(FromCore(data))
 	if tx.Error != nil {
 		return -1, tx.Error
 	}

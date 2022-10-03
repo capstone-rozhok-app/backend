@@ -4,12 +4,6 @@ import (
 	"gorm.io/gorm"
 	js "rozhok/features/junk_station"
 )
-type JunkStation struct{
-	gorm.Model
-	JunkStationName		string
-	Status				string
-	User				User
-}
 
 type User struct {
 	gorm.Model
@@ -17,6 +11,7 @@ type User struct {
 	Password 			string
 	Role    			string
 	Username 			string
+	JunkStationName		string
 	StatusKemitraan   	string
 	Foto 				string
 	Provinsi 			string
@@ -24,25 +19,42 @@ type User struct {
 	Kecamatan 			string
 	Jalan 				string
 	Telepon 			string
-	JunkStation			[]JunkStation
 }
 
-func FromCore(dataCore js.Core) JunkStation {
-	dataModel := JunkStation{
-		JunkStationName:  dataCore.JunkStationName,
-		Status: 		dataCore.Status,
+func FromCore(dataCore js.Core) User {
+	dataModel := User{
+		Email: 					dataCore.Email,
+		Password: 				dataCore.Password,
+		JunkStationName:  		dataCore.JunkStationName,
+		Username: 				dataCore.JunkStationOwner,
+		StatusKemitraan: 		dataCore.Status,
+		Provinsi: 				dataCore.Provinsi,
+		Kota:					dataCore.Kota,
+		Kecamatan: 				dataCore.Kecamatan,
+		Telepon: 				dataCore.Telp,
+		Jalan: 					dataCore.Jalan,
+
 	}
 	return dataModel
 }
 
-func (dataCore *JunkStation)ToCore() js.Core {
+func (dataCore *User)ToCore() js.Core {
 	return js.Core{
-		JunkStationID: 		int(dataCore.ID),
-		JunkStationName: 	dataCore.JunkStationName,
+		JunkStationID: 				int(dataCore.ID),
+		Email: 					dataCore.Email,
+		Password: 				dataCore.Password,
+		JunkStationName:  		dataCore.JunkStationName,
+		JunkStationOwner: 		dataCore.Username,
+		Status: 				dataCore.StatusKemitraan,
+		Provinsi: 				dataCore.Provinsi,
+		Kota:					dataCore.Kota,
+		Kecamatan: 				dataCore.Kecamatan,
+		Telp: 					dataCore.Telepon,
+		Jalan: 					dataCore.Jalan,
 	}
 }
 
-func CoreList(dataCore []JunkStation) []js.Core {
+func CoreList(dataCore []User) []js.Core {
 	var data []js.Core
 	for key := range dataCore {
 		data = append(data, dataCore[key].ToCore())
