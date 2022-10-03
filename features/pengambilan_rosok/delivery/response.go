@@ -19,11 +19,11 @@ type Client struct {
 }
 
 type BarangRosok struct {
-	Id            uint   `json:"id"`
+	Id            uint   `json:"id,omitempty"`
 	Kategori      string `json:"kategori"`
-	Berat         int64  `json:"berat"`
-	Subtotal      int64  `json:"subtotal"`
-	HargaKategori int64  `json:"harga_kategori"`
+	Berat         int64  `json:"berat,omitempty"`
+	Subtotal      int64  `json:"subtotal,omitempty"`
+	HargaKategori int64  `json:"harga_kategori,omitempty"`
 }
 
 func toResponse(PengambilanRosokCore pengambilanrosok.Core) Response {

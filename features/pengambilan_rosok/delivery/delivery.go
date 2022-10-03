@@ -18,9 +18,9 @@ func New(e *echo.Echo, usecase pengambilanrosok.PengambilanRosokUsecase) {
 		Usecase: usecase,
 	}
 
-	e.GET("/pengambilan/porter", handler.Get)
-	e.GET("/pengambilan/:penjualan_id/porter", handler.GetAll)
-	e.POST("/pengambilan/:penjualan_id/porter", handler.PostTransaksiPenjualan)
+	e.GET("/pengambilan/porter", handler.GetAll, middlewares.JWTMiddleware(), middlewares.IsPorter)
+	e.GET("/pengambilan/:penjualan_id/porter", handler.Get, middlewares.JWTMiddleware(), middlewares.IsPorter)
+	e.POST("/pengambilan/:penjualan_id/porter", handler.PostTransaksiPenjualan, middlewares.JWTMiddleware(), middlewares.IsPorter)
 }
 
 func (deliv *PengambilanRosok) GetAll(c echo.Context) error {

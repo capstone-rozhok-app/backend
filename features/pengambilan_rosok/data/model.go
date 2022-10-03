@@ -77,6 +77,19 @@ type User struct {
 	Jalan           string
 	Telepon         string
 	Bonus           int64
+	Alamat          []Alamat
+}
+
+type Alamat struct {
+	gorm.Model
+	UserID    uint
+	Provinsi  string
+	Kota      string
+	Kecamatan string
+	Status    string
+	Jalan     string
+
+	User User `gorm:"foreignKey:UserID"`
 }
 
 func FromCore(transaksiClientCore pengambilanrosok.Core) TransaksiClient {
@@ -109,11 +122,11 @@ func toCore(transaksiClientModel TransaksiClient) pengambilanrosok.Core {
 		Status:        transaksiClientModel.Status,
 		Client: pengambilanrosok.User{
 			Username:  transaksiClientModel.UserClient.Username,
-			Provinsi:  transaksiClientModel.UserClient.Provinsi,
-			Kota:      transaksiClientModel.UserClient.Kota,
-			Jalan:     transaksiClientModel.UserClient.Jalan,
+			Provinsi:  transaksiClientModel.UserClient.Alamat[0].Provinsi,
+			Kota:      transaksiClientModel.UserClient.Alamat[0].Kota,
+			Jalan:     transaksiClientModel.UserClient.Alamat[0].Jalan,
 			Telepon:   transaksiClientModel.UserClient.Telepon,
-			Kecamatan: transaksiClientModel.UserClient.Kecamatan,
+			Kecamatan: transaksiClientModel.UserClient.Alamat[0].Kecamatan,
 		},
 	}
 

@@ -39,6 +39,10 @@ import (
 	penjualanClientData "rozhok/features/penjualan_client/data"
 	penjualanClientDelivery "rozhok/features/penjualan_client/delivery"
 	penjualanClientUsecase "rozhok/features/penjualan_client/usecase"
+	
+	pengambilanRosok "rozhok/features/pengambilan_rosok/data"
+	pengambilanRosokDelivery "rozhok/features/pengambilan_rosok/delivery"
+	pengambilanRosokUsecase "rozhok/features/pengambilan_rosok/usecase"
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {
@@ -77,4 +81,8 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	penjualanClientDataFactory := penjualanClientData.New(db)
 	penjualanClientUsecaseFactory := penjualanClientUsecase.New(penjualanClientDataFactory)
 	penjualanClientDelivery.New(e, penjualanClientUsecaseFactory)
+	
+	pengambilanRosokDataFactory := pengambilanRosok.New(db)
+	pengambilanRosokUsecaseFactory := pengambilanRosokUsecase.New(pengambilanRosokDataFactory)
+	pengambilanRosokDelivery.New(e, pengambilanRosokUsecaseFactory)
 }
