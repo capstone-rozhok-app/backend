@@ -30,6 +30,7 @@ type User struct {
 func FromCore(dataCore js.Core) JunkStation {
 	dataModel := JunkStation{
 		JunkStationName:  dataCore.JunkStationName,
+		Status: 		dataCore.Status,
 	}
 	return dataModel
 }
