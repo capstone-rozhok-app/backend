@@ -1,14 +1,11 @@
 package delivery
 
 import (
-	"fmt"
 	"net/http"
-	"rozhok/config"
 	"rozhok/features/produk"
 	"rozhok/middlewares"
 	"rozhok/utils/helper"
 	"strconv"
-	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -42,34 +39,6 @@ func (deliv *Delivery) PostProduk(c echo.Context) error {
 	if errValidate != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
 	}
-
-	//upload file Image
-	imageData, imageInfo, imageErr := c.Request().FormFile("file")
-	if imageErr == http.ErrMissingFile || imageErr != nil {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to get image"))
-	}
-
-	imageExtension, err_image_extension := helper.CheckFileExtension(imageInfo.Filename, config.ContentImage)
-	if err_image_extension != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("Image extension error"))
-	}
-
-	// check image size
-	err_image_size := helper.CheckFileSize(imageInfo.Size, config.ContentImage)
-	if err_image_size != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("Image size error"))
-	}
-
-	// memberikan nama file
-	imageName := "product" + "_" + time.Now().Format("2006-01-02 15:04:05") + "." + imageExtension
-
-	image, errUploadImg := helper.UploadFileToS3(config.EventImages, imageName, config.ContentImage, imageData)
-
-	if errUploadImg != nil {
-		fmt.Println(errUploadImg)
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("failed to upload file"))
-	}
-	dataRequest.Image_url = image
 
 	row, err := deliv.produkUsecase.CreateProduk(toCore(dataRequest))
 	if err != nil {
