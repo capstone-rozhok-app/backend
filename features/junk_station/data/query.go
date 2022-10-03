@@ -18,27 +18,26 @@ func New(db *gorm.DB) js.DataInterface {
 
 func (junk *DataJS) FindJunkStationAll(dataCore js.Core) (row []js.Core, err error) {
 	var data []User
-	tx := junk.db.Find(&User{}).Where("id = ?", dataCore.JunkStationID)
-	if dataCore.Provinsi != ""{
-		tx.Where("provinsi >= ?", dataCore.Provinsi)
-	}
-	if dataCore.Kota != ""{
-		tx.Where("kota >= ?", dataCore.Kota)
-	}
-	if dataCore.Kecamatan != ""{
-		tx.Where("kecamatan >= ?", dataCore.Kecamatan)
-	}
-	tx.Find(&data)
-	if tx.Error != nil{
-		return row, tx.Error
-	}
-	if len(data) < 1 {
-		return row, errors.New("id not found")
-	}
-	for _, v := range data {
-		row = append(row, v.ToCore(v))
-	}
-	return row, nil
+    tx := junk.db.Find(&User{}).Where("role = ?", "junkstation").Where("status = ?", "terverifikasi").Where("status = belum_diverifikasi")
+    if dataCore.Provinsi != "" {
+        tx.Where("provinsi = ?", dataCore.Provinsi)
+    }
+    if dataCore.Kota != "" {
+        tx.Where("kota = ?", dataCore.Kota)
+    }
+    if dataCore.Kecamatan != "" {
+        tx.Where("kecamatan = ?", dataCore.Kecamatan)
+    }
+    tx.Find(&data)
+
+    if tx.Error != nil {
+        return row, tx.Error
+    }
+
+    for _, v := range data {
+        row = append(row, ToCore(v))
+    }
+    return row, nil
 }
 
 func (junk *DataJS) FindJunkStationById(id int) (js.Core, error){
@@ -47,8 +46,7 @@ func (junk *DataJS) FindJunkStationById(id int) (js.Core, error){
 	if tx.Error != nil{
 		return js.Core{}, tx.Error
 	}
-	dataCore := FromCore(js.Core{})
-	return dataCore.ToCore(dataCore), nil
+	return ToCore(data), nil
 }
 
 func (junk *DataJS) InsertJunkStation(data js.Core)(int , error) {

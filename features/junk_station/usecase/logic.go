@@ -3,6 +3,8 @@ package usecase
 import (
 	"errors"
 	js "rozhok/features/junk_station"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Usecase struct{
@@ -17,10 +19,17 @@ func NewLogic(data js.DataInterface) js.UsecaseInterface {
 }
 
 func (u *Usecase) CreateJunkStation(junkCreate js.Core, id int) (int, error) {
-	if junkCreate.JunkStationName == "" || junkCreate.Status == ""{
+	if junkCreate.Email == ""  || junkCreate.Password == "" || junkCreate.JunkStationName == "" || junkCreate.JunkStationOwner == "" || junkCreate.Provinsi == "" || junkCreate.Kota == "" ||junkCreate.Kecamatan == "" || junkCreate.Telp == "" || junkCreate.Jalan == ""{
 		return -1, errors.New("your data not fuel field")
 	}
 
+	passBcyrpt := []byte(junkCreate.Password)
+	hash, errHash := bcrypt.GenerateFromPassword(passBcyrpt, bcrypt.DefaultCost)
+	if errHash != nil {
+		return -2, errors.New("failed to hashing password")
+	}
+
+	junkCreate.Password = string(hash)
 	result, err := u.jsData.InsertJunkStation(junkCreate)
 	if err != nil{
 		return 0, errors.New("failed insert data")

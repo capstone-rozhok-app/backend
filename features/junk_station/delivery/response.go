@@ -5,15 +5,16 @@ import (
 )
 
 type JSRes struct{
-	JunkStationID	int			`json:"js_id"`
-	JunkStationName	string		`json:"js_name"`
-	JunkStationOwner string		`json:"js_owner"`
-	Status			string 		`json:"status"`
-	Provinsi		string		`json:"provinsi"`
-	Kota			string 		`json:"kota"`
-	Kecamatan		string 		`json:"kecamatan"`
-	Telp			string		`json:"telp"`
-	Jalan			string		`json:"jalan"`
+	JunkStationID		int			`json:"id_junk_station"`
+	JunkStationName		string		`json:"junk_station_name"`
+	JunkStationOwner 	string		`json:"junk_station_owner"`
+	Status				string 		`json:"status_kemitraan"`
+	Provinsi			string		`json:"provinsi"`
+	Kota				string 		`json:"kota"`
+	Kecamatan			string 		`json:"kecamatan"`
+	Telp				string		`json:"telp"`
+	Jalan				string		`json:"jalan"`
+	Image_url			string		`json:"image_url"`
 }
 
 
@@ -27,6 +28,7 @@ func FromCore(data js.Core) JSRes {
 		JunkStationOwner: data.JunkStationOwner,
 		Telp: data.Telp,
 		Status: data.Status,
+		Image_url: data.Image_url,
 	}
 }
 
@@ -48,6 +50,7 @@ func FromCoreToResponse(data js.Core) JSRes {
 		JunkStationOwner: data.JunkStationOwner,
 		Telp: data.Telp,
 		Status: data.Status,
+		Image_url: data.Image_url,
 	}
 	return dataResponse
 }
