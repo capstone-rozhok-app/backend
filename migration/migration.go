@@ -17,6 +17,6 @@ func InitMigrate(db *gorm.DB) {
 		new(transaksiportermodel.TransaksiPorterDetail),
 		new(addresModel.Alamat),
 		new(produkModel.Produk),
-		new(kategoriModel.Kategori),
+		new(kategoriModel.KategoriRosok),
 	)
 }

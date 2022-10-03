@@ -29,7 +29,7 @@ func (repo *kategoriData) CreateKategori(kategori kategori.Core) (int, error) {
 }
 
 func (repo *kategoriData) UpdateKategori(data kategori.Core, id int) (row int, err error) {
-	tx := repo.db.Model(&Kategori{}).Where("id = ?", id).Updates(fromCore(data))
+	tx := repo.db.Model(&KategoriRosok{}).Where("id = ?", id).Updates(fromCore(data))
 	if tx.Error != nil {
 		return -1, tx.Error
 	}
@@ -40,7 +40,7 @@ func (repo *kategoriData) UpdateKategori(data kategori.Core, id int) (row int, e
 }
 
 func (repo *kategoriData) GetAllKategori() ([]kategori.Core, error) {
-	var allkategoriData []Kategori
+	var allkategoriData []KategoriRosok
 	tx := repo.db.Find(&allkategoriData)
 
 	if tx.Error != nil {
@@ -51,7 +51,7 @@ func (repo *kategoriData) GetAllKategori() ([]kategori.Core, error) {
 }
 
 func (repo *kategoriData) DeleteKategori(id int) (row int, err error) {
-	tx := repo.db.Where("id = ?", id).Delete(&Kategori{})
+	tx := repo.db.Where("id = ?", id).Delete(&KategoriRosok{})
 	if tx.Error != nil {
 		return -1, tx.Error
 	}
