@@ -2,181 +2,110 @@ package data
 
 import (
 	"errors"
-	transaksiporter "rozhok/features/pengambilan_rosok"
+	pengambilanrosok "rozhok/features/pengambilan_rosok"
 
 	"gorm.io/gorm"
 )
 
-type transaksiPorterRepo struct {
+type pengambilanRosokRepo struct {
 	DB *gorm.DB
 }
 
-func New(db *gorm.DB) *transaksiPorterRepo {
-	return &transaksiPorterRepo{
+func New(db *gorm.DB) *pengambilanRosokRepo {
+	return &pengambilanRosokRepo{
 		DB: db,
 	}
 }
 
-func (repo *transaksiPorterRepo) GetAll(TransaksiCore transaksiporter.Core) (rows []transaksiporter.Core, err error) {
-	var TransaksiPorterModel []TransaksiPorter
+func (repo *pengambilanRosokRepo) GetAll(TransaksiCore pengambilanrosok.Core) (rows []pengambilanrosok.Core, err error) {
+	var pengambilanRosokModelList []TransaksiClient
 
-	tx := repo.DB.Model(&TransaksiPorter{}).Where("porter_id = ?", TransaksiCore.PorterID)
-
-	if TransaksiCore.StartDate != "" {
-		tx.Where("created_at >= ?", TransaksiCore.StartDate)
+	//ambil data porter
+	porter := User{}
+	if porerError := repo.DB.Model(&User{}).Where("id = ?", TransaksiCore.PorterID).First(&porter).Error; porerError != nil {
+		return rows, porerError
 	}
 
-	if TransaksiCore.EndDate != "" {
-		tx.Where("created_at <= ?", TransaksiCore.EndDate)
+	//ambil data transaksi client dengan status unpaid dan kecamatan,kota,provinsi sesuai porter
+	clientTransactionError := repo.DB.Model(&TransaksiClient{}).Where("status = ?", "unpaid").Preload("UserClient", func(db *gorm.DB) *gorm.DB {
+		return db.Where("users.kecamatan = ?", porter.Kecamatan).Where("users.kota", porter.Kota).Where("users.provinsi", porter.Provinsi)
+	}).Find(&pengambilanRosokModelList).Error
+
+	if clientTransactionError != nil {
+		return rows, clientTransactionError
 	}
 
-	if TransaksiCore.TipeTransaksi != "" {
-		tx.Where("tipe_transaksi = ?", TransaksiCore.TipeTransaksi)
+	var pengambilanRosokCoreList []pengambilanrosok.Core
+	for _, transaksiRosokClient := range pengambilanRosokModelList {
+		pengambilanRosokCoreList = append(pengambilanRosokCoreList, toCore(transaksiRosokClient))
 	}
 
-	if TransaksiCore.Status != "" {
-		tx.Where("status = ?", TransaksiCore.Status)
-	}
-
-	tx.Find(&TransaksiPorterModel)
-	if tx.Error != nil {
-		return rows, tx.Error
-	}
-
-	if len(TransaksiPorterModel) < 1 {
-		return rows, errors.New("not found")
-	}
-
-	for _, model := range TransaksiPorterModel {
-		rows = append(rows, toCore(model))
-	}
-
-	return rows, nil
+	return pengambilanRosokCoreList, nil
 }
 
-func (repo *transaksiPorterRepo) Get(TransaksiCore transaksiporter.Core) (row transaksiporter.Core, err error) {
-	var transaksiPorterModel TransaksiPorter
-	transaksiPorterModel.ID = TransaksiCore.ID
-	tx := repo.DB.Model(&TransaksiPorter{}).Preload("UserClient").Preload("TransaksiPorterDetail.KategoriRosok").Where("tipe_transaksi = ?", TransaksiCore.TipeTransaksi).First(&transaksiPorterModel)
-	if tx.Error != nil {
-		return row, tx.Error
+func (repo *pengambilanRosokRepo) Get(TransaksiCore pengambilanrosok.Core) (row pengambilanrosok.Core, err error) {
+	var transaksiClientModel TransaksiClient
+	transaksiClientModel.ID = TransaksiCore.ID
+
+	if transaksiClientError := repo.DB.Model(&TransaksiClient{}).Preload("UserClient").Preload("TransaksiClientDetail.KategoriRosok").First(&transaksiClientModel).Error; transaksiClientError != nil {
+		return row, transaksiClientError
 	}
 
-	return toCore(transaksiPorterModel), nil
+	return toCore(transaksiClientModel), nil
 }
 
-func (repo *transaksiPorterRepo) CreateTransaksiPenjualan(TransaksiCore transaksiporter.Core) (row int, err error) {
-	var transaksiPorterModel TransaksiPorter
+func (repo *pengambilanRosokRepo) CreatePengambilanRosok(TransaksiCore pengambilanrosok.Core) (row int, err error) {
+	// ambil data transaksi client
+	var transaksiClientModel TransaksiClient
+	transaksiClientModel.ID = TransaksiCore.ID
 
-	transaksiPorterModel.ID = TransaksiCore.ID
-
-	// ambil data transaksi porter by id transaksi
-	tx := repo.DB.Model(&TransaksiPorter{}).Preload("TransaksiPorterDetail.KategoriRosok").First(&transaksiPorterModel)
-	if tx.Error != nil {
-		return row, tx.Error
+	if transaksiClientError := repo.DB.Model(&TransaksiClient{}).Preload("UserClient").Preload("TransaksiClientDetail.KategoriRosok").First(&transaksiClientModel).Error; transaksiClientError != nil {
+		return row, transaksiClientError
 	}
 
-	if transaksiPorterModel.Status != "sudah_bayar" {
-		return 0, errors.New("failed status not sudah_dibayar")
+	// masukkan data transaksi client ke dalam transaksi porter dengan status "unpaid"
+	transaksiPorterModel := TransaksiPorter{
+		ClientID:      transaksiClientModel.ClientID,
+		PorterID:      TransaksiCore.PorterID,
+		TipeTransaksi: "pembelian",
+		Status:        "unpaid",
 	}
 
-	// kalkulasi harga mitra
-	var grandTotal int64
-	for _, barangRosok := range transaksiPorterModel.TransaksiPorterDetail {
-		grandTotal += int64(barangRosok.Berat) * barangRosok.KategoriRosok.HargaMitra
+	txTransaksiPorter := repo.DB.Model(&TransaksiPorter{}).Create(&transaksiPorterModel)
+	if txTransaksiPorter.Error != nil {
+		return row, txTransaksiPorter.Error
 	}
 
-	// buat ulang data transaksi kemudian ganti dengan status terjual
-	transaksiPorterModelAfter := TransaksiPorter{
-		PorterID:      transaksiPorterModel.PorterID,
-		ClientID:      transaksiPorterModel.ClientID,
-		GrandTotal:    grandTotal,
-		TipeTransaksi: "penjualan",
-		Status:        "terjual",
+	if txTransaksiPorter.RowsAffected < 1 {
+		return row, errors.New("failed create to transaksi porter")
 	}
 
-	tx1 := repo.DB.Model(&TransaksiPorter{}).Create(&transaksiPorterModelAfter)
-	if tx1.Error != nil {
-		return row, tx.Error
-	}
-
-	if tx1.RowsAffected < 1 {
-		return int(tx1.RowsAffected), errors.New("failed to insert data")
-	}
-
-	// insert ulang juga data detail transaksi yang berkaitan, dan kalkulasi ulang dengan harga mitra.
-	barangRosokList := []TransaksiPorterDetail{}
-	for _, barangRosok := range transaksiPorterModel.TransaksiPorterDetail {
-		barangRosokList = append(barangRosokList, TransaksiPorterDetail{
-			TransaksiPorterID: transaksiPorterModelAfter.ID,
+	transaksiPorterModelDetailList := []TransaksiPorterDetail{}
+	for _, barangRosok := range transaksiClientModel.TransaksiClientDetail {
+		transaksiPorterModelDetailList = append(transaksiPorterModelDetailList, TransaksiPorterDetail{
+			TransaksiPorterID: transaksiPorterModel.ID,
 			KategoriID:        barangRosok.KategoriID,
-			Berat:             barangRosok.Berat,
-			Subtotal:          barangRosok.KategoriRosok.HargaMitra * int64(barangRosok.Berat),
 		})
 	}
 
-	tx3 := repo.DB.Model(&TransaksiPorterDetail{}).Create(&barangRosokList)
-	if tx3.Error != nil {
-		return row, tx.Error
+	txTransaksiPorterDetail := repo.DB.Model(&TransaksiPorterDetail{}).Create(&transaksiPorterModelDetailList)
+	if txTransaksiPorterDetail.Error != nil {
+		return row, txTransaksiPorterDetail.Error
 	}
 
-	if tx3.RowsAffected < 1 {
-		return int(tx3.RowsAffected), errors.New("failed to insert data")
+	if txTransaksiPorterDetail.RowsAffected < 1 {
+		return row, errors.New("failed create to transaksi porter detail")
 	}
 
-	return int(tx3.RowsAffected), nil
-}
-
-func (repo *transaksiPorterRepo) UpdateTransaksiPembelian(TransaksiCore transaksiporter.Core) (row int, err error) {
-	var transaksiPorterModel TransaksiPorter
-	transaksiPorterModel.ID = TransaksiCore.ID
-
-	//get transaksi porter sebelum dibayar dengan berelasi dengan barang rosok dan kategori rosok
-	tx := repo.DB.Model(&TransaksiPorter{}).Preload("TransaksiPorterDetail.KategoriRosok").First(&transaksiPorterModel)
-	if tx.Error != nil {
-		return row, tx.Error
+	// update data transaksi client "pending"
+	txTransaksiClient := repo.DB.Model(&TransaksiClient{}).Where("id = ?", TransaksiCore.ID).Update("status = ?", "pending")
+	if txTransaksiClient.Error != nil {
+		return row, txTransaksiClient.Error
 	}
 
-	//looping untuk kalkulasi subtotal (harga kategori client * berat)
-	barangRosokList := []TransaksiPorterDetail{}
-	var grandTotal int64
-	for index, barangRosok := range transaksiPorterModel.TransaksiPorterDetail {
-		barangRosokList = append(barangRosokList, TransaksiPorterDetail{
-			TransaksiPorterID: barangRosok.TransaksiPorterID,
-			KategoriID:        barangRosok.KategoriID,
-			Berat:             uint(TransaksiCore.DetailTransaksiPorter[index].Berat),
-			Subtotal:          barangRosok.KategoriRosok.HargaClient * int64(TransaksiCore.DetailTransaksiPorter[index].Berat),
-		})
-		grandTotal += barangRosok.KategoriRosok.HargaClient * int64(TransaksiCore.DetailTransaksiPorter[index].Berat)
+	if txTransaksiClient.RowsAffected < 1 {
+		return row, errors.New("failed update to client transaction")
 	}
 
-	//delete barang rosok by transaksi porter id
-	tx2 := repo.DB.Model(&TransaksiPorterDetail{}).Where("transaksi_porter_id = ?", transaksiPorterModel.ID).Unscoped().Delete(barangRosokList)
-	if tx2.Error != nil {
-		return row, tx.Error
-	}
-
-	//buat ulang barang rosok by transaksi porter id
-	tx3 := repo.DB.Model(&TransaksiPorterDetail{}).Create(&barangRosokList)
-	if tx3.Error != nil {
-		return row, tx.Error
-	}
-
-	if tx3.RowsAffected < 1 {
-		return int(tx3.RowsAffected), errors.New("failed to insert data")
-	}
-
-	//buat ulang barang rosok by transaksi porter id
-	transaksiPorterModel.GrandTotal = grandTotal
-	transaksiPorterModel.Status = "sudah_bayar"
-	tx4 := repo.DB.Model(&TransaksiPorter{}).Where("id =  ?", transaksiPorterModel.ID).Updates(&transaksiPorterModel)
-	if tx4.Error != nil {
-		return row, tx.Error
-	}
-
-	if tx4.RowsAffected < 1 {
-		return int(tx4.RowsAffected), errors.New("failed to insert data")
-	}
-
-	return int(tx4.RowsAffected), nil
+	return 1, nil
 }
