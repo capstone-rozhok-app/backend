@@ -20,7 +20,7 @@ func (u *Usecase) GetPembelian()([]pjs.PembelianCore, error) {
 	return result, err
 }
 
-func (u *Usecase) CreatePembelian(data pjs.PembelianCore) (int, error) {
+func (u *Usecase) CreatePembelian(data pjs.PembelianCore, token int) (int, error) {
 	if data.Kategori == "" || data.Harga == 0 || data.Berat == 0 {
 		return -1, errors.New("data must be filled")
 	}

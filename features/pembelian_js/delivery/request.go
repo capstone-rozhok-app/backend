@@ -11,11 +11,19 @@ type PembelianRequest struct{
 	Harga		int		`json:"harga" form:"harga" validate:"required"`
 }
 
-func FromCoreReq(data PembelianRequest) pjs.PembelianCore {
+func FromCoreReq(r PembelianRequest) pjs.PembelianCore {
 	return pjs.PembelianCore{
-		ID: data.ID,
-		Kategori: data.Kategori,
-		Berat: data.Berat,
-		Harga: data.Harga,
+		ID: r.ID,
+		Kategori: r.Kategori,
+		Berat: r.Berat,
+		Harga: r.Harga,
+	}
+}
+
+func ToCore(r PembelianRequest) pjs.PembelianCore {
+	return pjs.PembelianCore{
+		Kategori: r.Kategori,
+		Berat: r.Berat,
+		Harga: r.Harga,
 	}
 }

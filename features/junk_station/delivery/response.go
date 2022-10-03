@@ -5,15 +5,15 @@ import (
 )
 
 type JSRes struct{
-	JunkStationID	int			`json:js_id`
-	JunkStationName	string		`json:js_name`
-	JunkStationOwner string		`json:js_owner`
-	Status			string 		`json:status`
-	Provinsi		string		`json:provinsi`
-	Kota			string 		`json:kota`
-	Kecamatan		string 		`json:kecamatan`
-	Telp			string		`json:telp`
-	Jalan			string		`json:jalan`
+	JunkStationID	int			`json:"js_id"`
+	JunkStationName	string		`json:"js_name"`
+	JunkStationOwner string		`json:"js_owner"`
+	Status			string 		`json:"status"`
+	Provinsi		string		`json:"provinsi"`
+	Kota			string 		`json:"kota"`
+	Kecamatan		string 		`json:"kecamatan"`
+	Telp			string		`json:"telp"`
+	Jalan			string		`json:"jalan"`
 }
 
 func FromCore(data js.Core) JSRes {
