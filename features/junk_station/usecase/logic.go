@@ -36,7 +36,7 @@ func (u *Usecase) GetJunkStationAll() ([]js.Core, error) {
 
 func (u *Usecase) GetJunkStationById(id, token int) (data js.Core, err error) {
 	if data.JunkStationID == 0{
-		return data, errors.New("Id tidak ditemukan")
+		return data, errors.New("id tidak ditemukan")
 	}
 	result, err:= u.jsData.FindJunkStationById(id)
 	return result, err
@@ -45,10 +45,28 @@ func (u *Usecase) GetJunkStationById(id, token int) (data js.Core, err error) {
 func (u *Usecase) PutJunkStation(id int, data js.Core) (int, error){
 	junkMap := make(map[string]interface{})
 	if data.JunkStationName != "" {
-		junkMap["JunkStationName"] = &data.JunkStationName
+		junkMap["js_name"] = &data.JunkStationName
+	}
+	if data.JunkStationOwner != "" {
+		junkMap["js_owner"]  = &data.JunkStationOwner
 	}
 	if data.Status != "" {
-		junkMap["Status"] = &data.Status
+		junkMap["status"] = &data.Status
+	}
+	if data.Provinsi != "" {
+		junkMap["provinsi"] = &data.Provinsi
+	}
+	if data.Kota != "" {
+		junkMap["kota"] = &data.Kota
+	}
+	if data.Kecamatan != "" {
+		junkMap["kecamatan"] = &data.Kecamatan
+	}
+	if data.Telp != "" {
+		junkMap["telp"] = &data.Telp
+	}
+	if data.Jalan != "" {
+		junkMap["jalan"] = &data.Jalan
 	}
 	result, err := u.jsData.UpdateJunkStation(id, data)
 	if err != nil{

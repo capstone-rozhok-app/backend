@@ -13,10 +13,14 @@ type JunkHandler struct {
 	JunkInterface js.UsecaseInterface
 }
 
-func NewHandller(handler js.UsecaseInterface) *JunkHandler {
-	return &JunkHandler{
-		JunkInterface: handler,
+func NewHandller(e *echo.Echo, data js.UsecaseInterface){
+	handler := &JunkHandler{
+		JunkInterface: data,
 	}
+	e.GET("junk-station", handler.GetJunkStationAll, middlewares.JWTMiddleware())
+	e.POST("junk-station", handler.CreateJunkStation, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
+	e.GET("junk-station/:id", handler.GetJunkStationById, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
+	e.PUT("junk-station/:id", handler.PutJunkStation,middlewares.JWTMiddleware(),middlewares.IsJunkStation)
 }
 
 func (h *JunkHandler) CreateJunkStation(c echo.Context) error {
