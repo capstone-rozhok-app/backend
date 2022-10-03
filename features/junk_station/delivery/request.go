@@ -5,12 +5,10 @@ import (
 )
 
 type JsReq struct {
-	JunkStationID		int	`json:"js_id" form:"js_id" validate:"required"`
 	Email				string	`json:"email" form:"email" validate:"required"`
 	Password			string	`json:"password" form:"password" validate:"required"`
-	Status				string	`json:"status" form:"status" validate:"required"`
-	JunkStationName		string	`json:"js_name" form:"js_name" validate:"required"`
-	Username			string	`json:"js_owner" form:"js_owner" validate:"required"`
+	JunkStationName		string	`json:"junk_station_name" form:"junk_station_name" validate:"required"`
+	Username			string	`json:"junk_station_owner" form:"junk_station_owner" validate:"required"`
 	Provinsi			string	`json:"provinsi" form:"provinsi" validate:"required"`
 	Kota				string	`json:"kota" form:"kota" validate:"required"`
 	Kecamatan			string	`json:"kecamatan" form:"kecamatan" validate:"required"`
@@ -24,7 +22,6 @@ func FromCoreReq(req JsReq) js.Core{
 		Password: 			req.Password,	
 		JunkStationName: 	req.JunkStationName,
 		JunkStationOwner: 	req.Username,
-		Status: 			req.Status,
 		Provinsi: 			req.Provinsi,
 		Kota: 				req.Kota,
 		Kecamatan: 			req.Kecamatan,	
@@ -39,7 +36,6 @@ func ToCoreReq(req JsReq) js.Core{
 		Password: 			req.Password,	
 		JunkStationName: 	req.JunkStationName,
 		JunkStationOwner: 	req.Username,
-		Status: 			req.Status,
 		Provinsi: 			req.Provinsi,
 		Kota: 				req.Kota,
 		Kecamatan: 			req.Kecamatan,	

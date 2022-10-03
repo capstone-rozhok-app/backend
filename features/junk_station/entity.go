@@ -12,6 +12,7 @@ type Core struct{
 	Kecamatan			string
 	Telp				string
 	Jalan				string
+	Image_url			string
 }
 
 type UsecaseInterface interface{
