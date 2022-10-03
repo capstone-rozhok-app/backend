@@ -5,7 +5,7 @@ import "rozhok/features/porter"
 type PorterRequest struct {
 	Email     string `json:"email" form:"email" validate:"required"`
 	Password  string `json:"password" form:"password" validate:"required"`
-	Name  string `json:"name" form:"name" validate:"required"`
+	Name      string `json:"name" form:"name" validate:"required"`
 	NoTelp    string `json:"no_telp" form:"no_telp" validate:"required"`
 	Provinsi  string `json:"provinsi" form:"provinsi" validate:"required"`
 	Kota      string `json:"kota" form:"kota" validate:"required"`

@@ -3,11 +3,11 @@ package delivery
 import "rozhok/features/alamat"
 
 type AlamatRequest struct {
-	Provinsi  string `json:"provinsi" form:"provinsi"`
-	Kota      string `json:"kota" form:"kota"`
-	Kecamatan string `json:"kecamatan" form:"kecamatan"`
-	Jalan     string `json:"jalan" form:"jalan"`
-	Status    string `json:"status" form:"status"`
+	Provinsi  string `json:"provinsi" form:"provinsi" validate:"required`
+	Kota      string `json:"kota" form:"kota" validate:"required`
+	Kecamatan string `json:"kecamatan" form:"kecamatan" validate:"required`
+	Jalan     string `json:"jalan" form:"jalan" validate:"required`
+	Status    string `json:"status" form:"status" validate:"required`
 	UserId    uint
 }
 

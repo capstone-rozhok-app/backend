@@ -28,23 +28,24 @@ func (deliv *Delivery) PostKategori(c echo.Context) error {
 
 	var dataRequest Request
 
-	// errValidate := c.Validate(&dataRequest)
-	// if errValidate != nil {
-	// 	return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
-	// }
 	errBind := c.Bind(&dataRequest)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("error binding data"))
 	}
 
+	errValidate := c.Validate(&dataRequest)
+	if errValidate != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
+	}
+
 	row, err := deliv.kategoriUsecase.CreateKategori(toCore(dataRequest))
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal membuat kategori"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to insert category"))
 	}
 	if row != 1 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal membuat kategori"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to insert category"))
 	}
-	return c.JSON(http.StatusCreated, helper.SuccessResponseHelper("Berhasil membuat kategori"))
+	return c.JSON(http.StatusCreated, helper.SuccessResponseHelper("Inserting category is succes"))
 }
 
 func (deliv *Delivery) UpdateKategori(c echo.Context) error {
@@ -63,10 +64,10 @@ func (deliv *Delivery) UpdateKategori(c echo.Context) error {
 
 	row, err := deliv.kategoriUsecase.UpdateKategori(toCore(dataUpdate), idConv)
 	if err != nil || row == 0 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal memperbarui data"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to update data"))
 	}
 
-	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Berhasil memperbarui data"))
+	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Updating data is succes"))
 
 }
 
@@ -91,5 +92,5 @@ func (deliv *Delivery) DeleteKategori(c echo.Context) error {
 	if err != nil || row == 0 {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to get category"))
 	}
-	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Berhasil menghapus kategori"))
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Deleting category is succes"))
 }

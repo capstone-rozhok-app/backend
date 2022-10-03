@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"errors"
 	"rozhok/features/kategori"
 )
 
@@ -16,10 +15,6 @@ func New(dataKategori kategori.DataInterface) kategori.UsecaseInterface {
 }
 
 func (usecase *kategoriUsecase) CreateKategori(kategori kategori.Core) (int, error) {
-	if kategori.Nama == "" || kategori.Harga_client == 0 || kategori.Harga_mitra == 0 || kategori.Desc == "" {
-		return -1, errors.New("tidak boleh ada data yang kosong")
-	}
-
 	row, err := usecase.kategoriData.CreateKategori(kategori)
 	return row, err
 }

@@ -3,10 +3,10 @@ package delivery
 import "rozhok/features/kategori"
 
 type Request struct {
-	Nama         string `json:"nama_kategori" form:"nama_kategori"`
-	Harga_mitra  int    `json:"harga_mitra" form:"harga_mitra"`
-	Harga_client int    `json:"harga_client" form:"harga_client"`
-	Desc         string `json:"desc" form:"desc"`
+	Nama         string `json:"nama_kategori" form:"nama_kategori" validate:"required"`
+	Harga_mitra  int    `json:"harga_mitra" form:"harga_mitra" validate:"required"`
+	Harga_client int    `json:"harga_client" form:"harga_client" validate:"required"`
+	Desc         string `json:"desc" form:"desc" validate:"required"`
 }
 
 func toCore(dataRequest Request) kategori.Core {

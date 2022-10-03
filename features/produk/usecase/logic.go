@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"errors"
 	"rozhok/features/produk"
 )
 
@@ -16,10 +15,6 @@ func New(dataProduk produk.DataInterface) produk.UsecaseInterface {
 }
 
 func (usecase *produkUsecase) CreateProduk(produk produk.Core) (int, error) {
-	if produk.Nama == "" || produk.Harga == "" || produk.Image_url == "" || produk.Desc == "" {
-		return -1, errors.New("tidak boleh ada data yang kosong")
-	}
-
 	row, err := usecase.produkData.CreateProduk(produk) //produkData.InsertAddress(address)
 	return row, err
 }
