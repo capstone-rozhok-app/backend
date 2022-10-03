@@ -1,29 +1,27 @@
 package usecase
 
-import transaksiporter "rozhok/features/transaksi_porter"
+import (
+	pengambilanrosok "rozhok/features/pengambilan_rosok"
+)
 
-type TransaksiPorter struct {
-	Repo transaksiporter.TransaksiPorterData
+type PengambilanRosok struct {
+	Repo pengambilanrosok.PengambilanRosokData
 }
 
-func New(repo transaksiporter.TransaksiPorterData) *TransaksiPorter {
-	return &TransaksiPorter{
+func New(repo pengambilanrosok.PengambilanRosokData) *PengambilanRosok {
+	return &PengambilanRosok{
 		Repo: repo,
 	}
 }
 
-func (usecase *TransaksiPorter) GetAll(TransaksiCore transaksiporter.Core) (rows []transaksiporter.Core, err error) {
-	return usecase.Repo.GetAll(TransaksiCore)
+func (u *PengambilanRosok) GetAll(TransaksiCore pengambilanrosok.Core) (rows []pengambilanrosok.Core, err error) {
+	return u.Repo.GetAll(TransaksiCore)
 }
 
-func (usecase *TransaksiPorter) Get(TransaksiCore transaksiporter.Core) (row transaksiporter.Core, err error) {
-	return usecase.Repo.Get(TransaksiCore)
+func (u *PengambilanRosok) Get(TransaksiCore pengambilanrosok.Core) (row pengambilanrosok.Core, err error) {
+	return u.Repo.Get(TransaksiCore)
 }
 
-func (usecase *TransaksiPorter) PostTransaksiPenjualan(TransaksiCore transaksiporter.Core) (row int, err error) {
-	return usecase.Repo.CreateTransaksiPenjualan(TransaksiCore)
-}
-
-func (usecase *TransaksiPorter) PutTransaksiPembelian(TransaksiCore transaksiporter.Core) (row int, err error) {
-	return usecase.Repo.UpdateTransaksiPembelian(TransaksiCore)
+func (u *PengambilanRosok) CreatePengambilanRosok(TransaksiCore pengambilanrosok.Core) (row int, err error) {
+	return u.Repo.CreatePengambilanRosok(TransaksiCore)
 }
