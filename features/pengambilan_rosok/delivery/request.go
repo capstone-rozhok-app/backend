@@ -8,7 +8,7 @@ type Request struct {
 	Subtotal      int64 `json:"subtotal" form:"subtotal" validate:"dive"`
 }
 
-func toCore(transaksiRequest Request) transaksiporter.DetailTransaksiPorter {
+func ToCore(transaksiRequest Request) transaksiporter.DetailTransaksiPorter {
 	return transaksiporter.DetailTransaksiPorter{
 		Id:       transaksiRequest.IdBarangRosok,
 		Berat:    int64(transaksiRequest.Berat),

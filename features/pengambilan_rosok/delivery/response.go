@@ -7,7 +7,7 @@ import (
 type Response struct {
 	IdPenjualan uint          `json:"id_penjualan"`
 	Client      Client        `json:"client"`
-	BarangRosok []BarangRosok `json:"barang_rosok"`
+	BarangRosok []BarangRosok `json:"barang_rosok,omitempty"`
 }
 
 type Client struct {
@@ -20,7 +20,7 @@ type Client struct {
 
 type BarangRosok struct {
 	Id            uint   `json:"id,omitempty"`
-	Kategori      string `json:"kategori"`
+	Kategori      string `json:"kategori,omitempty"`
 	Berat         int64  `json:"berat,omitempty"`
 	Subtotal      int64  `json:"subtotal,omitempty"`
 	HargaKategori int64  `json:"harga_kategori,omitempty"`
