@@ -35,6 +35,10 @@ import (
 	junk_stationData "rozhok/features/junk_station/data"
 	junk_stationDelivery "rozhok/features/junk_station/delivery"
 	junk_stationUsecase "rozhok/features/junk_station/usecase"
+	
+	penjualanClientData "rozhok/features/penjualan_client/data"
+	penjualanClientDelivery "rozhok/features/penjualan_client/delivery"
+	penjualanClientUsecase "rozhok/features/penjualan_client/usecase"
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {
@@ -69,4 +73,8 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	junk_stationDataFactory := junk_stationData.New(db)
 	junk_stationcaseFactory := junk_stationUsecase.NewLogic(junk_stationDataFactory)
 	junk_stationDelivery.NewHandller(e, junk_stationcaseFactory)
+	
+	penjualanClientDataFactory := penjualanClientData.New(db)
+	penjualanClientUsecaseFactory := penjualanClientUsecase.New(penjualanClientDataFactory)
+	penjualanClientDelivery.New(e, penjualanClientUsecaseFactory)
 }
