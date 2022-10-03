@@ -29,9 +29,8 @@ func (u *Usecase) CreateJunkStation(junkCreate js.Core, id int) (int, error) {
 	return result, nil
 }
 
-func (u *Usecase) GetJunkStationAll() ([]js.Core, error) {
-	result, err := u.jsData.FindJunkStationAll()
-	return result, err
+func (u *Usecase) GetJunkStationAll(dataCore js.Core) ([]js.Core, error) {
+	return u.jsData.FindJunkStationAll(dataCore)
 }
 
 func (u *Usecase) GetJunkStationById(id, token int) (data js.Core, err error) {
