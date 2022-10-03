@@ -20,7 +20,7 @@ func New(db *gorm.DB) *PenjualanClient {
 func (r *PenjualanClient) GetAll(PenjualanClientCore penjualanclient.Core) ([]penjualanclient.Core, error) {
 	KeranjangRosokList := []KeranjangRosok{}
 
-	if err := r.DB.Model(&KeranjangRosok{}).Where("client_id = ?", PenjualanClientCore.ClientID).Preload("KeranjangRosok").Find(&KeranjangRosokList).Error; err != nil {
+	if err := r.DB.Model(&KeranjangRosok{}).Where("client_id = ?", PenjualanClientCore.ClientID).Preload("KategoriRosok").Find(&KeranjangRosokList).Error; err != nil {
 		return []penjualanclient.Core{}, err
 	}
 
