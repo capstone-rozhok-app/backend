@@ -19,6 +19,19 @@ func New(db *gorm.DB) alamat.DataInterface {
 
 func (repo *addressData) InsertAddress(address alamat.Core) (int, error) {
 	addressModel := fromCore(address)
+	var count int64
+
+	if address.Status == "utama" {
+		txUtama := repo.db.Model(&Alamat{}).Where("status = ?", "utama").Count(&count)
+		if txUtama.Error != nil {
+			if !errors.Is(txUtama.Error, gorm.ErrRecordNotFound) {
+				return 0, txUtama.Error
+			}
+		}
+		if count > 0 {
+			return 0, errors.New("Status utama has used")
+		}
+	}
 
 	tx := repo.db.Create(&addressModel)
 	if tx.Error != nil {
@@ -29,6 +42,21 @@ func (repo *addressData) InsertAddress(address alamat.Core) (int, error) {
 }
 
 func (repo *addressData) UpdateAdress(data alamat.Core, id, userId int) (row int, err error) {
+	var addressModel Alamat
+
+	if data.Status == "utama" {
+		txUtama := repo.db.Model(&Alamat{}).Where("status = ?", "utama").First(&addressModel)
+		if txUtama.Error != nil {
+			return 0, txUtama.Error
+		}
+		if addressModel.ID > 0 {
+			txToCadangan := repo.db.Model(&Alamat{}).Where("id = ?", addressModel.ID).Update("status", "cadangan")
+			if txToCadangan.Error != nil {
+				return 0, txToCadangan.Error
+			}
+		}
+	}
+
 	tx := repo.db.Model(&Alamat{}).Where("id = ?", id).Where("user_id = ?", userId).Updates(fromCore(data))
 	if tx.Error != nil {
 		return -1, tx.Error

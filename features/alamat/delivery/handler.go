@@ -28,13 +28,8 @@ func New(e *echo.Echo, usecase alamat.UsecaseInterface) {
 func (deliv *Delivery) PostAlamat(c echo.Context) error {
 
 	var dataRequest AlamatRequest
-	var dataResponse AlamatResponse
-
 	userId, _, _ := middlewares.ExtractToken(c)
 	dataRequest.UserId = uint(userId)
-	if dataResponse.Id == 1 {
-		dataRequest.Status = "Default"
-	}
 
 	errBind := c.Bind(&dataRequest)
 	if errBind != nil {
