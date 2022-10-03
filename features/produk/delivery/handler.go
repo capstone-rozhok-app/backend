@@ -30,23 +30,24 @@ func (deliv *Delivery) PostProduk(c echo.Context) error {
 
 	var dataRequest ProdukRequest
 
-	// errValidate := c.Validate(&dataRequest)
-	// if errValidate != nil {
-	// 	return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
-	// }
 	errBind := c.Bind(&dataRequest)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("error binding data"))
 	}
 
+	errValidate := c.Validate(&dataRequest)
+	if errValidate != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
+	}
+
 	row, err := deliv.produkUsecase.CreateProduk(toCore(dataRequest))
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal membuat produk"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to insert product"))
 	}
 	if row != 1 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal membuat produk"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to insert product"))
 	}
-	return c.JSON(http.StatusCreated, helper.SuccessResponseHelper("Berhasil membuat produk"))
+	return c.JSON(http.StatusCreated, helper.SuccessResponseHelper("Inserting product is succes"))
 }
 
 func (deliv *Delivery) UpdateProduk(c echo.Context) error {
@@ -65,10 +66,10 @@ func (deliv *Delivery) UpdateProduk(c echo.Context) error {
 
 	row, err := deliv.produkUsecase.UpdateProduk(toCore(dataUpdate), idConv)
 	if err != nil || row == 0 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal memperbarui data"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to update data"))
 	}
 
-	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Berhasil memperbarui data"))
+	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Updating data is succes"))
 
 }
 
@@ -105,7 +106,7 @@ func (deliv *Delivery) DeleteProduk(c echo.Context) error {
 
 	row, err := deliv.produkUsecase.DeleteProduk(idConv)
 	if err != nil || row == 0 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal menghapus akun"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to delete product"))
 	}
-	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Berhasil menghapus akun"))
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Deleting product is success"))
 }

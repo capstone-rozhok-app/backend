@@ -28,16 +28,22 @@ func New(e *echo.Echo, usecase alamat.UsecaseInterface) {
 func (deliv *Delivery) PostAlamat(c echo.Context) error {
 
 	var dataRequest AlamatRequest
+	var dataResponse AlamatResponse
+
 	userId, _, _ := middlewares.ExtractToken(c)
 	dataRequest.UserId = uint(userId)
+	if dataResponse.Id == 1 {
+		dataRequest.Status = "Default"
+	}
 
-	// errValidate := c.Validate(&dataRequest)
-	// if errValidate != nil {
-	// 	return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
-	// }
 	errBind := c.Bind(&dataRequest)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("error binding data"))
+	}
+
+	errValidate := c.Validate(&dataRequest)
+	if errValidate != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
 	}
 
 	row, err := deliv.addressUsecase.CreateAddress(toCore(dataRequest))
@@ -47,7 +53,7 @@ func (deliv *Delivery) PostAlamat(c echo.Context) error {
 	if row != 1 {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to insert address"))
 	}
-	return c.JSON(http.StatusCreated, helper.SuccessResponseHelper("Berhasil memasukan alamat"))
+	return c.JSON(http.StatusCreated, helper.SuccessResponseHelper("Inserting address is succesfull"))
 }
 
 func (deliv *Delivery) UpdateAdress(c echo.Context) error {
@@ -70,7 +76,7 @@ func (deliv *Delivery) UpdateAdress(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to update address"))
 	}
 
-	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Berhasil memperbarui data"))
+	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Updating data is succesfull"))
 
 }
 
@@ -87,7 +93,7 @@ func (deliv *Delivery) DeleteAddress(c echo.Context) error {
 	if err != nil || row == 0 {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to delete address"))
 	}
-	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Berhasil menghapus akun"))
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Deleting data is succesfull"))
 }
 
 func (deliv *Delivery) GetAllAddress(c echo.Context) error {

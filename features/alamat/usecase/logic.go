@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"errors"
 	"rozhok/features/alamat"
 )
 
@@ -16,10 +15,6 @@ func New(dataAddress alamat.DataInterface) alamat.UsecaseInterface {
 }
 
 func (usecase *addressUsecase) CreateAddress(address alamat.Core) (int, error) {
-	if address.Provinsi == "" || address.Kota == "" || address.Kecamatan == "" || address.Jalan == "" {
-		return -1, errors.New("tidak boleh ada data yang kosong")
-	}
-
 	row, err := usecase.addressData.InsertAddress(address)
 	return row, err
 }

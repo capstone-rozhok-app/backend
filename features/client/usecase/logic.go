@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"errors"
 	"rozhok/features/client"
 
 	"golang.org/x/crypto/bcrypt"
@@ -18,10 +17,6 @@ func New(dataClient client.DataInterface) client.UsecaseInterface {
 }
 
 func (usecase *clientUsecase) CreateClient(client client.Core) (int, error) {
-	if client.Email == "" || client.Password == "" {
-		return -1, errors.New("email dan password tidak boleh kosong")
-	}
-
 	passwordHased, err := bcrypt.GenerateFromPassword([]byte(client.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return 0, err

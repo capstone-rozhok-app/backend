@@ -17,9 +17,9 @@ func New(e *echo.Echo, usecase client.UsecaseInterface) {
 	handler := &Delivery{
 		clientUsecase: usecase,
 	}
-	e.POST("/register/client", handler.PostClient)
-	e.PUT("client", handler.UpdateClient, middlewares.JWTMiddleware())
-	e.DELETE("client", handler.DeleteAkun, middlewares.JWTMiddleware())
+	e.POST("/register", handler.PostClient)
+	e.PUT("client", handler.UpdateClient, middlewares.JWTMiddleware(), middlewares.IsClient)
+	e.DELETE("client", handler.DeleteAkun, middlewares.JWTMiddleware(), middlewares.IsClient)
 }
 
 func (deliv *Delivery) PostClient(c echo.Context) error {
@@ -27,23 +27,24 @@ func (deliv *Delivery) PostClient(c echo.Context) error {
 	var dataRequest ClientRequest
 	dataRequest.Role = "client"
 
-	// errValidate := c.Validate(&dataRequest)
-	// if errValidate != nil {
-	// 	return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
-	// }
 	errBind := c.Bind(&dataRequest)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("error binding data"))
 	}
 
+	errValidate := c.Validate(&dataRequest)
+	if errValidate != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
+	}
+
 	row, err := deliv.clientUsecase.CreateClient(toCore(dataRequest))
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal membuat akun"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to ccreat account"))
 	}
 	if row != 1 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal membuat akun"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to ccreat account"))
 	}
-	return c.JSON(http.StatusCreated, helper.SuccessResponseHelper("Berhasil membuat akun"))
+	return c.JSON(http.StatusCreated, helper.SuccessResponseHelper("Creating acccount is succes"))
 }
 
 func (deliv *Delivery) UpdateClient(c echo.Context) error {
@@ -57,10 +58,10 @@ func (deliv *Delivery) UpdateClient(c echo.Context) error {
 
 	row, err := deliv.clientUsecase.PutClient(toCore(dataUpdate), idClient)
 	if err != nil || row == 0 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal memperbarui data"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to update data"))
 	}
 
-	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Berhasil memperbarui data"))
+	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Updating data is succes"))
 
 }
 
@@ -69,7 +70,7 @@ func (deliv *Delivery) DeleteAkun(c echo.Context) error {
 
 	row, err := deliv.clientUsecase.DeleteClient(idUser)
 	if err != nil || row == 0 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Gagal menghapus akun"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to delet account"))
 	}
-	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Berhasil menghapus akun"))
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Deleting account is succes"))
 }
