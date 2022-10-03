@@ -26,13 +26,13 @@ type DetailTransaksiClient struct {
 }
 
 type PengambilanRosokData interface {
-	GetAll(TransaksiCore Core) (rows []Core, err error)
-	Get(TransaksiCore Core) (row Core, err error)
-	CreatePengambilanRosok(TransaksiCore Core) (row int, err error)
+	GetAll(PengambilanRosokCore Core) (rows []Core, err error)
+	Get(PengambilanRosokCore Core) (row Core, err error)
+	CreatePengambilanRosok(PengambilanRosokCore Core) (row int, err error)
 }
 
 type PengambilanRosokUsecase interface {
-	GetAll(TransaksiCore Core) (rows []Core, err error)
-	Get(TransaksiCore Core) (row Core, err error)
-	CreatePengambilanRosok(TransaksiCore Core) (row int, err error)
+	GetAll(PengambilanRosokCore Core) (rows []Core, err error)
+	Get(PengambilanRosokCore Core) (row Core, err error)
+	CreatePengambilanRosok(PengambilanRosokCore Core) (row int, err error)
 }
