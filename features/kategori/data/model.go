@@ -6,34 +6,34 @@ import (
 	"gorm.io/gorm"
 )
 
-type Kategori struct {
+type KategoriRosok struct {
 	gorm.Model
-	Nama         string
-	Harga_mitra  int
-	Harga_client int
+	NamaKategori string
+	HargaMitra   int64
+	HargaClient  int64
 	Desc         string
 }
 
-func fromCore(dataCore kategori.Core) Kategori {
-	return Kategori{
-		Nama:         dataCore.Nama,
-		Harga_mitra:  dataCore.Harga_mitra,
-		Harga_client: dataCore.Harga_client,
+func fromCore(dataCore kategori.Core) KategoriRosok {
+	return KategoriRosok{
+		NamaKategori: dataCore.Nama,
+		HargaMitra:   int64(dataCore.Harga_mitra),
+		HargaClient:  int64(dataCore.Harga_client),
 		Desc:         dataCore.Desc,
 	}
 }
 
-func (dataCore *Kategori) toCore() kategori.Core {
+func (dataCore *KategoriRosok) toCore() kategori.Core {
 	return kategori.Core{
 		ID:           dataCore.ID,
-		Nama:         dataCore.Nama,
-		Harga_mitra:  dataCore.Harga_mitra,
-		Harga_client: dataCore.Harga_client,
+		Nama:         dataCore.NamaKategori,
+		Harga_mitra:  int(dataCore.HargaMitra),
+		Harga_client: int(dataCore.HargaClient),
 		Desc:         dataCore.Desc,
 	}
 }
 
-func toCoreList(data []Kategori) []kategori.Core {
+func toCoreList(data []KategoriRosok) []kategori.Core {
 	var dataCore []kategori.Core
 
 	for key := range data {
