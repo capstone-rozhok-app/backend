@@ -31,11 +31,13 @@ func (h *PembelianHandler) CreatePembelian(c echo.Context) error{
 		return c.JSON(400, helper.FailedResponseHelper(errBind.Error()))
 	}
 
-	if err := c.Validate(PjsRequest); err != nil{
+	if  err := c.Validate(PjsRequest); err != nil{
 		return c.JSON(400, helper.FailedResponseHelper(err.Error()))
 	}
-	
-	_, err := h.PembelianInterface.CreatePembelian(ToCore(PjsRequest), idToken)
+
+	var Core = ToCore(PjsRequest)
+	Core.JunkStationID = idToken
+	_, err := h.PembelianInterface.CreatePembelian(Core)
 	if err != nil {
 		return c.JSON(400, helper.FailedResponseHelper(err.Error()))
 	}
@@ -45,25 +47,18 @@ func (h *PembelianHandler) CreatePembelian(c echo.Context) error{
 func (h *PembelianHandler) GetPembelian(c echo.Context) error {
 	idToken, _, _:=  middlewares.ExtractToken(c)
 
-	result, err:= h.PembelianInterface.GetPembelian()
-	pembelianResult := PembelianResponse{}
-
+	result, err:= h.PembelianInterface.GetPembelian(idToken)
+	pembelianResult := []PembelianResponse{}
 	for _, v := range result {
-		if v.ID == idToken{
-			pembelianResult.ID = idToken
-			pembelianResult.Kategori = v.Kategori
-		}
+		pembelianResult = append(pembelianResult, ToResponse(v))
 	}
-
-	if err != nil || pembelianResult.ID < 1 {
+	if err != nil {
 		return c.JSON(400, helper.FailedResponseHelper("error get data"))
 	}
 	return c.JSON(200, helper.SuccessDataResponseHelper("Success Get Data", pembelianResult))
 }
 
-func (h *PembelianHandler) PutPembelian(c echo.Context)error {
-	idToken, _, _:= middlewares.ExtractToken(c)
-	
+func (h *PembelianHandler) PutPembelian(c echo.Context)error {	
 	idParam := c.Param("id")
 	idConv, errConv := strconv.Atoi(idParam)
 	if errConv != nil || idConv == 0 {
@@ -84,14 +79,12 @@ func (h *PembelianHandler) PutPembelian(c echo.Context)error {
 	if err != nil || row == 0{
 		return c.JSON(400, helper.FailedResponseHelper("Failed to update pembelian"))
 	}
-	return c.JSON(200, helper.SuccessDataResponseHelper("Success update data pembelian", idToken))
+	return c.JSON(200, helper.SuccessResponseHelper("Success update data pembelian"))
 }
 
 func (h *PembelianHandler) DeletePembelian(c echo.Context)error {
-	idToken, _, _ := middlewares.ExtractToken(c)
-
 	var pjsDelete PembelianRequest
-	pjsDelete.ID = idToken
+
 	row, err := h.PembelianInterface.DeletePembelian(helper.ParamInt(c, "id"), ToCore(pjsDelete))
 	if err != nil || row < 1 {
 		return c.JSON(400, helper.FailedResponseHelper("failed delete pembelian"))

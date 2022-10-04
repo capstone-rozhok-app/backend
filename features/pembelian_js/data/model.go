@@ -1,36 +1,18 @@
 package data
 
 import (
-	"gorm.io/gorm"
 	pjs "rozhok/features/pembelian_js"
-)
 
-type User struct {
-	gorm.Model
-	Email           string `gorm:"unique"`
-	Password        string
-	Role            string
-	Username        string
-	StatusKemitraan string
-	JunkStationName string
-	ImageUrl        string
-	Provinsi        string
-	Kota            string
-	Kecamatan       string
-	Jalan           string
-	Telepon         string
-	Bonus           int64
-	KeranjangRosok	[]KeranjangRosok 
-}
+	"gorm.io/gorm"
+)
 
 type KeranjangRosok struct {
 	gorm.Model
-	JunkStationID   uint
+	ClientID        uint
 	KategoriRosokID uint
 	Berat           int
 	Subtotal        int64
-	User			User `gorm:"foreignKey:JunkStationID"`
-	KategoriRosok KategoriRosok
+	KategoriRosok   KategoriRosok
 }
 
 type KategoriRosok struct {
@@ -43,24 +25,27 @@ type KategoriRosok struct {
 
 func FromCore(junkCore pjs.PembelianCore) KeranjangRosok {
 	junkModel := KeranjangRosok{
-		Berat: junkCore.Berat,
-		Subtotal: int64(junkCore.Harga),
+		ClientID:        uint(junkCore.JunkStationID),
+		KategoriRosokID: uint(junkCore.Kategori),
+		Berat:           junkCore.Berat,
+		Subtotal:        int64(junkCore.Harga),
 	}
 	return junkModel
 }
 
-func (junkCore *KeranjangRosok) ToCore() pjs.PembelianCore {
+func ToCore(junkCore KeranjangRosok) pjs.PembelianCore {
 	return pjs.PembelianCore{
-		ID: 	int(junkCore.ID),	
-		Berat: junkCore.Berat,
-		Harga: int(junkCore.Subtotal),
+		IDPembelian:   int(junkCore.ID),
+		JunkStationID: int(junkCore.ClientID),
+		NamaKategori:  junkCore.KategoriRosok.NamaKategori,
+		Berat:         junkCore.Berat,
 	}
 }
 
 func CoreList(junkCore []KeranjangRosok) []pjs.PembelianCore {
 	var junk []pjs.PembelianCore
-	for key := range junkCore {
-		junk = append(junk, junkCore[key].ToCore())
+	for _, v := range junkCore {
+		junk = append(junk, ToCore(v))
 	}
 	return junk
 }

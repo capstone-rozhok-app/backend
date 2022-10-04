@@ -15,15 +15,12 @@ func New(data pjs.DataInterface) pjs.UsecaseInterface {
 	}
 }
 
-func (u *Usecase) GetPembelian()([]pjs.PembelianCore, error) {
-	result, err := u.pembelianJS.FindPembelian()
+func (u *Usecase) GetPembelian(JunkStationID int)([]pjs.PembelianCore, error) {
+	result, err := u.pembelianJS.FindPembelian(JunkStationID)
 	return result, err
 }
 
-func (u *Usecase) CreatePembelian(data pjs.PembelianCore, token int) (int, error) {
-	if data.Kategori == "" || data.Harga < 1 || data.Berat < 1 {
-		return -1, errors.New("data must be filled")
-	}
+func (u *Usecase) CreatePembelian(data pjs.PembelianCore) (int, error) {
 	result, err := u.pembelianJS.InsertPembelian(data)
 	if err != nil{
 		return 0, errors.New("failed to create pembelian")
@@ -32,16 +29,6 @@ func (u *Usecase) CreatePembelian(data pjs.PembelianCore, token int) (int, error
 }
 
 func (u *Usecase) PutPembelian(id int, data pjs.PembelianCore)(int, error) {
-	pjsMap := make(map[string]interface{})
-	if data.Kategori != ""{
-		pjsMap["kategori"] = &data.Kategori
-	}
-	if data.Berat != 0{
-		pjsMap["berat"] = &data.Berat
-	}
-	if data.Harga != 0{
-		pjsMap["harga"] = &data.Harga
-	}
 	result, err := u.pembelianJS.UpdatePembelian(id, data)
 	if err != nil{
 		return 0, errors.New("failed to update pembelian")

@@ -16,9 +16,9 @@ func New(db *gorm.DB) pjs.DataInterface {
 	}
 }
 
-func (q *DataPembelian) FindPembelian() ([]pjs.PembelianCore, error) {
+func (q *DataPembelian) FindPembelian(JunkStationID int) ([]pjs.PembelianCore, error) {
 	var data []KeranjangRosok
-	tx := q.db.Find(&data)
+	tx := q.db.Where("client_id = ?", JunkStationID).Preload("KategoriRosok").Find(&data)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -27,7 +27,7 @@ func (q *DataPembelian) FindPembelian() ([]pjs.PembelianCore, error) {
 
 func (q *DataPembelian) InsertPembelian(data pjs.PembelianCore) (int, error) {
 	DpModel := FromCore(data)
-	tx := q.db.Model(DpModel)
+	tx := q.db.Model(&KeranjangRosok{}).Create(&DpModel)
 	if tx.Error != nil {
 		return 0, tx.Error
 	}
@@ -35,7 +35,7 @@ func (q *DataPembelian) InsertPembelian(data pjs.PembelianCore) (int, error) {
 }
 
 func (q *DataPembelian) UpdatePembelian(id int, data pjs.PembelianCore)(int, error) {
-	tx := q.db.Model(&KeranjangRosok{}).Where("id = ?", data.ID).Updates(FromCore(data))
+	tx := q.db.Model(&KeranjangRosok{}).Where("id = ?", id).Updates(FromCore(data))
 	if tx.Error != nil{
 		return -1, tx.Error
 	}
@@ -46,7 +46,9 @@ func (q *DataPembelian) UpdatePembelian(id int, data pjs.PembelianCore)(int, err
 }
 
 func (q *DataPembelian) DeletePembelian(id int, data pjs.PembelianCore)(int, error){
- 	tx := q.db.Model(&KeranjangRosok{}).Where("id = ?", data.ID). Delete(FromCore(data))
+	var keranjangModel KeranjangRosok
+	keranjangModel.ID = uint(id)
+ 	tx := q.db.Model(&KeranjangRosok{}).Delete(&keranjangModel)
 	if tx.Error != nil {
 		return -1, tx.Error
 	}

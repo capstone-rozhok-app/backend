@@ -3,18 +3,21 @@ package delivery
 import pjs "rozhok/features/pembelian_js"
 
 type PembelianResponse struct{
-	ID			int			`json:"id"`
+	ID			int			`json:"id_pembelian"`
 	Kategori	string		`json:"kategori"`
-	Berat		int			`json:"berat"`
-	Harga		int			`json:"harga"`
 }
 
 func FromCore(data pjs.PembelianCore) PembelianResponse {
 	return PembelianResponse{
-		ID: 	data.ID,
-		Kategori: data.Kategori,
-		Berat: data.Berat,
-		Harga: data.Harga,
+		ID: 	data.JunkStationID,
+		Kategori: data.NamaKategori,
+	}
+}
+
+func ToResponse(data pjs.PembelianCore) PembelianResponse {
+	return PembelianResponse{
+		ID:		data.IDPembelian,
+		Kategori: data.NamaKategori,
 	}
 }
 
@@ -28,9 +31,7 @@ func CoreList(data []pjs.PembelianCore) []PembelianResponse {
 
 func FromCoreToResponse(data pjs.PembelianCore) PembelianResponse {
 	dataResponse := PembelianResponse{
-		Kategori: data.Kategori,
-		Berat: data.Berat,
-		Harga: data.Harga,
+		Kategori: data.NamaKategori,
 	}
 	return dataResponse
 }

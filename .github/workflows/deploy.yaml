@@ -28,7 +28,7 @@ jobs:
             export AWS_REGION=${{secrets.AWS_REGION}}
             export S3_KEY=${{secrets.S3_KEY}}
             export S3_SECRET=${{secrets.S3_SECRET}}
-            export S3_BUCKET=${{secrets.S3_BUCKET}}
+            export AWS_BUCKET=${{secrets.S3_BUCKET}}
             git pull origin main
             go mod tidy
             docker compose down
