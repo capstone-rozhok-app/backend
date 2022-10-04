@@ -5,51 +5,59 @@ import (
 	pjs "rozhok/features/pembelian_js"
 )
 
-type PembelianJS struct{
-	gorm.Model
-	UserID			int
-	Kategori		string
-	Berat			int
-	Harga			int
-	User			User	`gorm:"foreignKey:UserID"`
-}
-
 type User struct {
 	gorm.Model
-	Email    			string	`gorm:"unique"`
-	Password 			string	
-	Role    			string
-	Username 			string
-	JunkStationName		string
-	StatusKemitraan   	string
-	Foto 				string
-	Provinsi 			string
-	Kota 				string
-	Kecamatan 			string
-	Jalan 				string
-	Telepon 			string
-	PembelianJS			[]PembelianJS
+	Email           string `gorm:"unique"`
+	Password        string
+	Role            string
+	Username        string
+	StatusKemitraan string
+	JunkStationName string
+	ImageUrl        string
+	Provinsi        string
+	Kota            string
+	Kecamatan       string
+	Jalan           string
+	Telepon         string
+	Bonus           int64
+	KeranjangRosok	[]KeranjangRosok 
 }
 
-func FromCore(junkCore pjs.PembelianCore) PembelianJS {
-	junkModel := PembelianJS{
-		Kategori: junkCore.Kategori,
+type KeranjangRosok struct {
+	gorm.Model
+	JunkStationID   uint
+	KategoriRosokID uint
+	Berat           int
+	Subtotal        int64
+	User			User `gorm:"foreignKey:JunkStationID"`
+	KategoriRosok KategoriRosok
+}
+
+type KategoriRosok struct {
+	gorm.Model
+	NamaKategori string
+	HargaMitra   int64
+	HargaClient  int64
+	Desc         string
+}
+
+func FromCore(junkCore pjs.PembelianCore) KeranjangRosok {
+	junkModel := KeranjangRosok{
 		Berat: junkCore.Berat,
-		Harga:	junkCore.Harga,
+		Subtotal: int64(junkCore.Harga),
 	}
 	return junkModel
 }
 
-func (junkCore *PembelianJS) ToCore() pjs.PembelianCore {
+func (junkCore *KeranjangRosok) ToCore() pjs.PembelianCore {
 	return pjs.PembelianCore{
 		ID: 	int(junkCore.ID),	
-		Kategori: junkCore.Kategori,
 		Berat: junkCore.Berat,
-		Harga: junkCore.Harga,
+		Harga: int(junkCore.Subtotal),
 	}
 }
 
-func CoreList(junkCore []PembelianJS) []pjs.PembelianCore {
+func CoreList(junkCore []KeranjangRosok) []pjs.PembelianCore {
 	var junk []pjs.PembelianCore
 	for key := range junkCore {
 		junk = append(junk, junkCore[key].ToCore())

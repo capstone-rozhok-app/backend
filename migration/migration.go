@@ -6,8 +6,7 @@ import (
 	usermodel "rozhok/features/login/data"
 	produkModel "rozhok/features/produk/data"
 	transaksiportermodel "rozhok/features/transaksi_porter/data"
-	JSmodel "rozhok/features/junk_station/data"
-	PJSmodel "rozhok/features/pembelian_js/data"
+
 
 	"gorm.io/gorm"
 )
@@ -20,7 +19,5 @@ func InitMigrate(db *gorm.DB) {
 		new(addresModel.Alamat),
 		new(produkModel.Produk),
 		new(kategoriModel.KategoriRosok),
-		new(PJSmodel.PembelianJS),
-		new(JSmodel.User),
 	)
 }
