@@ -21,7 +21,7 @@ func (usecase *cartUsecase) CreateCart(cart cart.Core) (int, error) {
 	return row, err
 }
 
-func (usecase *cartUsecase) GetAllCart(userId int) (data []cart.ResponseCore, err error) {
+func (usecase *cartUsecase) GetAllCart(userId int) (data []cart.Core, err error) {
 	results, err := usecase.cartData.GetAllCart(userId)
 	return results, err
 }

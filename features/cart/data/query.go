@@ -4,6 +4,7 @@ import (
 	"errors"
 	"rozhok/features/cart"
 	produkModel "rozhok/features/produk/data"
+	"strconv"
 
 	"gorm.io/gorm"
 )
@@ -23,6 +24,7 @@ func (repo *cartData) CreateCart(cart cart.Core) (int, error) {
 	repo.db.First(&dbCek, "id = ?", cart.ProdukId)
 
 	cartModel := fromCore(cart)
+	cartModel.Qty = 1
 	cartModel.Subtotal = dbCek.Harga * int64(cartModel.Qty)
 
 	tx := repo.db.Create(&cartModel)
@@ -33,7 +35,7 @@ func (repo *cartData) CreateCart(cart cart.Core) (int, error) {
 	return int(tx.RowsAffected), nil
 }
 
-func (repo *cartData) GetAllCart(userId int) ([]cart.ResponseCore, error) {
+func (repo *cartData) GetAllCart(userId int) ([]cart.Core, error) {
 	var allCartData []Cart
 	tx := repo.db.Where("user_id = ?", userId).Joins("User").Joins("Produk").Find(&allCartData)
 
@@ -45,13 +47,30 @@ func (repo *cartData) GetAllCart(userId int) ([]cart.ResponseCore, error) {
 }
 
 func (repo *cartData) UpdateCart(data cart.Core, id, userId int) (row int, err error) {
-	// var dbCek produkModel.Produk
-	// // repo.db.First(&dbCek, "id = ?", data.ProdukId)
-	// data.Subtotal = dbCek.Harga * int64(data.Qty)
-	// fmt.Println(data.ProdukId)
-	// fmt.Println(dbCek.Harga)
+	var dbCek Cart
+	txCek := repo.db.Preload("Produk").First(&dbCek, "id = ?", id)
+	if txCek.Error != nil {
+		return 0, txCek.Error
+	}
 
-	tx := repo.db.Model(&Cart{}).Where("id = ?", id).Where("user_id = ?", userId).Updates(fromCore(data))
+	if data.Counter == "increment" {
+		dbCek.Qty += 1
+	} else if dbCek.Qty > 1 {
+		dbCek.Qty -= 1
+	}
+
+	var dataModel Cart
+	dataModel.Qty = dbCek.Qty
+	dataModel.Subtotal = dbCek.Produk.Harga * int64(dbCek.Qty)
+	if data.Checklist != "" {
+		checklist, err := strconv.ParseBool(data.Checklist)
+		if err != nil {
+			return 0, err
+		}
+		dataModel.Checklist = checklist
+	}
+
+	tx := repo.db.Model(&Cart{}).Where("id = ?", id).Select("checklist").Updates(&dataModel)
 	if tx.Error != nil {
 		return -1, tx.Error
 	}

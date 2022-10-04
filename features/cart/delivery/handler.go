@@ -42,12 +42,12 @@ func (deliv *Delivery) PostCart(c echo.Context) error {
 
 	row, err := deliv.cartUsecase.CreateCart(toCore(dataRequest))
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to insert address"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to insert into cart"))
 	}
 	if row != 1 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to insert address"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to insert into cart"))
 	}
-	return c.JSON(http.StatusCreated, helper.SuccessResponseHelper("Inserting address is succesfull"))
+	return c.JSON(http.StatusCreated, helper.SuccessResponseHelper("Inserting into cart is succes"))
 }
 
 func (deliv *Delivery) GetCarts(c echo.Context) error {
@@ -70,17 +70,21 @@ func (deliv *Delivery) UpdateCart(c echo.Context) error {
 	userId, _, _ := middlewares.ExtractToken(c)
 
 	var dataUpdate CartRequest
+	var dataCore = toCore(dataUpdate)
+	dataCore.Counter = c.QueryParam("counter")
+	dataCore.Checklist = c.QueryParam("checklist")
+
 	errBind := c.Bind(&dataUpdate)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("error binding data"))
 	}
 
-	row, err := deliv.cartUsecase.UpdateCart(toCore(dataUpdate), idConv, userId)
+	row, err := deliv.cartUsecase.UpdateCart(dataCore, idConv, userId)
 	if err != nil || row == 0 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to update address"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to update cart"))
 	}
 
-	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Updating data is succesfull"))
+	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Updating cart is succes"))
 
 }
 
@@ -95,7 +99,7 @@ func (deliv *Delivery) DeleteCart(c echo.Context) error {
 
 	row, err := deliv.cartUsecase.DeleteCart(idConv, userId)
 	if err != nil || row == 0 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to delete address"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to delete cart"))
 	}
-	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Deleting data is succesfull"))
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Deleting cart is succesfull"))
 }

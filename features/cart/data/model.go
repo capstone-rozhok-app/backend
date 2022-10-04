@@ -21,27 +21,26 @@ type Cart struct {
 
 func fromCore(dataCore cart.Core) Cart {
 	return Cart{
-		Subtotal:  dataCore.Subtotal,
-		Qty:       dataCore.Qty,
-		Checklist: dataCore.Checklist,
-		UserId:    dataCore.UserId,
-		ProdukId:  dataCore.ProdukId,
+		Subtotal: dataCore.Subtotal,
+		Qty:      dataCore.Qty,
+		UserId:   dataCore.UserId,
+		ProdukId: dataCore.ProdukId,
 	}
 }
 
-func (dataCart *Cart) toCore() cart.ResponseCore {
-	return cart.ResponseCore{
-		ID:         dataCart.ID,
-		Subtotal:   dataCart.Subtotal,
-		Qty:        dataCart.Qty,
-		Checklist:  dataCart.Checklist,
-		ProdFile:   dataCart.Produk.Image_url,
-		ProdukName: dataCart.Produk.Nama,
+func (dataCart *Cart) toCore() cart.Core {
+	return cart.Core{
+		ID:            dataCart.ID,
+		Subtotal:      dataCart.Subtotal,
+		Qty:           dataCart.Qty,
+		ImageUrl:      dataCart.Produk.Image_url,
+		ProdukName:    dataCart.Produk.Nama,
+		ChecklistBool: dataCart.Checklist,
 	}
 }
 
-func toCoreList(dataCart []Cart) []cart.ResponseCore {
-	var dataCore []cart.ResponseCore
+func toCoreList(dataCart []Cart) []cart.Core {
+	var dataCore []cart.Core
 
 	for key := range dataCart {
 		dataCore = append(dataCore, dataCart[key].toCore())
