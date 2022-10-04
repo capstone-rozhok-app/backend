@@ -34,10 +34,6 @@ func (h *JunkHandler) CreateJunkStation(c echo.Context) error {
 		return c.JSON(400, helper.FailedResponseHelper(errBind.Error()))
 	}
 
-	errValidate := c.Validate(&JsRequest)
-	if errValidate != nil {
-		return c.JSON(400, helper.FailedResponseHelper("failed to bind"))
-	}
 
 	imageData, ImageInfo, ImageErr := c.Request().FormFile("image_url")
 	if ImageErr == http.ErrMissingFile || ImageErr != nil{
