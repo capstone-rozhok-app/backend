@@ -3,7 +3,7 @@ package delivery
 import "rozhok/features/client"
 
 type ClientRequest struct {
-	Email    string `json:"email" form:"email" validate:"required"`
+	Email    string `json:"email" form:"email" validate:"required,email"`
 	Password string `json:"password" form:"password" validate:"required"`
 	Username string `json:"username" form:"username" validate:"required"`
 	Telp     string `json:"telepon" form:"telepon" validate:"required"`
