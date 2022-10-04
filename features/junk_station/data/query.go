@@ -71,3 +71,14 @@ func (junk *DataJS) UpdateJunkStation(id int, data js.Core) (int, error) {
 	}
 	return int(tx.RowsAffected), nil
 }
+
+func (q *DataJS) UpdateKemitraan(id int, data js.Core) (int, error) {
+	tx := q.db.Model(&User{}).Where("id = ?", id).Updates(FromCore(data))
+	if tx.Error != nil {
+		return -1, tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return 0, errors.New("failed update kemitraan")
+	}
+	return int(tx.RowsAffected), nil
+}

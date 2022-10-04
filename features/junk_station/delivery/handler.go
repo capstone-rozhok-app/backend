@@ -21,6 +21,7 @@ func NewHandller(e *echo.Echo, data js.UsecaseInterface) {
 	e.POST("junk-station", handler.CreateJunkStation)
 	e.GET("junk-station/:id", handler.GetJunkStationById, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
 	e.PUT("junk-station/:id", handler.PutJunkStation, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
+	e.PUT("kemitraan/:id", handler.PutKemitraan, middlewares.JWTMiddleware(), middlewares.IsAdmin)
 }
 
 func (h *JunkHandler) CreateJunkStation(c echo.Context) error {
@@ -95,4 +96,23 @@ func (h *JunkHandler) PutJunkStation(c echo.Context) error {
 		return c.JSON(400, helper.FailedResponseHelper("error Update JS"))
 	}
 	return c.JSON(200, helper.SuccessResponseHelper("Succses update JS"))
+}
+
+func (h *JunkHandler) PutKemitraan(c echo.Context) error {
+	var mitraUpdate JsReq
+
+	errBind := c.Bind(&mitraUpdate)
+	if errBind != nil{
+		return c.JSON(400, helper.FailedResponseHelper("error bind data"))
+	}
+
+	if errValidation := c.Validate(mitraUpdate); errValidation != nil{
+		return c.JSON(403, helper.FailedResponseHelper(errBind.Error()))
+	}
+
+	row, err := h.JunkInterface.PutKemitraan(helper.ParamInt(c, "id"), ToCoreMitra(mitraUpdate))
+	if err != nil || row == 0{
+		return c.JSON(400, helper.FailedResponseHelper("failed to update kemitraan"))
+	}
+	return c.JSON(200, helper.SuccessResponseHelper("Succses Update data"))
 }
