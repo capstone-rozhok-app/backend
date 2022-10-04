@@ -51,6 +51,10 @@ import (
 	alamatData "rozhok/features/alamat/data"
 	alamatDelivery "rozhok/features/alamat/delivery"
 	alamatUsecase "rozhok/features/alamat/usecase"
+	
+	transaksiJS "rozhok/features/transaksi_junk_station/data"
+	transaksiJSDelivery "rozhok/features/transaksi_junk_station/delivery"
+	transaksiJSUsecase "rozhok/features/transaksi_junk_station/usecase"
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {
@@ -102,4 +106,7 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	alamatUsecaseFactory := alamatUsecase.New(alamatDataFactory)
 	alamatDelivery.New(e, alamatUsecaseFactory)
 
+	transaksiJSDataFactory := transaksiJS.New(db)
+	transaksiJSUsecaseFactory := transaksiJSUsecase.New(transaksiJSDataFactory)
+	transaksiJSDelivery.New(e, transaksiJSUsecaseFactory)
 }
