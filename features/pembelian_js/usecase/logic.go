@@ -20,8 +20,8 @@ func (u *Usecase) GetPembelian()([]pjs.PembelianCore, error) {
 	return result, err
 }
 
-func (u *Usecase) CreatePembelian(data pjs.PembelianCore) (int, error) {
-	if data.Kategori == "" || data.Harga == 0 || data.Berat == 0 {
+func (u *Usecase) CreatePembelian(data pjs.PembelianCore, token int) (int, error) {
+	if data.Kategori == "" || data.Harga < 1 || data.Berat < 1 {
 		return -1, errors.New("data must be filled")
 	}
 	result, err := u.pembelianJS.InsertPembelian(data)

@@ -11,7 +11,7 @@ type PembelianJS struct{
 	Kategori		string
 	Berat			int
 	Harga			int
-	User			User
+	User			User	`gorm:"foreignKey:UserID"`
 }
 
 type User struct {

@@ -24,15 +24,18 @@ func New(e *echo.Echo, data pjs.UsecaseInterface)  {
 }
 
 func (h *PembelianHandler) CreatePembelian(c echo.Context) error{
+	idToken, _, _:=  middlewares.ExtractToken(c)
 	var PjsRequest PembelianRequest
 	errBind := c.Bind(&PjsRequest)
 	if errBind != nil {
 		return c.JSON(400, helper.FailedResponseHelper(errBind.Error()))
 	}
+
 	if err := c.Validate(PjsRequest); err != nil{
 		return c.JSON(400, helper.FailedResponseHelper(err.Error()))
 	}
-	_, err := h.PembelianInterface.CreatePembelian(ToCore(PjsRequest))
+	
+	_, err := h.PembelianInterface.CreatePembelian(ToCore(PjsRequest), idToken)
 	if err != nil {
 		return c.JSON(400, helper.FailedResponseHelper(err.Error()))
 	}
