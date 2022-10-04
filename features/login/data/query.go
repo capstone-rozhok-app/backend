@@ -1,7 +1,6 @@
 package data
 
 import (
-	"fmt"
 	"rozhok/features/login"
 
 	"gorm.io/gorm"
@@ -41,20 +40,14 @@ func (repo *data) GetUsers() (login.ResponseCore, error) {
 	var client int64
 	repo.db.Model(&User{}).Where("role = ?", "client").Count(&client)
 	var mitra int64
-	repo.db.Model(&User{}).Where("role = ?", "mitra").Count(&mitra)
+	repo.db.Model(&User{}).Where("role = ?", "junk_station").Count(&mitra)
 	userCores.TotalCL = int(client)
 	userCores.TotalJS = int(mitra)
 
-	type GrafikData struct {
-		Bulan    int
-		JumlahCL int
-		JumlahJS int
-	}
-
-	var sliceGrafik []GrafikData
+	var sliceGrafik []login.GrafikData
 	repo.db.Model(&User{}).Select("month(created_at) as bulan, count(id) as jumlah_cl").Where("role = ?", "client").Group("month(created_at)").Find(&sliceGrafik)
-	var sliceGrafik2 []GrafikData
-	repo.db.Model(&User{}).Select("month(created_at) as bulan, count(id) as jumlah_js").Where("role = ?", "mitra").Group("month(created_at)").Find(&sliceGrafik2)
+	var sliceGrafik2 []login.GrafikData
+	repo.db.Model(&User{}).Select("month(created_at) as bulan, count(id) as jumlah_js").Where("role = ?", "junk_station").Group("month(created_at)").Find(&sliceGrafik2)
 
 	for i := range sliceGrafik {
 		for j := range sliceGrafik2 {
@@ -64,7 +57,7 @@ func (repo *data) GetUsers() (login.ResponseCore, error) {
 		}
 	}
 
-	fmt.Println(sliceGrafik)
+	userCores.Grafik = sliceGrafik
 
 	return userCores, nil
 }
