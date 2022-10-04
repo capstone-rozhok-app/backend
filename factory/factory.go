@@ -28,14 +28,14 @@ import (
 	PJSDelivery "rozhok/features/pembelian_js/delivery"
 	PJSUsecase "rozhok/features/pembelian_js/usecase"
 
-	// kategoriData "rozhok/features/kategori/data"
-	// kategoriDelivery "rozhok/features/kategori/delivery"
-	// kategoriUsecase "rozhok/features/kategori/usecase"
-	
+	kategoriData "rozhok/features/kategori/data"
+	kategoriDelivery "rozhok/features/kategori/delivery"
+	kategoriUsecase "rozhok/features/kategori/usecase"
+
 	penjualanClientData "rozhok/features/penjualan_client/data"
 	penjualanClientDelivery "rozhok/features/penjualan_client/delivery"
 	penjualanClientUsecase "rozhok/features/penjualan_client/usecase"
-	
+
 	pengambilanRosok "rozhok/features/pengambilan_rosok/data"
 	pengambilanRosokDelivery "rozhok/features/pengambilan_rosok/delivery"
 	pengambilanRosokUsecase "rozhok/features/pengambilan_rosok/usecase"
@@ -45,6 +45,10 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	clientDataFactory := clientData.New(db)
 	clientUsecaseFactory := clientUsecase.New(clientDataFactory)
 	clientDelivery.New(e, clientUsecaseFactory)
+
+	kategoriDataFactory := kategoriData.New(db)
+	kategoriUsecaseFactory := kategoriUsecase.New(kategoriDataFactory)
+	kategoriDelivery.New(e, kategoriUsecaseFactory)
 
 	porterDataFactory := porterData.New(db)
 	porterUsecaseFactory := porterUsecase.New(porterDataFactory)
@@ -65,11 +69,11 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	PJSDataFactory := PJSData.New(db)
 	PJSUsecaseFactory := PJSUsecase.New(PJSDataFactory)
 	PJSDelivery.New(e, PJSUsecaseFactory)
-	
+
 	penjualanClientDataFactory := penjualanClientData.New(db)
 	penjualanClientUsecaseFactory := penjualanClientUsecase.New(penjualanClientDataFactory)
 	penjualanClientDelivery.New(e, penjualanClientUsecaseFactory)
-	
+
 	pengambilanRosokDataFactory := pengambilanRosok.New(db)
 	pengambilanRosokUsecaseFactory := pengambilanRosokUsecase.New(pengambilanRosokDataFactory)
 	pengambilanRosokDelivery.New(e, pengambilanRosokUsecaseFactory)
