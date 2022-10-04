@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"rozhok/features/client"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -27,7 +28,6 @@ func (usecase *clientUsecase) CreateClient(client client.Core) (int, error) {
 }
 
 func (usecase *clientUsecase) PutClient(newData client.Core, id int) (int, error) {
-
 	row, err := usecase.clientData.UpdateClient(newData, id)
 	return row, err
 }
@@ -35,4 +35,12 @@ func (usecase *clientUsecase) PutClient(newData client.Core, id int) (int, error
 func (usecase *clientUsecase) DeleteClient(id int) (int, error) {
 	row, err := usecase.clientData.DeleteDataClient(id)
 	return row, err
+}
+
+func (usecase *clientUsecase) GetClient(id int) (client.Core, error) {
+	result, err := usecase.clientData.GetClient(id)
+	if err != nil {
+		return client.Core{}, err
+	}
+	return result, nil
 }

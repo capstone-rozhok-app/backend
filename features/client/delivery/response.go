@@ -1,7 +1,15 @@
 package delivery
 
-type LoginResponse struct {
-	Token    string `json:"token" form:"token"`
-	Role     string `json:"role" form:"role"`
-	Username string `json:"username" form:"username"`
+import "rozhok/features/client"
+
+type Response struct {
+	TotaJual int `json:"total_penjualan"`
+	Bonus    int `json:"bonus_terakhir"`
+}
+
+func fromCore(dataCore client.Core) Response {
+	return Response{
+		TotaJual: dataCore.TotaJual,
+		Bonus:    int(dataCore.Bonus),
+	}
 }

@@ -3,6 +3,7 @@ package data
 import (
 	"errors"
 	"rozhok/features/client"
+	transaksiModel "rozhok/features/pengambilan_rosok/data"
 
 	"gorm.io/gorm"
 )
@@ -49,4 +50,12 @@ func (repo *clientData) DeleteDataClient(id int) (row int, err error) {
 		return 0, errors.New("gagal menghapus akun")
 	}
 	return int(tx.RowsAffected), nil
+}
+
+func (repo *clientData) GetClient(id int) (data client.Core, err error) {
+	var jual int64
+	repo.db.Model(&transaksiModel.TransaksiClient{}).Where("client_id = ?", id).Count(&jual)
+	data.TotaJual = int(jual)
+
+	return data, nil
 }
