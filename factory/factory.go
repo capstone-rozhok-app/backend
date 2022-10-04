@@ -27,11 +27,14 @@ import (
 	PJSData "rozhok/features/pembelian_js/data"
 	PJSDelivery "rozhok/features/pembelian_js/delivery"
 	PJSUsecase "rozhok/features/pembelian_js/usecase"
+<<<<<<< HEAD
 
 	kategoriData "rozhok/features/kategori/data"
 	kategoriDelivery "rozhok/features/kategori/delivery"
 	kategoriUsecase "rozhok/features/kategori/usecase"
 
+=======
+>>>>>>> f9fe327 (factory)
 	
 	penjualanClientData "rozhok/features/penjualan_client/data"
 	penjualanClientDelivery "rozhok/features/penjualan_client/delivery"
