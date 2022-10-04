@@ -27,6 +27,7 @@ func FromCore(data js.Core) JSRes {
 		JunkStationOwner: data.JunkStationOwner,
 		Telp:             data.Telp,
 		StatusKemitraan:  data.StatusKemitraan,
+		Image_url: 		  data.Image_url,
 	}
 }
 
