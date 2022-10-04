@@ -1,10 +1,13 @@
 package delivery
 
 import (
+	"net/http"
+	"rozhok/config"
 	js "rozhok/features/junk_station"
 	"rozhok/middlewares"
 	"rozhok/utils/helper"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -35,6 +38,28 @@ func (h *JunkHandler) CreateJunkStation(c echo.Context) error {
 	if errValidate != nil {
 		return c.JSON(400, helper.FailedResponseHelper("failed to bind"))
 	}
+
+	imageData, ImageInfo, ImageErr := c.Request().FormFile("image_url")
+	if ImageErr == http.ErrMissingFile || ImageErr != nil{
+		return c.JSON(400, helper.FailedResponseHelper("failed get image"))
+	}
+
+	imageExtension, errImageExtension := helper.CheckFileExtension(ImageInfo.Filename, config.ContentImage)
+	if errImageExtension != nil{
+		return c.JSON(400, helper.FailedResponseHelper("your extension is illegal format"))
+	}
+
+	errImageSize := helper.CheckFileSize(ImageInfo.Size, config.ContentImage)
+	if errImageSize != nil {
+		return c.JSON(400, helper.FailedResponseHelper("size not up to standard"))
+	}
+
+	imageName := "junkstation" + "_" + time.Now().Format("2022-10-04 19:34:05") + "." + imageExtension
+	image, errUploadImg := helper.UploadFileToS3(config.EventImages, imageName, config.ContentImage, imageData)
+	if errUploadImg != nil {
+		return c.JSON(400, helper.FailedResponseHelper("image can't be upload"))
+	}
+	JsRequest.Image_url = image
 
 	row, err := h.JunkInterface.CreateJunkStation(ToCoreReq(JsRequest))
 	if err != nil || row != 1 {
