@@ -20,6 +20,7 @@ func New(e *echo.Echo, usecase client.UsecaseInterface) {
 	e.POST("/register", handler.PostClient)
 	e.PUT("client", handler.UpdateClient, middlewares.JWTMiddleware(), middlewares.IsClient)
 	e.DELETE("client", handler.DeleteAkun, middlewares.JWTMiddleware(), middlewares.IsClient)
+	e.GET("client", handler.GetClient, middlewares.JWTMiddleware())
 }
 
 func (deliv *Delivery) PostClient(c echo.Context) error {
@@ -73,4 +74,15 @@ func (deliv *Delivery) DeleteAkun(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to delet account"))
 	}
 	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Deleting account is succes"))
+}
+
+func (deliv *Delivery) GetClient(c echo.Context) error {
+	idUser, _, _ := middlewares.ExtractToken(c)
+
+	result, err := deliv.clientUsecase.GetClient(idUser)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to get data"))
+	}
+
+	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("Succes get data", fromCore(result)))
 }
