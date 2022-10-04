@@ -2,9 +2,12 @@ package transaksijunkstation
 
 type Core struct {
 	ID          uint
+	UserID      uint
 	GrandTotal  int64
 	KodeTF      string
 	CreatedAt   string
+	StartDate   string
+	EndDate     string
 	BarangRosok []BarangRosok
 }
 
@@ -12,7 +15,7 @@ type BarangRosok struct {
 	ID       uint
 	Kategori string
 	Berat    uint
-	Subtotal    int64
+	Subtotal int64
 }
 
 type TransaksiJunkStationData interface {
