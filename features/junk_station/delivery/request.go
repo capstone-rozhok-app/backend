@@ -12,7 +12,7 @@ type JsReq struct {
 	Provinsi			string	`json:"provinsi" form:"provinsi" validate:"required"`
 	Kota				string	`json:"kota" form:"kota" validate:"required"`
 	Kecamatan			string	`json:"kecamatan" form:"kecamatan" validate:"required"`
-	Telp				string	`json:"telp" form:"telp" validate:"required"`
+	Telp				string	`json:"no_telp" form:"telp" validate:"required"`
 	Jalan				string	`json:"jalan" form:"jalan" validate:"required"`
 }
 

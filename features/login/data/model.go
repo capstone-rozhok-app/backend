@@ -14,7 +14,7 @@ type User struct {
 	Username        string
 	StatusKemitraan string
 	JunkStationName string
-	Foto            string
+	ImageUrl        string
 	Provinsi        string
 	Kota            string
 	Kecamatan       string
