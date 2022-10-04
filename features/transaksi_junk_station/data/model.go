@@ -18,11 +18,12 @@ type TransaksiJunkStation struct {
 type TransaksiJunkStationDetail struct {
 	gorm.Model
 	TransaksiJunkStationID uint
-	KategoriID             uint
+	KategoriRosokID        uint
 	Berat                  int
 	Subtotal               int64
 
-	KategoriRosok KategoriRosok
+	KategoriRosok        KategoriRosok
+	TransaksiJunkStation TransaksiJunkStation
 }
 
 type KategoriRosok struct {
@@ -48,14 +49,15 @@ func ToCore(transaksiModel TransaksiJunkStation) transaksijunkstation.Core {
 		KodeTF:     transaksiModel.KodeTf,
 		CreatedAt:  transaksiModel.CreatedAt.Format("2006-01-02"),
 	}
+	transaksiCore.ID = transaksiModel.ID
 
 	barangRosokCoreList := []transaksijunkstation.BarangRosok{}
-	for _, barangrosok := range transaksiModel.TransaksiJunkStationDetail{
+	for _, barangrosok := range transaksiModel.TransaksiJunkStationDetail {
 		barangRosokCoreList = append(barangRosokCoreList, transaksijunkstation.BarangRosok{
-			ID: barangrosok.ID,
+			ID:       barangrosok.ID,
 			Kategori: barangrosok.KategoriRosok.NamaKategori,
-			Berat: uint(barangrosok.Berat),
-			Subtotal: int64(barangrosok.Berat) * barangrosok.KategoriRosok.HargaMitra,
+			Berat:    uint(barangrosok.Berat),
+			Subtotal: barangrosok.Subtotal,
 		})
 	}
 

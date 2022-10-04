@@ -21,7 +21,7 @@ func New(db *gorm.DB) *TransaksiJunkStationRepo {
 func (r *TransaksiJunkStationRepo) GetAll(TransaksiJunkStationCore transaksijunkstation.Core) ([]transaksijunkstation.Core, error) {
 	transaksiModelList := []TransaksiJunkStation{}
 
-	tx := r.DB.Model(&TransaksiJunkStation{}).Where("user_id = ?", TransaksiJunkStationCore.UserID).Preload("TransaksiJunkStationDetail.Kategori")
+	tx := r.DB.Model(&TransaksiJunkStation{}).Where("user_id = ?", TransaksiJunkStationCore.UserID).Preload("TransaksiJunkStationDetail.KategoriRosok")
 
 	if TransaksiJunkStationCore.StartDate != "" {
 		tx.Where("created_at >=", TransaksiJunkStationCore.StartDate)
@@ -49,7 +49,7 @@ func (r *TransaksiJunkStationRepo) Get(TransaksiJunkStationCore transaksijunksta
 	transaksiModel := TransaksiJunkStation{}
 	transaksiModel.ID = TransaksiJunkStationCore.ID
 
-	tx := r.DB.Model(&TransaksiJunkStation{}).Where("user_id = ?", TransaksiJunkStationCore.UserID).Preload("TransaksiJunkStationDetail.Kategori").First(&transaksiModel)
+	tx := r.DB.Model(&TransaksiJunkStation{}).Preload("TransaksiJunkStationDetail.KategoriRosok").First(&transaksiModel)
 	if tx.Error != nil {
 		return transaksijunkstation.Core{}, tx.Error
 	}
@@ -77,10 +77,12 @@ func (r *TransaksiJunkStationRepo) Insert(TransaksiJunkStationCore transaksijunk
 		GrandTotal: grandTotal,
 		KodeTf:     helper.GenerateTF(int(TransaksiJunkStationCore.UserID)),
 	}
+
 	txTransaksi := r.DB.Model(&TransaksiJunkStation{}).Create(&transaksiModel)
-	if txTransaksi != nil {
+	if txTransaksi.Error != nil {
 		return 0, txTransaksi.Error
 	}
+
 	if txTransaksi.RowsAffected < 1 {
 		return 0, errors.New("error rows affected")
 	}
@@ -90,7 +92,7 @@ func (r *TransaksiJunkStationRepo) Insert(TransaksiJunkStationCore transaksijunk
 	for _, transaksi := range KeranjangRosokList {
 		transaksiModel := TransaksiJunkStationDetail{
 			TransaksiJunkStationID: transaksiModel.ID,
-			KategoriID:             transaksi.KategoriRosokID,
+			KategoriRosokID:        transaksi.KategoriRosokID,
 			Berat:                  transaksi.Berat,
 			Subtotal:               transaksi.Subtotal,
 		}
@@ -98,8 +100,8 @@ func (r *TransaksiJunkStationRepo) Insert(TransaksiJunkStationCore transaksijunk
 	}
 
 	// insert data detail transaksi
-	txTransaksiDetail := r.DB.Model(&TransaksiJunkStation{}).Create(&transaksiModelDetail)
-	if txTransaksiDetail != nil {
+	txTransaksiDetail := r.DB.Model(&TransaksiJunkStationDetail{}).Create(&transaksiModelDetail)
+	if txTransaksiDetail.Error != nil {
 		return 0, txTransaksiDetail.Error
 	}
 	if txTransaksiDetail.RowsAffected < 1 {
@@ -108,7 +110,7 @@ func (r *TransaksiJunkStationRepo) Insert(TransaksiJunkStationCore transaksijunk
 
 	// hapus semua data di keranjang rosok berdasarkan user
 	keranjangRosok := KeranjangRosok{}
-	txDeleteKeranjangRosok := r.DB.Model(&KategoriRosok{}).Where("user_id = ?", TransaksiJunkStationCore.UserID).Delete(&keranjangRosok)
+	txDeleteKeranjangRosok := r.DB.Model(&KeranjangRosok{}).Where("client_id = ?", TransaksiJunkStationCore.UserID).Delete(&keranjangRosok)
 	if txTransaksiDetail != nil {
 		return 0, txDeleteKeranjangRosok.Error
 	}
