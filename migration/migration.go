@@ -8,6 +8,7 @@ import (
 	pengambilanrosokmodel "rozhok/features/pengambilan_rosok/data"
 	penjualanclientmodel "rozhok/features/penjualan_client/data"
 	produkModel "rozhok/features/produk/data"
+	transaksijunkstationModel "rozhok/features/transaksi_junk_station/data"
 	transaksiportermodel "rozhok/features/transaksi_porter/data"
 
 	"gorm.io/gorm"
@@ -26,5 +27,7 @@ func InitMigrate(db *gorm.DB) {
 		new(transaksiportermodel.TransaksiPorter),
 		new(transaksiportermodel.TransaksiPorterDetail),
 		new(cartModel.Cart),
+		new(transaksijunkstationModel.TransaksiJunkStation),
+		new(transaksijunkstationModel.TransaksiJunkStationDetail),
 	)
 }
