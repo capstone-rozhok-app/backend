@@ -45,10 +45,26 @@ func (repo *data) GetUsers() (login.ResponseCore, error) {
 	userCores.TotalCL = int(client)
 	userCores.TotalJS = int(mitra)
 
-	var userModel []User
-	repo.db.Model(&User{}).Where("role = ?", "client").Or("role = ?", "mitra").Find(&userModel)
-	// userCores.Grafik =
-	fmt.Println(userModel)
+	type GrafikData struct {
+		Bulan    int
+		JumlahCL int
+		JumlahJS int
+	}
+
+	var sliceGrafik []GrafikData
+	repo.db.Model(&User{}).Select("month(created_at) as bulan, count(id) as jumlah_cl").Where("role = ?", "client").Group("month(created_at)").Find(&sliceGrafik)
+	var sliceGrafik2 []GrafikData
+	repo.db.Model(&User{}).Select("month(created_at) as bulan, count(id) as jumlah_js").Where("role = ?", "mitra").Group("month(created_at)").Find(&sliceGrafik2)
+
+	for i := range sliceGrafik {
+		for j := range sliceGrafik2 {
+			if sliceGrafik[i].Bulan == sliceGrafik2[j].Bulan {
+				sliceGrafik[i].JumlahJS = sliceGrafik2[j].JumlahJS
+			}
+		}
+	}
+
+	fmt.Println(sliceGrafik)
 
 	return userCores, nil
 }
