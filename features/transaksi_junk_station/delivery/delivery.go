@@ -62,12 +62,12 @@ func (d *TransaksiJunkStation) Get(c echo.Context) error {
 }
 
 func (d *TransaksiJunkStation) Create(c echo.Context) error {
-	idTransaksi := helper.ParamInt(c, "id")
+	id, _, _ := middlewares.ExtractToken(c)
 	var Core transaksijunkstation.Core
 
-	Core.ID = uint(idTransaksi)
+	Core.UserID = uint(id)
 
-	_, err := d.Usecase.Get(Core)
+	_, err := d.Usecase.Create(Core)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
 	}
