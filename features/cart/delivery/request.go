@@ -7,7 +7,7 @@ type CartRequest struct {
 	Qty       uint `json:"qty" form:"qty"`
 	Checklist bool
 	UserId    uint
-	ProdukId  uint `json:"id_barang" form:"id_barang"`
+	ProdukId  uint `json:"id_barang" form:"id_barang" validate:"required"`
 }
 
 func toCore(dataRequest CartRequest) cart.Core {
