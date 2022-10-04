@@ -18,25 +18,23 @@ func New(e *echo.Echo, data pjs.UsecaseInterface)  {
 		PembelianInterface: data,
 	}
 	e.POST("pembelian/junk-station", handler.CreatePembelian, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
-	e.GET("pembelian/junk-station", handler.GetPembelian, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
+	e.GET("pembelian/junk-station", handler.GetPembelian, middlewares.JWTMiddleware())
 	e.PUT("pembelian/:id/junk-station", handler.PutPembelian, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
 	e.DELETE("pembelian/:id/junk-station", handler.DeletePembelian, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
 }
 
 func (h *PembelianHandler) CreatePembelian(c echo.Context) error{
-	idToken, _, _ := middlewares.ExtractToken(c)
-
 	var PjsRequest PembelianRequest
 	errBind := c.Bind(&PjsRequest)
 	if errBind != nil {
-		return c.JSON(400, helper.FailedResponseHelper("failed to bind"))
+		return c.JSON(400, helper.FailedResponseHelper(errBind.Error()))
 	}
 	if err := c.Validate(PjsRequest); err != nil{
 		return c.JSON(400, helper.FailedResponseHelper(err.Error()))
 	}
-	_, err := h.PembelianInterface.CreatePembelian(ToCore(PjsRequest), idToken)
-	if err != nil{
-		return c.JSON(400, helper.FailedResponseHelper("failed to create pembelian"))
+	_, err := h.PembelianInterface.CreatePembelian(ToCore(PjsRequest))
+	if err != nil {
+		return c.JSON(400, helper.FailedResponseHelper(err.Error()))
 	}
 	return c.JSON(200, helper.SuccessResponseHelper("Success Create pembelian"))
 }

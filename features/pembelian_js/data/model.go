@@ -7,6 +7,7 @@ import (
 
 type PembelianJS struct{
 	gorm.Model
+	UserID			int
 	Kategori		string
 	Berat			int
 	Harga			int
@@ -15,8 +16,8 @@ type PembelianJS struct{
 
 type User struct {
 	gorm.Model
-	Email    			string
-	Password 			string
+	Email    			string	`gorm:"unique"`
+	Password 			string	
 	Role    			string
 	Username 			string
 	JunkStationName		string

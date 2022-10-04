@@ -5,7 +5,7 @@ import (
 )
 
 type PembelianRequest struct{
-	ID			int		`json:"id" form:"id" validate:"required"`
+	ID			int		`json:"id" form:"id" validate:"isdefault"`
 	Kategori	string	`json:"kategori" form:"kategori" validate:"required"`
 	Berat		int		`json:"berat" form:"berat" validate:"required"`
 	Harga		int		`json:"harga" form:"harga" validate:"required"`

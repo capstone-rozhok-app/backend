@@ -8,7 +8,7 @@ type PembelianCore struct{
 }
 
 type UsecaseInterface interface{
-	CreatePembelian (data PembelianCore, token int) (row int, err error)
+	CreatePembelian (data PembelianCore) (row int, err error)
 	GetPembelian () (data []PembelianCore, err error)
 	PutPembelian (id int, data PembelianCore) (row int, err error)
 	DeletePembelian (id int, data PembelianCore) (row int, err error)

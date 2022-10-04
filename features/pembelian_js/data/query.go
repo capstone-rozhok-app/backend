@@ -22,8 +22,7 @@ func (q *DataPembelian) FindPembelian() ([]pjs.PembelianCore, error) {
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
-	DP := CoreList(data)
-	return DP, nil
+	return CoreList(data), nil
 }
 
 func (q *DataPembelian) InsertPembelian(data pjs.PembelianCore) (int, error) {
