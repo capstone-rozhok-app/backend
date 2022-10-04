@@ -35,6 +35,11 @@ func (deliv *Delivery) PostCart(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper("error binding data"))
 	}
 
+	errValidate := c.Validate(&dataRequest)
+	if errValidate != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
+	}
+
 	row, err := deliv.cartUsecase.CreateCart(toCore(dataRequest))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to insert address"))
