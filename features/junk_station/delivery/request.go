@@ -8,6 +8,7 @@ type JsReq struct {
 	Email				string	`json:"email" form:"email" validate:"required"`
 	Password			string	`json:"password" form:"password" validate:"required"`
 	JunkStationName		string	`json:"junk_station_name" form:"junk_station_name" validate:"required"`
+	StatusKemitraan		string	`json:"status_kemitraan" form:"status_kemitraan" validate:"required"`
 	Username			string	`json:"junk_station_owner" form:"junk_station_owner" validate:"required"`
 	Provinsi			string	`json:"provinsi" form:"provinsi" validate:"required"`
 	Kota				string	`json:"kota" form:"kota" validate:"required"`
@@ -41,5 +42,17 @@ func ToCoreReq(req JsReq) js.Core{
 		Kecamatan: 			req.Kecamatan,	
 		Telp: 				req.Telp,
 		Jalan:				req.Jalan,
+	}
+}
+
+func FromCoreMitra(r JsReq) js.Core {
+	return js.Core{
+		StatusKemitraan: r.StatusKemitraan,
+	}
+}
+
+func ToCoreMitra(r JsReq) js.Core {
+	return js.Core{
+		StatusKemitraan: r.StatusKemitraan,
 	}
 }
