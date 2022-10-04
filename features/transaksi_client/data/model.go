@@ -1,0 +1,149 @@
+package data
+
+import (
+	transaksiclient "rozhok/features/transaksi_client"
+
+	"gorm.io/gorm"
+)
+
+type KeranjangRosok struct {
+	gorm.Model
+	ClientID        uint
+	KategoriRosokID uint
+	Berat           int
+	Subtotal        int64
+
+	KategoriRosok KategoriRosok
+}
+
+type TransaksiClient struct {
+	gorm.Model
+	ClientID      uint
+	PorterID      uint
+	TagihanID     uint
+	Kurir         string
+	TipeTransaksi string
+	GrandTotal    int64
+	Status        string
+	KodeTransaksi string
+
+	Client                User
+	Porter                User
+	Tagihan               Tagihan
+	DetailTransaksiClient []DetailTransaksiClient
+}
+
+type User struct {
+	gorm.Model
+	Email           string `gorm:"unique"`
+	Password        string
+	Role            string
+	Username        string
+	StatusKemitraan string
+	JunkStationName string
+	ImageUrl        string
+	Provinsi        string
+	Kota            string
+	Kecamatan       string
+	Jalan           string
+	Telepon         string
+	Bonus           int64
+	AlamatID        uint
+
+	Alamat []Alamat
+}
+
+type Alamat struct {
+	gorm.Model
+	Provinsi  string
+	Kota      string
+	Kecamatan string
+	Jalan     string
+	UserId    uint
+	Status    string
+}
+
+type Tagihan struct {
+	gorm.Model
+	TransaksiClientID uint
+	NoVa              string
+	TipePembayaran    string
+	Bank              string
+	GrandTotal        int64
+}
+
+type DetailTransaksiClient struct {
+	gorm.Model
+	TransaksiClientID uint
+	KategoriRosokID   uint
+	ProdukID          uint
+	Berat             int64
+	Qty               uint
+	Subtotal          int64
+
+	Produk        Produk
+	KategoriRosok KategoriRosok
+}
+
+type Produk struct {
+	gorm.Model
+	Nama      string
+	Image_url string
+	Stok      int
+	Harga     int64
+	Desc      string
+}
+
+type KategoriRosok struct {
+	gorm.Model
+	NamaKategori string
+	HargaMitra   int64
+	HargaClient  int64
+	Desc         string
+}
+
+func ToCore(TransaksiClientModel TransaksiClient) transaksiclient.Core {
+	transaksiClient := transaksiclient.Core{
+		ID:            TransaksiClientModel.ID,
+		GrandTotal:    TransaksiClientModel.GrandTotal,
+		TipeTransaksi: TransaksiClientModel.TipeTransaksi,
+		Status:        TransaksiClientModel.Status,
+		KodeTransaksi: TransaksiClientModel.KodeTransaksi,
+		Kurir:         TransaksiClientModel.Kurir,
+		Client: transaksiclient.User{
+			Name:      TransaksiClientModel.Client.Username,
+			NoTelp:    TransaksiClientModel.Client.Telepon,
+			Provinsi:  TransaksiClientModel.Client.Alamat[0].Provinsi,
+			Kota:      TransaksiClientModel.Client.Alamat[0].Kota,
+			Kecamatan: TransaksiClientModel.Client.Alamat[0].Kecamatan,
+		},
+		Porter: transaksiclient.User{
+			Name:   TransaksiClientModel.Porter.Telepon,
+			NoTelp: TransaksiClientModel.Porter.Telepon,
+		},
+	}
+
+	productsCoreList := []transaksiclient.Product{}
+	for _, product := range TransaksiClientModel.DetailTransaksiClient {
+		productsCoreList = append(productsCoreList, transaksiclient.Product{
+			ImageUrl:    product.Produk.Image_url,
+			ProductName: product.Produk.Nama,
+			Qty:         product.Qty,
+			Subtotal:    int64(product.Qty) * int64(product.Produk.Harga),
+		})
+	}
+
+	barangRosokCoreList := []transaksiclient.BarangRosok{}
+	for _, barangRosok := range TransaksiClientModel.DetailTransaksiClient {
+		barangRosokCoreList = append(barangRosokCoreList, transaksiclient.BarangRosok{
+			Kategori: barangRosok.KategoriRosok.NamaKategori,
+			Berat:    barangRosok.Berat,
+			Harga:    barangRosok.Berat * barangRosok.KategoriRosok.HargaClient,
+		})
+	}
+
+	transaksiClient.Product = productsCoreList
+	transaksiClient.BarangRosok = barangRosokCoreList
+
+	return transaksiClient
+}
