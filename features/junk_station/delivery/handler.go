@@ -13,32 +13,36 @@ type JunkHandler struct {
 	JunkInterface js.UsecaseInterface
 }
 
-func NewHandller(e *echo.Echo, data js.UsecaseInterface){
+func NewHandller(e *echo.Echo, data js.UsecaseInterface) {
 	handler := &JunkHandler{
 		JunkInterface: data,
 	}
 	e.GET("junk-station", handler.GetJunkStationAll, middlewares.JWTMiddleware())
-	e.POST("junk-station", handler.CreateJunkStation, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
+	e.POST("junk-station", handler.CreateJunkStation)
 	e.GET("junk-station/:id", handler.GetJunkStationById, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
-	e.PUT("junk-station/:id", handler.PutJunkStation,middlewares.JWTMiddleware(),middlewares.IsJunkStation)
+	e.PUT("junk-station/:id", handler.PutJunkStation, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
 }
 
 func (h *JunkHandler) CreateJunkStation(c echo.Context) error {
-	jsID, _, _ := middlewares.ExtractToken(c)
-
 	var JsRequest JsReq
 	errBind := c.Bind(&JsRequest)
 	if errBind != nil {
+		return c.JSON(400, helper.FailedResponseHelper(errBind.Error()))
+	}
+
+	errValidate := c.Validate(&JsRequest)
+	if errValidate != nil {
 		return c.JSON(400, helper.FailedResponseHelper("failed to bind"))
 	}
-	row, err := h.JunkInterface.CreateJunkStation(ToCoreReq(JsRequest), jsID)
+
+	row, err := h.JunkInterface.CreateJunkStation(ToCoreReq(JsRequest))
 	if err != nil || row != 1 {
-		return c.JSON(400, helper.FailedResponseHelper("failed to create"))
+		return c.JSON(400, helper.FailedResponseHelper(err.Error()))
 	}
-	return c.JSON(200, helper.SuccessDataResponseHelper("Succses create Junk Station", jsID))
+	return c.JSON(200, helper.SuccessResponseHelper("Succses create Junk Station"))
 }
 
-func (h *JunkHandler) GetJunkStationAll(c echo.Context)error {
+func (h *JunkHandler) GetJunkStationAll(c echo.Context) error {
 	Provinsi := c.QueryParam("provinsi")
 	Kota := c.QueryParam("kota")
 	Kecamatam := c.QueryParam("kecamatan")
@@ -48,7 +52,7 @@ func (h *JunkHandler) GetJunkStationAll(c echo.Context)error {
 	JunkFilter.Provinsi = Provinsi
 	JunkFilter.Kota = Kota
 	JunkFilter.Kecamatan = Kecamatam
-	
+
 	res, err := h.JunkInterface.GetJunkStationAll(JunkFilter)
 	if err != nil {
 		return c.JSON(400, helper.FailedResponseHelper("failed to get data"))
@@ -56,29 +60,32 @@ func (h *JunkHandler) GetJunkStationAll(c echo.Context)error {
 	return c.JSON(200, helper.SuccessDataResponseHelper(("succses get data"), CoreList(res)))
 }
 
-func (h *JunkHandler) GetJunkStationById(c echo.Context)error {
-	idToken, _ ,_ := middlewares.ExtractToken(c)
-
+func (h *JunkHandler) GetJunkStationById(c echo.Context) error {
 	idParam := c.Param("id")
 	idConv, errConv := strconv.Atoi(idParam)
 	if errConv != nil {
 		return c.JSON(400, helper.FailedResponseHelper("error get by param"))
 	}
-	result, err := h.JunkInterface.GetJunkStationById(idConv, idToken)
+	result, err := h.JunkInterface.GetJunkStationById(idConv)
 	if err != nil {
 		return c.JSON(400, helper.FailedResponseHelper("error Get data"))
 	}
 	return c.JSON(200, helper.SuccessDataResponseHelper(("Succses get data"), FromCoreToResponse(result)))
 }
 
-func (h *JunkHandler) PutJunkStation(c echo.Context)error  {
-	idToken, _ ,_ := middlewares.ExtractToken(c)
+func (h *JunkHandler) PutJunkStation(c echo.Context) error {
+	idUser, _, _ := middlewares.ExtractToken(c)
 
 	idParam := c.Param("id")
 	idConv, errConv := strconv.Atoi(idParam)
 	if errConv != nil || idConv == 0 {
 		return c.JSON(400, helper.FailedResponseHelper("error update by param"))
 	}
+
+	if idConv != idUser {
+		return c.JSON(403, helper.FailedResponseHelper("forbidden update"))
+	}
+
 	var JunkRequest JsReq
 	errBind := c.Bind(&JunkRequest)
 	if errBind != nil {
@@ -88,5 +95,5 @@ func (h *JunkHandler) PutJunkStation(c echo.Context)error  {
 	if err != nil || row == 0 {
 		return c.JSON(400, helper.FailedResponseHelper("error Update JS"))
 	}
-	return c.JSON(200, helper.SuccessDataResponseHelper("Succses update JS", idToken))
+	return c.JSON(200, helper.SuccessResponseHelper("Succses update JS"))
 }

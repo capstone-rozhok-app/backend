@@ -31,6 +31,10 @@ import (
 	kategoriData "rozhok/features/kategori/data"
 	kategoriDelivery "rozhok/features/kategori/delivery"
 	kategoriUsecase "rozhok/features/kategori/usecase"
+
+	junk_stationData "rozhok/features/junk_station/data"
+	junk_stationDelivery "rozhok/features/junk_station/delivery"
+	junk_stationUsecase "rozhok/features/junk_station/usecase"
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {
@@ -62,4 +66,7 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	kategoriUsecaseFactory := kategoriUsecase.New(kategoriDataFactory)
 	kategoriDelivery.New(e, kategoriUsecaseFactory)
 
+	junk_stationDataFactory := junk_stationData.New(db)
+	junk_stationcaseFactory := junk_stationUsecase.NewLogic(junk_stationDataFactory)
+	junk_stationDelivery.NewHandller(e, junk_stationcaseFactory)
 }
