@@ -1,6 +1,7 @@
 package delivery
 
 import (
+	"net/http"
 	"rozhok/features/login"
 	"rozhok/utils/helper"
 
@@ -18,6 +19,7 @@ func New(e *echo.Echo, usecase login.UsecaseInterface) {
 	}
 
 	e.POST("/login", handler.Auth)
+	e.GET("/admin", handler.GetUsers)
 
 }
 
@@ -38,4 +40,13 @@ func (delivery *Delivery) Auth(c echo.Context) error {
 		return c.JSON(200, helper.SuccessDataResponseHelper("Login Success", FromCore(str, role, username, status)))
 	}
 
+}
+
+func (delivery *Delivery) GetUsers(c echo.Context) error {
+	result, err := delivery.authUsecase.GetUsers()
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to get data"))
+	}
+	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("Succes get data", fromCore(result)))
 }
