@@ -8,13 +8,13 @@ import (
 
 type User struct {
 	gorm.Model
-	Email           string
+	Email           string `gorm:"unique"`
 	Password        string
 	Role            string
 	Username        string
 	StatusKemitraan string
 	JunkStationName string
-	Foto            string
+	ImageUrl        string
 	Provinsi        string
 	Kota            string
 	Kecamatan       string

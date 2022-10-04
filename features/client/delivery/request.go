@@ -3,17 +3,11 @@ package delivery
 import "rozhok/features/client"
 
 type ClientRequest struct {
-	Email    string `json:"email" form:"email"`
-	Password string `json:"password" form:"password"`
-	Username string `json:"username" form:"username"`
-	Telp     string `json:"no.telp" form:"no.telp"`
+	Email    string `json:"email" form:"email" validate:"required"`
+	Password string `json:"password" form:"password" validate:"required"`
+	Username string `json:"username" form:"username" validate:"required"`
+	Telp     string `json:"telepon" form:"telepon" validate:"required"`
 	Role     string
-	AlamatId int
-}
-
-type AuthRequest struct {
-	Email    string `json:"email" form:"email"`
-	Password string `json:"password" form:"password"`
 }
 
 func toCore(dataRequest ClientRequest) client.Core {
@@ -21,8 +15,7 @@ func toCore(dataRequest ClientRequest) client.Core {
 		Email:    dataRequest.Email,
 		Password: dataRequest.Password,
 		Username: dataRequest.Username,
-		Telp:     dataRequest.Telp,
+		Telepon:  dataRequest.Telp,
 		Role:     dataRequest.Role,
-		AlamatId: dataRequest.AlamatId,
 	}
 }

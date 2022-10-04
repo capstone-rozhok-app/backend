@@ -5,11 +5,3 @@ type LoginResponse struct {
 	Role     string `json:"role" form:"role"`
 	Username string `json:"username" form:"username"`
 }
-
-func FromLoginCore(token, role, username string) LoginResponse {
-	return LoginResponse{
-		Token:    token,
-		Role:     role,
-		Username: username,
-	}
-}

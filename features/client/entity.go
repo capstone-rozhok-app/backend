@@ -2,24 +2,13 @@ package client
 
 type Core struct {
 	ID       int
-	Nama     string
 	Email    string
 	Password string
-	Username string
-	Telp     string
 	Role     string
-	AlamatId int
-}
-
-type ResponseCore struct {
-	ID       int
-	Nama     string
-	Email    string
-	Password string
 	Username string
-	Telp     string
-	Role     string
-	Alamat   string
+	Foto     string
+	Telepon  string
+	Bonus    int64
 }
 
 type UsecaseInterface interface {

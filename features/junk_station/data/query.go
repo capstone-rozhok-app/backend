@@ -6,7 +6,8 @@ import (
 
 	"gorm.io/gorm"
 )
-type DataJS struct{
+
+type DataJS struct {
 	db *gorm.DB
 }
 
@@ -18,41 +19,41 @@ func New(db *gorm.DB) js.DataInterface {
 
 func (junk *DataJS) FindJunkStationAll(dataCore js.Core) (row []js.Core, err error) {
 	var data []User
-	tx := junk.db.Find(&User{}).Where("id = ?", dataCore.JunkStationID)
-	if dataCore.Provinsi != ""{
-		tx.Where("provinsi >= ?", dataCore.Provinsi)
+	tx := junk.db.Model(&User{}).Where("role = ?", "junk_station").Where("status_kemitraan = ?", "terverifikasi")
+	if dataCore.Provinsi != "" {
+		tx.Where("provinsi = ?", dataCore.Provinsi)
 	}
-	if dataCore.Kota != ""{
-		tx.Where("kota >= ?", dataCore.Kota)
+	if dataCore.Kota != "" {
+		tx.Where("kota = ?", dataCore.Kota)
 	}
-	if dataCore.Kecamatan != ""{
-		tx.Where("kecamatan >= ?", dataCore.Kecamatan)
+	if dataCore.Kecamatan != "" {
+		tx.Where("kecamatan = ?", dataCore.Kecamatan)
 	}
 	tx.Find(&data)
-	if tx.Error != nil{
+
+	if tx.Error != nil {
 		return row, tx.Error
 	}
-	if len(data) < 1 {
-		return row, errors.New("id not found")
-	}
+
 	for _, v := range data {
-		row = append(row, v.ToCore(v))
+		row = append(row, ToCore(v))
 	}
 	return row, nil
 }
 
-func (junk *DataJS) FindJunkStationById(id int) (js.Core, error){
+func (junk *DataJS) FindJunkStationById(id int) (js.Core, error) {
 	var data User
-	tx := junk.db.First(&data, id)
-	if tx.Error != nil{
+	tx := junk.db.Where("role = ?", "junk_station").First(&data, id)
+	if tx.Error != nil {
 		return js.Core{}, tx.Error
 	}
-	dataCore := FromCore(js.Core{})
-	return dataCore.ToCore(dataCore), nil
+	return ToCore(data), nil
 }
 
-func (junk *DataJS) InsertJunkStation(data js.Core)(int , error) {
+func (junk *DataJS) InsertJunkStation(data js.Core) (int, error) {
 	dataModel := FromCore(data)
+	dataModel.StatusKemitraan = "belum_terverifikasi"
+	dataModel.Role = "junk_station"
 	tx := junk.db.Create(&dataModel)
 	if tx.Error != nil {
 		return 0, tx.Error
