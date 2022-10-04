@@ -12,7 +12,6 @@ type User struct {
 	Password string
 	Role     string
 	Username string
-	Foto     string
 	Telepon  string
 	Bonus    int64
 }
@@ -23,7 +22,6 @@ func fromCore(dataCore client.Core) User {
 		Password: dataCore.Password,
 		Role:     dataCore.Role,
 		Username: dataCore.Username,
-		Foto:     dataCore.Foto,
 		Telepon:  dataCore.Telepon,
 		Bonus:    dataCore.Bonus,
 	}
