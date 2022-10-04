@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"rozhok/features/client"
-
 	"golang.org/x/crypto/bcrypt"
 )
 

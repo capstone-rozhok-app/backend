@@ -2,7 +2,6 @@ package data
 
 import (
 	"gorm.io/gorm"
-
 	js "rozhok/features/junk_station"
 )
 

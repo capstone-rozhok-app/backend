@@ -52,7 +52,6 @@ func (h *JunkHandler) GetJunkStationAll(c echo.Context) error {
 	JunkFilter.Provinsi = Provinsi
 	JunkFilter.Kota = Kota
 	JunkFilter.Kecamatan = Kecamatam
-
 	res, err := h.JunkInterface.GetJunkStationAll(JunkFilter)
 	if err != nil {
 		return c.JSON(400, helper.FailedResponseHelper("failed to get data"))
