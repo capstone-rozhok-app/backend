@@ -13,7 +13,6 @@ type User struct {
 	Role            string
 	Username        string `gorm:"unique"`
 	StatusKemitraan string
-	Foto            string
 	Provinsi        string
 	Kota            string
 	Kecamatan       string
