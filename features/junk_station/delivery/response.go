@@ -53,3 +53,9 @@ func FromCoreToResponse(data js.Core) JSRes {
 	}
 	return dataResponse
 }
+
+func FromCoreResMitra(data js.Core) JSRes {
+	return JSRes{
+		JunkStationOwner: data.JunkStationOwner,
+	}
+}

@@ -106,10 +106,6 @@ func (h *JunkHandler) PutKemitraan(c echo.Context) error {
 		return c.JSON(400, helper.FailedResponseHelper("error bind data"))
 	}
 
-	if errValidation := c.Validate(mitraUpdate); errValidation != nil{
-		return c.JSON(403, helper.FailedResponseHelper(errBind.Error()))
-	}
-
 	row, err := h.JunkInterface.PutKemitraan(helper.ParamInt(c, "id"), ToCoreMitra(mitraUpdate))
 	if err != nil || row == 0{
 		return c.JSON(400, helper.FailedResponseHelper("failed to update kemitraan"))
