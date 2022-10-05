@@ -40,7 +40,8 @@ func (repo *clientData) UpdateClient(data client.Core, id int) (row int, err err
 }
 
 func (repo *clientData) DeleteDataClient(id int) (row int, err error) {
-	tx := repo.db.Delete(&User{}, id)
+	tx := repo.db.Unscoped().Delete(&User{}, id)
+	//  repo.db.Delete(&User{}, id)
 	if tx.Error != nil {
 		return -1, tx.Error
 	}
