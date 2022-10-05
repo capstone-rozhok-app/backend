@@ -49,7 +49,7 @@ func (h *JunkHandler) CreateJunkStation(c echo.Context) error {
 		return c.JSON(400, helper.FailedResponseHelper("size not up to standard"))
 	}
 
-	imageName := "junkstation" + "_" + time.Now().Format("2022-10-04 19:34:05") + "." + imageExtension
+	imageName := "junkstation" + "_" + time.Now().Format("2006-01-02 15:04:05") + "." + imageExtension
 	image, errUploadImg := helper.UploadFileToS3(config.EventImages, imageName, config.ContentImage, imageData)
 	if errUploadImg != nil {
 		return c.JSON(400, helper.FailedResponseHelper("image can't be upload"))
