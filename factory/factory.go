@@ -55,6 +55,10 @@ import (
 	transaksiJS "rozhok/features/transaksi_junk_station/data"
 	transaksiJSDelivery "rozhok/features/transaksi_junk_station/delivery"
 	transaksiJSUsecase "rozhok/features/transaksi_junk_station/usecase"
+
+	transaksiclient "rozhok/features/transaksi_client/data"
+	transaksiclientDelivery "rozhok/features/transaksi_client/delivery"
+	transaksiclientUsecase "rozhok/features/transaksi_client/usecase"
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {
@@ -109,4 +113,8 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	transaksiJSDataFactory := transaksiJS.New(db)
 	transaksiJSUsecaseFactory := transaksiJSUsecase.New(transaksiJSDataFactory)
 	transaksiJSDelivery.New(e, transaksiJSUsecaseFactory)
+	
+	transaksiclientDataFactory := transaksiclient.New(db)
+	transaksiclientUsecaseFactory := transaksiclientUsecase.New(transaksiclientDataFactory)
+	transaksiclientDelivery.New(e, transaksiclientUsecaseFactory)
 }
