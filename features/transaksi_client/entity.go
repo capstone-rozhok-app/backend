@@ -12,6 +12,7 @@ type Core struct {
 
 	Client      User
 	Porter      User
+	Tagihan     Tagihan
 	BarangRosok []BarangRosok
 	Product     []Product
 }
@@ -29,6 +30,13 @@ type BarangRosok struct {
 	Kategori string
 	Berat    int64
 	Harga    int64
+}
+
+type Tagihan struct {
+	NoVA           string
+	TipePembayaran string
+	Bank           string
+	GrandTotal     int64
 }
 
 type Product struct {

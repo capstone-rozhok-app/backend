@@ -10,6 +10,8 @@ import (
 	produkModel "rozhok/features/produk/data"
 	transaksijunkstationModel "rozhok/features/transaksi_junk_station/data"
 	transaksiportermodel "rozhok/features/transaksi_porter/data"
+	transaksiclientmodel "rozhok/features/transaksi_client/data"
+
 
 	"gorm.io/gorm"
 )
@@ -22,8 +24,8 @@ func InitMigrate(db *gorm.DB) {
 		new(kategoriModel.KategoriRosok),
 		new(penjualanclientmodel.KeranjangRosok),
 		new(pengambilanrosokmodel.Alamat),
-		new(pengambilanrosokmodel.TransaksiClient),
-		new(pengambilanrosokmodel.TransaksiClientDetail),
+		new(transaksiclientmodel.TransaksiClient),
+		new(transaksiclientmodel.TransaksiClientDetail),
 		new(transaksiportermodel.TransaksiPorter),
 		new(transaksiportermodel.TransaksiPorterDetail),
 		new(cartModel.Cart),
