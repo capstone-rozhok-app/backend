@@ -114,6 +114,10 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	alamatUsecaseFactory := alamatUsecase.New(alamatDataFactory)
 	alamatDelivery.New(e, alamatUsecaseFactory)
 
+	dbadminDataFactory := dbadminData.New(db)
+	dbadminUsecaseFactory := dbadminUsecase.New(dbadminDataFactory)
+	dbadminDelivery.New(e, dbadminUsecaseFactory)
+
 	transaksiJSDataFactory := transaksiJS.New(db)
 	transaksiJSUsecaseFactory := transaksiJSUsecase.New(transaksiJSDataFactory)
 	transaksiJSDelivery.New(e, transaksiJSUsecaseFactory)
@@ -122,7 +126,4 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	transaksiclientUsecaseFactory := transaksiclientUsecase.New(transaksiclientDataFactory)
 	transaksiclientDelivery.New(e, transaksiclientUsecaseFactory)
 
-	dbadminDataFactory := dbadminData.New(db)
-	dbadminUsecaseFactory := dbadminUsecase.New(dbadminDataFactory)
-	dbadminDelivery.New(e, dbadminUsecaseFactory)
 }
