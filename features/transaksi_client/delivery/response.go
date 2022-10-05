@@ -7,20 +7,20 @@ type Response struct {
 	KodeTransaksi string        `json:"kode_transaksi,omitempty"`
 	TipeTransaksi string        `json:"tipe_transaksi,omitempty"`
 	Status        string        `json:"status,omitempty"`
-	Client        Client        `json:"client,omitemtpy"`
+	Client        Client        `json:"client,omitempty"`
 	Porter        Porter        `json:"porter,omitempty"`
 	GrandTotal    int64         `json:"grand_total,omitempty"`
-	Kurir         string        `json:"kurir,omitemtpy"`
+	Kurir         string        `json:"kurir,omitempty"`
 	BarangRosok   []BarangRosok `json:"barang_rosok,omitempty"`
 	Produk        []Produk      `json:"produk,omitempty"`
 }
 
 type Client struct {
-	Name      string `json:"name,omitemtpy"`
-	NoTelp    string `json:"no_telp,omitemtpy"`
-	Provinsi  string `json:"provinsi,omitemtpy"`
-	Kota      string `json:"kota,omitemtpy"`
-	Kecamatan string `json:"kecamatan,omitemtpy"`
+	Name      string `json:"name,omitempty"`
+	NoTelp    string `json:"no_telp,omitempty"`
+	Provinsi  string `json:"provinsi,omitempty"`
+	Kota      string `json:"kota,omitempty"`
+	Kecamatan string `json:"kecamatan,omitempty"`
 }
 
 type Porter struct {
@@ -31,7 +31,7 @@ type Porter struct {
 type BarangRosok struct {
 	Kategori string `json:"kategori,omitempty"`
 	Berat    uint   `json:"berat,omitempty"`
-	harga    int64  `json:"harga,omitempty"`
+	Harga    int64  `json:"harga,omitempty"`
 }
 
 type Produk struct {
@@ -77,7 +77,7 @@ func FromCore(transaksiCore transaksiclient.Core) Response {
 		barangRosokList = append(barangRosokList, BarangRosok{
 			Kategori: barangrosokcore.Kategori,
 			Berat:    uint(barangrosokcore.Berat),
-			harga:    barangrosokcore.Harga,
+			Harga:    barangrosokcore.Harga,
 		})
 	}
 
