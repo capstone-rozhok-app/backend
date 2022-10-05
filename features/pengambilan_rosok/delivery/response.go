@@ -41,6 +41,7 @@ func toResponse(PengambilanRosokCore pengambilanrosok.Core) Response {
 	barangRosokList := []BarangRosok{}
 	for _, barangRosokCore := range PengambilanRosokCore.DetailTransaksiClient {
 		barangRosokList = append(barangRosokList, BarangRosok{
+			Id:       barangRosokCore.IdKategori,
 			Kategori: barangRosokCore.Nama,
 		})
 	}
