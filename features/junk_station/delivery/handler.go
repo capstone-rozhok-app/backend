@@ -33,8 +33,7 @@ func (h *JunkHandler) CreateJunkStation(c echo.Context) error {
 	if errBind != nil {
 		return c.JSON(400, helper.FailedResponseHelper(errBind.Error()))
 	}
-
-
+	
 	imageData, ImageInfo, ImageErr := c.Request().FormFile("image_url")
 	if ImageErr == http.ErrMissingFile || ImageErr != nil{
 		return c.JSON(400, helper.FailedResponseHelper("failed get image"))
