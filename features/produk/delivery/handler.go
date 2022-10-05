@@ -24,6 +24,7 @@ func New(e *echo.Echo, usecase produk.UsecaseInterface) {
 	e.POST("product", handler.PostProduk, middlewares.JWTMiddleware(), middlewares.IsAdmin)
 	e.PUT("product/:id", handler.UpdateProduk, middlewares.JWTMiddleware(), middlewares.IsAdmin)
 	e.GET("products", handler.GetAllProduk)
+	e.GET("product/favorite", handler.GetFavorite)
 	e.GET("product/:id", handler.GetProduk)
 	e.DELETE("product/:id", handler.DeleteProduk, middlewares.JWTMiddleware(), middlewares.IsAdmin)
 
@@ -140,4 +141,13 @@ func (deliv *Delivery) DeleteProduk(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to delete product"))
 	}
 	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Deleting product is success"))
+}
+
+func (deliv *Delivery) GetFavorite(c echo.Context) error {
+	result, err := deliv.produkUsecase.GetFavorite()
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to get data"))
+	}
+	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("Succes get data", fromCoreList(result)))
 }
