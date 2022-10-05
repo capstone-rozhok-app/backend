@@ -95,7 +95,7 @@ func (deliv *TransaksiPorter) PostTransaksiPenjualan(c echo.Context) error {
 
 func (deliv *TransaksiPorter) PutTransaksiPembelian(c echo.Context) error {
 	id := helper.ParamInt(c, "transaction_id")
-	var TransaksiRequestList []Request
+	var TransaksiRequestList ArrayOfReq
 	var TransaksiPorterCore transaksiporter.Core
 
 	TransaksiPorterCore.ID = uint(id)
@@ -105,13 +105,8 @@ func (deliv *TransaksiPorter) PutTransaksiPembelian(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errBind.Error()))
 	}
 
-	// errValidate := c.Validate(&TransaksiRequestList)
-	// if errValidate != nil {
-	// 	return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errValidate.Error()))
-	// }
-
 	BarangRosokList := []transaksiporter.DetailTransaksiPorter{}
-	for _, barangRosok := range TransaksiRequestList {
+	for _, barangRosok := range TransaksiRequestList.BarangRosok {
 		BarangRosokList = append(BarangRosokList, toCore(barangRosok))
 	}
 	TransaksiPorterCore.DetailTransaksiPorter = BarangRosokList
