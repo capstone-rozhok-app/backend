@@ -30,7 +30,7 @@ type TransaksiClient struct {
 	Client                User
 	Porter                User
 	Tagihan               Tagihan
-	DetailTransaksiClient []DetailTransaksiClient
+	DetailTransaksiClient []TransaksiClientDetail
 }
 
 type User struct {
@@ -72,7 +72,7 @@ type Tagihan struct {
 	GrandTotal        int64
 }
 
-type DetailTransaksiClient struct {
+type TransaksiClientDetail struct {
 	gorm.Model
 	TransaksiClientID uint
 	KategoriRosokID   uint
@@ -121,6 +121,12 @@ func ToCore(TransaksiClientModel TransaksiClient) transaksiclient.Core {
 			Name:   TransaksiClientModel.Porter.Telepon,
 			NoTelp: TransaksiClientModel.Porter.Telepon,
 		},
+		Tagihan: transaksiclient.Tagihan{
+			NoVA:           TransaksiClientModel.Tagihan.NoVa,
+			TipePembayaran: TransaksiClientModel.Tagihan.TipePembayaran,
+			Bank:           TransaksiClientModel.Tagihan.Bank,
+			GrandTotal:     TransaksiClientModel.Tagihan.GrandTotal,
+		},
 	}
 
 	productsCoreList := []transaksiclient.Product{}
@@ -129,7 +135,7 @@ func ToCore(TransaksiClientModel TransaksiClient) transaksiclient.Core {
 			ImageUrl:    product.Produk.Image_url,
 			ProductName: product.Produk.Nama,
 			Qty:         product.Qty,
-			Subtotal:    int64(product.Qty) * int64(product.Produk.Harga),
+			Subtotal:    product.Subtotal,
 		})
 	}
 
@@ -138,7 +144,7 @@ func ToCore(TransaksiClientModel TransaksiClient) transaksiclient.Core {
 		barangRosokCoreList = append(barangRosokCoreList, transaksiclient.BarangRosok{
 			Kategori: barangRosok.KategoriRosok.NamaKategori,
 			Berat:    barangRosok.Berat,
-			Harga:    barangRosok.Berat * barangRosok.KategoriRosok.HargaClient,
+			Harga:    barangRosok.Subtotal,
 		})
 	}
 
