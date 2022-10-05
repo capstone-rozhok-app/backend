@@ -75,8 +75,8 @@ func (junk *DataJS) UpdateJunkStation(id int, data js.Core) (int, error) {
 	return int(tx.RowsAffected), nil
 }
 
-func (q *DataJS) UpdateKemitraan(id int, data js.Core) (int, error) {
-	tx := q.db.Model(&User{}).Where("id = ?", id).Updates(FromCore(data))
+func (q *DataJS) UpdateKemitraan(id int) (int, error) {
+	tx := q.db.Model(&User{}).Where("id = ?", id).Update("status_kemitraan", "terverifikasi")
 	if tx.Error != nil {
 		return -1, tx.Error
 	}

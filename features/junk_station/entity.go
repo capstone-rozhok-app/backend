@@ -20,7 +20,7 @@ type UsecaseInterface interface{
 	GetJunkStationAll (dataCore Core) (row []Core, err error)
 	GetJunkStationById (id int) (data Core, err error)
 	PutJunkStation (id int, data Core) (row int, err error)
-	PutKemitraan (id int, data Core)(row int, err error)
+	PutKemitraan (id int)(row int, err error)
 }
 
 type DataInterface interface{
@@ -28,5 +28,5 @@ type DataInterface interface{
 	FindJunkStationAll (dataCore Core) (row []Core, err error)
 	FindJunkStationById (id int) (data Core, err error)
 	UpdateJunkStation (id int, data Core) (row int, err error)
-	UpdateKemitraan (id int, data Core)(row int, err error)
+	UpdateKemitraan (id int)(row int, err error)
 }
