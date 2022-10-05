@@ -1,8 +1,9 @@
 package data
 
 import (
-	"gorm.io/gorm"
 	js "rozhok/features/junk_station"
+
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -33,6 +34,7 @@ func FromCore(dataCore js.Core) User {
 		Kecamatan:       dataCore.Kecamatan,
 		Telepon:         dataCore.Telp,
 		Jalan:           dataCore.Jalan,
+		ImageUrl:        dataCore.Image_url,
 	}
 	return dataModel
 }
