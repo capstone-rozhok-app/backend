@@ -99,7 +99,7 @@ func toCore(transaksiPorterModel TransaksiPorter) transaksiporter.Core {
 		GrandTotal:    transaksiPorterModel.GrandTotal,
 	}
 
-	if len(transaksiPorterModel.UserClient.Alamat) > 1 {
+	if len(transaksiPorterModel.UserClient.Alamat) > 0 {
 		transaksiPorterCore.Client = transaksiporter.User{
 			Username:  transaksiPorterModel.UserClient.Username,
 			Provinsi:  transaksiPorterModel.UserClient.Alamat[0].Provinsi,
