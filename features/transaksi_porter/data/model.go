@@ -52,6 +52,18 @@ type User struct {
 	Jalan           string
 	Telepon         string
 	Bonus           int64
+
+	Alamat []Alamat
+}
+
+type Alamat struct {
+	gorm.Model
+	Provinsi  string
+	Kota      string
+	Kecamatan string
+	Jalan     string
+	UserId    uint
+	Status    string
 }
 
 func FromCore(transaksiPorterCore transaksiporter.Core) TransaksiPorter {
@@ -87,11 +99,11 @@ func toCore(transaksiPorterModel TransaksiPorter) transaksiporter.Core {
 		GrandTotal:    transaksiPorterModel.GrandTotal,
 		Client: transaksiporter.User{
 			Username:  transaksiPorterModel.UserClient.Username,
-			Provinsi:  transaksiPorterModel.UserClient.Provinsi,
-			Kota:      transaksiPorterModel.UserClient.Kota,
-			Jalan:     transaksiPorterModel.UserClient.Jalan,
+			Provinsi:  transaksiPorterModel.UserClient.Alamat[0].Provinsi,
+			Kota:      transaksiPorterModel.UserClient.Alamat[0].Kota,
+			Jalan:     transaksiPorterModel.UserClient.Alamat[0].Jalan,
 			Telepon:   transaksiPorterModel.UserClient.Telepon,
-			Kecamatan: transaksiPorterModel.UserClient.Kecamatan,
+			Kecamatan: transaksiPorterModel.UserClient.Alamat[0].Kecamatan,
 		},
 	}
 	transaksiPorterCore.ID = transaksiPorterModel.ID
