@@ -8,7 +8,7 @@ type Response struct {
 	Image_url string `json:"image_url" form:"image_url"`
 	Stok      int    `json:"stok" form:"stok"`
 	Harga     int64  `json:"harga" form:"harga"`
-	Desc      string `json:"desc" form:"desc"`
+	Descr     string `json:"desc" form:"desc"`
 }
 
 func fromCore(dataCore produk.Core) Response {
@@ -18,7 +18,7 @@ func fromCore(dataCore produk.Core) Response {
 		Image_url: dataCore.Image_url,
 		Stok:      dataCore.Stok,
 		Harga:     dataCore.Harga,
-		Desc:      dataCore.Desc,
+		Descr:     dataCore.Descr,
 	}
 }
 
