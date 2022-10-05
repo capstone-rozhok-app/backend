@@ -122,14 +122,7 @@ func (h *JunkHandler) PutJunkStation(c echo.Context) error {
 }
 
 func (h *JunkHandler) PutKemitraan(c echo.Context) error {
-	var mitraUpdate JsReq
-
-	errBind := c.Bind(&mitraUpdate)
-	if errBind != nil {
-		return c.JSON(400, helper.FailedResponseHelper("error bind data"))
-	}
-
-	row, err := h.JunkInterface.PutKemitraan(helper.ParamInt(c, "id"), ToCoreMitra(mitraUpdate))
+	row, err := h.JunkInterface.PutKemitraan(helper.ParamInt(c, "id"))
 	if err != nil || row == 0 {
 		return c.JSON(400, helper.FailedResponseHelper("failed to update kemitraan"))
 	}

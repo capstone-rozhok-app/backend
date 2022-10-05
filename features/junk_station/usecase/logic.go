@@ -50,8 +50,8 @@ func (u *Usecase) PutJunkStation(id int, data js.Core) (int, error) {
 	return result, err
 }
 
-func (u *Usecase) PutKemitraan(id int, data js.Core)(int, error) {
-	result, err := u.jsData.UpdateKemitraan(id, data)
+func (u *Usecase) PutKemitraan(id int)(int, error) {
+	result, err := u.jsData.UpdateKemitraan(id)
 	if err != nil {
 		return -1, errors.New("failed to update kemitraan")
 	}
