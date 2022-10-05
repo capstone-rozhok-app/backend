@@ -35,7 +35,3 @@ func (usecase *authUsecase) LoginAuthorized(email, password string) (string, str
 	return token, results.Role, results.Username, results.Status
 
 }
-
-func (usecase *authUsecase) GetUsers() (data login.ResponseCore, err error) {
-	return usecase.authData.GetUsers()
-}
