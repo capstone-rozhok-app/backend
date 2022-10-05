@@ -75,14 +75,14 @@ type Tagihan struct {
 type TransaksiClientDetail struct {
 	gorm.Model
 	TransaksiClientID uint
-	KategoriRosokID   uint
+	KategoriID        uint
 	ProdukID          uint
 	Berat             int64
 	Qty               uint
 	Subtotal          int64
 
 	Produk        Produk
-	KategoriRosok KategoriRosok
+	KategoriRosok KategoriRosok `gorm:"foreignKey:KategoriID"`
 }
 
 type Produk struct {
@@ -110,13 +110,6 @@ func ToCore(TransaksiClientModel TransaksiClient) transaksiclient.Core {
 		Status:        TransaksiClientModel.Status,
 		KodeTransaksi: TransaksiClientModel.KodeTransaksi,
 		Kurir:         TransaksiClientModel.Kurir,
-		Client: transaksiclient.User{
-			Name:      TransaksiClientModel.Client.Username,
-			NoTelp:    TransaksiClientModel.Client.Telepon,
-			Provinsi:  TransaksiClientModel.Client.Alamat[0].Provinsi,
-			Kota:      TransaksiClientModel.Client.Alamat[0].Kota,
-			Kecamatan: TransaksiClientModel.Client.Alamat[0].Kecamatan,
-		},
 		Porter: transaksiclient.User{
 			Name:   TransaksiClientModel.Porter.Telepon,
 			NoTelp: TransaksiClientModel.Porter.Telepon,
@@ -127,6 +120,17 @@ func ToCore(TransaksiClientModel TransaksiClient) transaksiclient.Core {
 			Bank:           TransaksiClientModel.Tagihan.Bank,
 			GrandTotal:     TransaksiClientModel.Tagihan.GrandTotal,
 		},
+	}
+
+	var clientCore transaksiclient.User
+	if len(TransaksiClientModel.Client.Alamat) > 0 {
+		clientCore = transaksiclient.User{
+			Name:      TransaksiClientModel.Client.Username,
+			NoTelp:    TransaksiClientModel.Client.Telepon,
+			Provinsi:  TransaksiClientModel.Client.Alamat[0].Provinsi,
+			Kota:      TransaksiClientModel.Client.Alamat[0].Kota,
+			Kecamatan: TransaksiClientModel.Client.Alamat[0].Kecamatan,
+		}
 	}
 
 	productsCoreList := []transaksiclient.Product{}
@@ -150,6 +154,7 @@ func ToCore(TransaksiClientModel TransaksiClient) transaksiclient.Core {
 
 	transaksiClient.Product = productsCoreList
 	transaksiClient.BarangRosok = barangRosokCoreList
+	transaksiClient.Client = clientCore
 
 	return transaksiClient
 }
