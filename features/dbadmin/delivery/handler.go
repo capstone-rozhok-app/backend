@@ -3,6 +3,7 @@ package delivery
 import (
 	"net/http"
 	"rozhok/features/dbadmin"
+	"rozhok/middlewares"
 	"rozhok/utils/helper"
 
 	"github.com/labstack/echo/v4"
@@ -17,7 +18,7 @@ func New(e *echo.Echo, usecase dbadmin.UsecaseInterface) {
 	handler := Delivery{
 		authUsecase: usecase,
 	}
-	e.GET("/admin", handler.GetUsers)
+	e.GET("/admin", handler.GetUsers, middlewares.JWTMiddleware(), middlewares.IsAdmin)
 
 }
 
