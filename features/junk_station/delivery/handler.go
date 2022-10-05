@@ -33,14 +33,14 @@ func (h *JunkHandler) CreateJunkStation(c echo.Context) error {
 	if errBind != nil {
 		return c.JSON(400, helper.FailedResponseHelper(errBind.Error()))
 	}
-	
-	imageData, ImageInfo, ImageErr := c.Request().FormFile("image_url")
-	if ImageErr == http.ErrMissingFile || ImageErr != nil{
+
+	imageData, ImageInfo, ImageErr := c.Request().FormFile("foto")
+	if ImageErr == http.ErrMissingFile || ImageErr != nil {
 		return c.JSON(400, helper.FailedResponseHelper("failed get image"))
 	}
 
 	imageExtension, errImageExtension := helper.CheckFileExtension(ImageInfo.Filename, config.ContentImage)
-	if errImageExtension != nil{
+	if errImageExtension != nil {
 		return c.JSON(400, helper.FailedResponseHelper("your extension is illegal format"))
 	}
 
@@ -54,9 +54,11 @@ func (h *JunkHandler) CreateJunkStation(c echo.Context) error {
 	if errUploadImg != nil {
 		return c.JSON(400, helper.FailedResponseHelper("image can't be upload"))
 	}
-	JsRequest.Image_url = image
 
-	row, err := h.JunkInterface.CreateJunkStation(ToCoreReq(JsRequest))
+	core := ToCoreReq(JsRequest)
+	core.Image_url = image
+
+	row, err := h.JunkInterface.CreateJunkStation(core)
 	if err != nil || row != 1 {
 		return c.JSON(400, helper.FailedResponseHelper(err.Error()))
 	}
@@ -69,6 +71,7 @@ func (h *JunkHandler) GetJunkStationAll(c echo.Context) error {
 	Kecamatam := c.QueryParam("kecamatan")
 
 	var JunkFilter js.Core
+	JunkFilter.StatusKemitraan = c.QueryParam("status_kemitraan")
 
 	JunkFilter.Provinsi = Provinsi
 	JunkFilter.Kota = Kota
@@ -122,12 +125,12 @@ func (h *JunkHandler) PutKemitraan(c echo.Context) error {
 	var mitraUpdate JsReq
 
 	errBind := c.Bind(&mitraUpdate)
-	if errBind != nil{
+	if errBind != nil {
 		return c.JSON(400, helper.FailedResponseHelper("error bind data"))
 	}
 
 	row, err := h.JunkInterface.PutKemitraan(helper.ParamInt(c, "id"), ToCoreMitra(mitraUpdate))
-	if err != nil || row == 0{
+	if err != nil || row == 0 {
 		return c.JSON(400, helper.FailedResponseHelper("failed to update kemitraan"))
 	}
 	return c.JSON(200, helper.SuccessResponseHelper("Succses Update data"))

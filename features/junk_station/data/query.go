@@ -19,7 +19,7 @@ func New(db *gorm.DB) js.DataInterface {
 
 func (junk *DataJS) FindJunkStationAll(dataCore js.Core) (row []js.Core, err error) {
 	var data []User
-	tx := junk.db.Model(&User{}).Where("role = ?", "junk_station").Where("status_kemitraan = ?", "terverifikasi")
+	tx := junk.db.Model(&User{}).Where("role = ?", "junk_station")
 	if dataCore.Provinsi != "" {
 		tx.Where("provinsi = ?", dataCore.Provinsi)
 	}
@@ -28,6 +28,9 @@ func (junk *DataJS) FindJunkStationAll(dataCore js.Core) (row []js.Core, err err
 	}
 	if dataCore.Kecamatan != "" {
 		tx.Where("kecamatan = ?", dataCore.Kecamatan)
+	}
+	if dataCore.StatusKemitraan != "" {
+		tx.Where("status_kemitraan = ?", dataCore.StatusKemitraan)
 	}
 	tx.Find(&data)
 
