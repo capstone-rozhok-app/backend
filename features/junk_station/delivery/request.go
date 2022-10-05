@@ -15,7 +15,7 @@ type JsReq struct {
 	Kecamatan			string	`json:"kecamatan" form:"kecamatan" validate:"required"`
 	Telp				string	`json:"no_telp" form:"telp" validate:"required"`
 	Jalan				string	`json:"jalan" form:"jalan" validate:"required"`
-	Image_url			string	`json:"image_url" form:"image_url" validate:"required"`
+	Image_url			string	`json:"image_url" form:"image_url"`
 }
 
 func FromCoreReq(req JsReq) js.Core{
