@@ -2,6 +2,8 @@ package data
 
 import (
 	"errors"
+	"fmt"
+	transaksiModel "rozhok/features/pengambilan_rosok/data"
 	"rozhok/features/produk"
 
 	"gorm.io/gorm"
@@ -70,4 +72,11 @@ func (repo *produkData) DeleteProduk(id int) (row int, err error) {
 		return 0, errors.New("gagal menghapus akun")
 	}
 	return int(tx.RowsAffected), nil
+}
+
+func (repo *produkData) GetFavorite() (data []produk.Core, err error) {
+	var slice [8]produk.Core
+	repo.db.Model(&transaksiModel.TransaksiClientDetail{}).Select("sum(qty)").Find(&slice)
+	fmt.Println(slice)
+	return data, nil
 }

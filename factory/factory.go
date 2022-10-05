@@ -51,6 +51,7 @@ import (
 	alamatData "rozhok/features/alamat/data"
 	alamatDelivery "rozhok/features/alamat/delivery"
 	alamatUsecase "rozhok/features/alamat/usecase"
+<<<<<<< HEAD
 
 	transaksiJS "rozhok/features/transaksi_junk_station/data"
 	transaksiJSDelivery "rozhok/features/transaksi_junk_station/delivery"
@@ -67,6 +68,8 @@ import (
 	paymentData "rozhok/features/payment/data"
 	paymentDelivery "rozhok/features/payment/delivery"
 	paymentUsecase "rozhok/features/payment/usecase"
+=======
+>>>>>>> e8537cd (produk favorite)
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {

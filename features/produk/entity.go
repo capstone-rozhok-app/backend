@@ -15,6 +15,7 @@ type UsecaseInterface interface {
 	GetAllProduk() (data []Core, err error)
 	GetProduk(id int) (data Core, err error)
 	DeleteProduk(id int) (row int, err error)
+	GetFavorite() (data []Core, err error)
 }
 
 type DataInterface interface {
@@ -23,4 +24,5 @@ type DataInterface interface {
 	GetAllProduk() (data []Core, err error)
 	GetProduk(id int) (data Core, err error)
 	DeleteProduk(id int) (row int, err error)
+	GetFavorite() (data []Core, err error)
 }

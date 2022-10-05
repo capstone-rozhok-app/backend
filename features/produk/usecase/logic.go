@@ -42,3 +42,8 @@ func (usecase *produkUsecase) DeleteProduk(id int) (int, error) {
 	row, err := usecase.produkData.DeleteProduk(id)
 	return row, err
 }
+
+func (usecase *produkUsecase) GetFavorite() ([]produk.Core, error) {
+	results, err := usecase.produkData.GetFavorite()
+	return results, err
+}
