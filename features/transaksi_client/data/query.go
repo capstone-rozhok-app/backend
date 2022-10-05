@@ -21,7 +21,7 @@ func New(db *gorm.DB) *TransaksiClientData {
 func (r *TransaksiClientData) GetAll(TransaksiClientCore transaksiclient.Core) ([]transaksiclient.Core, error) {
 	transaksiClientModelList := []TransaksiClient{}
 
-	tx := r.DB.Model(&TransaksiClient{})
+	tx := r.DB.Model(&TransaksiClient{}).Where("client_id = ?", TransaksiClientCore.Client.ID)
 
 	if TransaksiClientCore.StartDate != "" {
 		tx.Where("created_at >=", TransaksiClientCore.StartDate)
@@ -63,7 +63,7 @@ func (r *TransaksiClientData) Get(TransaksiClientCore transaksiclient.Core) (tra
 
 	if TransaksiClientCore.TipeTransaksi == "penjualan" {
 		tx.Preload("Porter").Preload("DetailTransaksiClient.KategoriRosok")
-	}else {
+	} else {
 		tx.Preload("DetailTransaksiClient.Produk").Preload("Tagihan")
 	}
 
