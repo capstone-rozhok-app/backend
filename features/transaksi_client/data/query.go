@@ -78,9 +78,20 @@ func (r *TransaksiClientData) Get(TransaksiClientCore transaksiclient.Core) (tra
 
 // insert penjualan client dari keranjang_rosoks ke transaksi_clients
 func (r *TransaksiClientData) Insert(TransaksiClientCore transaksiclient.Core) (int, error) {
+	//cek user punya alamat atau tidak
+	var alamatUtama int64
+	tx := r.DB.Model(&User{}).Joins("JOIN alamats ON alamats.user_id = users.id AND alamats.status = ?", "utama").Count(&alamatUtama)
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
+
+	if alamatUtama < 1 {
+		return 0, errors.New("user must have alamat with status utama")
+	}
+
 	// ambil barang rosok dari keranjang rosok dari id client
 	KeranjangRosokList := []KeranjangRosok{}
-	tx := r.DB.Model(&KeranjangRosok{}).Where("id_client = ?", TransaksiClientCore.Client.ID).Find(&KeranjangRosokList)
+	tx = r.DB.Model(&KeranjangRosok{}).Where("client_id = ?", TransaksiClientCore.Client.ID).Find(&KeranjangRosokList)
 	if tx.Error != nil {
 		return 0, tx.Error
 	}
@@ -92,7 +103,7 @@ func (r *TransaksiClientData) Insert(TransaksiClientCore transaksiclient.Core) (
 		TipeTransaksi: "penjualan",
 		KodeTransaksi: helper.GenerateTF(int(TransaksiClientCore.Client.ID)),
 	}
-	tx = r.DB.Model(&TransaksiClient{}).Create(&transaksiClientModel)
+	tx = r.DB.Model(&TransaksiClient{}).Omit("porter_id", "tagihan_id").Create(&transaksiClientModel)
 	if tx.Error != nil {
 		return 0, tx.Error
 	}
@@ -106,11 +117,11 @@ func (r *TransaksiClientData) Insert(TransaksiClientCore transaksiclient.Core) (
 	for _, barangrosok := range KeranjangRosokList {
 		detailTransaksiModel = append(detailTransaksiModel, TransaksiClientDetail{
 			TransaksiClientID: transaksiClientModel.ID,
-			KategoriRosokID:   barangrosok.KategoriRosokID,
+			KategoriID:        barangrosok.KategoriRosokID,
 		})
 	}
 
-	tx = r.DB.Model(&TransaksiClientDetail{}).Create(&detailTransaksiModel)
+	tx = r.DB.Model(&TransaksiClientDetail{}).Omit("produk_id").Create(&detailTransaksiModel)
 	if tx.Error != nil {
 		return 0, tx.Error
 	}
@@ -121,7 +132,7 @@ func (r *TransaksiClientData) Insert(TransaksiClientCore transaksiclient.Core) (
 
 	// hapus keranjang_rosok dengan id client
 	keranjangRosok := &KeranjangRosok{}
-	tx = r.DB.Model(&KeranjangRosok{}).Where("client_id = ?", TransaksiClientCore.Client.ID).Delete(&keranjangRosok)
+	tx = r.DB.Model(&KeranjangRosok{}).Where("client_id = ?", TransaksiClientCore.Client.ID).Unscoped().Delete(&keranjangRosok)
 	if tx.Error != nil {
 		return 0, tx.Error
 	}

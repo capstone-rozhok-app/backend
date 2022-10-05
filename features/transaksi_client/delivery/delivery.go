@@ -49,10 +49,11 @@ func (d *TransaksiClient) GetAll(c echo.Context) error {
 }
 
 func (d *TransaksiClient) Get(c echo.Context) error {
-	transaksiID := helper.ParamInt(c, c.Param("id"))
+	transaksiID := helper.ParamInt(c, "id")
 
 	transaksiCore := transaksiclient.Core{}
 	transaksiCore.ID = uint(transaksiID)
+	transaksiCore.TipeTransaksi = c.Param("tipe_transaksi")
 
 	transaksi, err := d.Usecase.Get(transaksiCore)
 	if err != nil {
@@ -75,7 +76,7 @@ func (d *TransaksiClient) Post(c echo.Context) error {
 }
 
 func (d *TransaksiClient) Put(c echo.Context) error {
-	transaksiID := helper.ParamInt(c, c.Param("id"))
+	transaksiID := helper.ParamInt(c, "id")
 	transaksiCore := transaksiclient.Core{}
 	transaksiCore.ID = uint(transaksiID)
 
