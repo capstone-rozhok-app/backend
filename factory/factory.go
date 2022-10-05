@@ -43,6 +43,14 @@ import (
 	cartData "rozhok/features/cart/data"
 	cartDelivery "rozhok/features/cart/delivery"
 	cartUsecase "rozhok/features/cart/usecase"
+
+	produkData "rozhok/features/produk/data"
+	produkDelivery "rozhok/features/produk/delivery"
+	produkUsecase "rozhok/features/produk/usecase"
+
+	alamatData "rozhok/features/alamat/data"
+	alamatDelivery "rozhok/features/alamat/delivery"
+	alamatUsecase "rozhok/features/alamat/usecase"
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {
@@ -85,5 +93,13 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	cartDataFactory := cartData.New(db)
 	cartUsecaseFactory := cartUsecase.New(cartDataFactory)
 	cartDelivery.New(e, cartUsecaseFactory)
+
+	produkDataFactory := produkData.New(db)
+	produkUsecaseFactory := produkUsecase.New(produkDataFactory)
+	produkDelivery.New(e, produkUsecaseFactory)
+
+	alamatDataFactory := alamatData.New(db)
+	alamatUsecaseFactory := alamatUsecase.New(alamatDataFactory)
+	alamatDelivery.New(e, alamatUsecaseFactory)
 
 }
