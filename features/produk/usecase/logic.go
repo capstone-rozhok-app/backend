@@ -15,7 +15,7 @@ func New(dataProduk produk.DataInterface) produk.UsecaseInterface {
 }
 
 func (usecase *produkUsecase) CreateProduk(produk produk.Core) (int, error) {
-	row, err := usecase.produkData.CreateProduk(produk) //produkData.InsertAddress(address)
+	row, err := usecase.produkData.CreateProduk(produk)
 	return row, err
 }
 

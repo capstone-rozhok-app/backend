@@ -90,7 +90,7 @@ type Produk struct {
 	Image_url string
 	Stok      int
 	Harga     int64
-	Desc      string
+	Descr     string
 }
 
 type KategoriRosok struct {

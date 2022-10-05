@@ -6,7 +6,8 @@ type Core struct {
 	Image_url string
 	Stok      int
 	Harga     int64
-	Desc      string
+	Descr     string
+	Total     int
 }
 
 type UsecaseInterface interface {

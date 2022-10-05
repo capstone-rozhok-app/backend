@@ -12,7 +12,7 @@ type Produk struct {
 	Image_url string
 	Stok      int
 	Harga     int64
-	Desc      string
+	Descr     string
 }
 
 func fromCore(dataCore produk.Core) Produk {
@@ -21,7 +21,7 @@ func fromCore(dataCore produk.Core) Produk {
 		Image_url: dataCore.Image_url,
 		Stok:      dataCore.Stok,
 		Harga:     dataCore.Harga,
-		Desc:      dataCore.Desc,
+		Descr:     dataCore.Descr,
 	}
 }
 
@@ -32,7 +32,7 @@ func (dataCore *Produk) toCore() produk.Core {
 		Image_url: dataCore.Image_url,
 		Stok:      dataCore.Stok,
 		Harga:     dataCore.Harga,
-		Desc:      dataCore.Desc,
+		Descr:     dataCore.Descr,
 	}
 }
 
