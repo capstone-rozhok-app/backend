@@ -8,6 +8,10 @@ type Request struct {
 	Subtotal      int64 `json:"subtotal" form:"subtotal"`
 }
 
+type ArrayOfReq struct {
+	BarangRosok []Request `json:"barang_rosok"`
+}
+
 func toCore(transaksiRequest Request) transaksiporter.DetailTransaksiPorter {
 	return transaksiporter.DetailTransaksiPorter{
 		Id:       transaksiRequest.IdBarangRosok,
