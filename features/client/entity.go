@@ -9,7 +9,7 @@ type Core struct {
 	Foto     string
 	Telepon  string
 	Bonus    int64
-	TotaJual int //
+	TotalJual int64
 }
 
 type UsecaseInterface interface {
