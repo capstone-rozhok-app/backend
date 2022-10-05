@@ -48,6 +48,37 @@ type Cart struct {
 	ProdukId  uint
 }
 
+type User struct {
+	gorm.Model
+	Email           string `gorm:"unique"`
+	Password        string
+	Role            string
+	Username        string
+	StatusKemitraan string
+	JunkStationName string
+	ImageUrl        string
+	Provinsi        string
+	Kota            string
+	Kecamatan       string
+	Jalan           string
+	Telepon         string
+	Bonus           int64
+
+	Alamat []Alamat
+}
+
+type Alamat struct {
+	gorm.Model
+	UserID    uint
+	Provinsi  string
+	Kota      string
+	Kecamatan string
+	Status    string
+	Jalan     string
+
+	User User `gorm:"foreignKey:UserID"`
+}
+
 func ToCore(transaksiClient TransaksiClient) payment.Core {
 	return payment.Core{
 		Bank:           transaksiClient.Tagihan.Bank,

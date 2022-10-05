@@ -1,11 +1,14 @@
 package payment
 
+import "time"
+
 type Core struct {
 	Bank           string
 	Kurir          string
 	NoVA           string
 	TipePembayaran string
 	GrandTotal     int64
+	ExpiredAt      time.Time
 
 	Client Client
 }
