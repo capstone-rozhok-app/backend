@@ -49,13 +49,39 @@ func (d *TransaksiClient) GetAll(c echo.Context) error {
 }
 
 func (d *TransaksiClient) Get(c echo.Context) error {
+	transaksiID := helper.ParamInt(c, c.Param("id"))
 
+	transaksiCore := transaksiclient.Core{}
+	transaksiCore.ID = uint(transaksiID)
+
+	transaksi, err := d.Usecase.Get(transaksiCore)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
+	}
+
+	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("success get data", FromCore(transaksi)))
 }
 
 func (d *TransaksiClient) Post(c echo.Context) error {
+	uid, _, _ := middlewares.ExtractToken(c)
+	transaksiCore := transaksiclient.Core{}
+	transaksiCore.Client.ID = uint(uid)
 
+	_, err := d.Usecase.Create(transaksiCore)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
+	}
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("success insert data"))
 }
 
 func (d *TransaksiClient) Put(c echo.Context) error {
+	transaksiID := helper.ParamInt(c, c.Param("id"))
+	transaksiCore := transaksiclient.Core{}
+	transaksiCore.ID = uint(transaksiID)
 
+	_, err := d.Usecase.Update(transaksiCore)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
+	}
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("success update data"))
 }
