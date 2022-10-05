@@ -32,7 +32,6 @@ import (
 	kategoriDelivery "rozhok/features/kategori/delivery"
 	kategoriUsecase "rozhok/features/kategori/usecase"
 
-	
 	penjualanClientData "rozhok/features/penjualan_client/data"
 	penjualanClientDelivery "rozhok/features/penjualan_client/delivery"
 	penjualanClientUsecase "rozhok/features/penjualan_client/usecase"
@@ -52,7 +51,7 @@ import (
 	alamatData "rozhok/features/alamat/data"
 	alamatDelivery "rozhok/features/alamat/delivery"
 	alamatUsecase "rozhok/features/alamat/usecase"
-	
+
 	transaksiJS "rozhok/features/transaksi_junk_station/data"
 	transaksiJSDelivery "rozhok/features/transaksi_junk_station/delivery"
 	transaksiJSUsecase "rozhok/features/transaksi_junk_station/usecase"
@@ -60,6 +59,10 @@ import (
 	transaksiclient "rozhok/features/transaksi_client/data"
 	transaksiclientDelivery "rozhok/features/transaksi_client/delivery"
 	transaksiclientUsecase "rozhok/features/transaksi_client/usecase"
+
+	dbadminData "rozhok/features/dbadmin/data"
+	dbadminDelivery "rozhok/features/dbadmin/delivery"
+	dbadminUsecase "rozhok/features/dbadmin/usecase"
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {
@@ -114,8 +117,12 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	transaksiJSDataFactory := transaksiJS.New(db)
 	transaksiJSUsecaseFactory := transaksiJSUsecase.New(transaksiJSDataFactory)
 	transaksiJSDelivery.New(e, transaksiJSUsecaseFactory)
-	
+
 	transaksiclientDataFactory := transaksiclient.New(db)
 	transaksiclientUsecaseFactory := transaksiclientUsecase.New(transaksiclientDataFactory)
 	transaksiclientDelivery.New(e, transaksiclientUsecaseFactory)
+
+	dbadminDataFactory := dbadminData.New(db)
+	dbadminUsecaseFactory := dbadminUsecase.New(dbadminDataFactory)
+	dbadminDelivery.New(e, dbadminUsecaseFactory)
 }
