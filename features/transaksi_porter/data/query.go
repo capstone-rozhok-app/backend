@@ -57,7 +57,9 @@ func (repo *transaksiPorterRepo) GetAll(TransaksiCore transaksiporter.Core) (row
 func (repo *transaksiPorterRepo) Get(TransaksiCore transaksiporter.Core) (row transaksiporter.Core, err error) {
 	var transaksiPorterModel TransaksiPorter
 	transaksiPorterModel.ID = TransaksiCore.ID
-	tx := repo.DB.Model(&TransaksiPorter{}).Preload("UserClient").Preload("TransaksiPorterDetail.KategoriRosok").Where("tipe_transaksi = ?", TransaksiCore.TipeTransaksi).First(&transaksiPorterModel)
+	tx := repo.DB.Model(&TransaksiPorter{}).Preload("UserClient.Alamat", func(db *gorm.DB) *gorm.DB {
+		return db.Where("alamats.status", "utama")
+	}).Preload("TransaksiPorterDetail.KategoriRosok").Where("tipe_transaksi = ?", TransaksiCore.TipeTransaksi).First(&transaksiPorterModel)
 	if tx.Error != nil {
 		return row, tx.Error
 	}
