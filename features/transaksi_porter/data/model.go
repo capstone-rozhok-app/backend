@@ -97,15 +97,19 @@ func toCore(transaksiPorterModel TransaksiPorter) transaksiporter.Core {
 		TipeTransaksi: transaksiPorterModel.TipeTransaksi,
 		Status:        transaksiPorterModel.Status,
 		GrandTotal:    transaksiPorterModel.GrandTotal,
-		Client: transaksiporter.User{
+	}
+
+	if len(transaksiPorterModel.UserClient.Alamat) > 1 {
+		transaksiPorterCore.Client = transaksiporter.User{
 			Username:  transaksiPorterModel.UserClient.Username,
 			Provinsi:  transaksiPorterModel.UserClient.Alamat[0].Provinsi,
 			Kota:      transaksiPorterModel.UserClient.Alamat[0].Kota,
 			Jalan:     transaksiPorterModel.UserClient.Alamat[0].Jalan,
 			Telepon:   transaksiPorterModel.UserClient.Telepon,
 			Kecamatan: transaksiPorterModel.UserClient.Alamat[0].Kecamatan,
-		},
+		}
 	}
+
 	transaksiPorterCore.ID = transaksiPorterModel.ID
 
 	transaksiDetailPorterCoreList := []transaksiporter.DetailTransaksiPorter{}
