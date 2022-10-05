@@ -54,11 +54,17 @@ func (repo *clientData) DeleteDataClient(id int) (row int, err error) {
 
 func (repo *clientData) GetClient(id int) (data client.Core, err error) {
 	var jual int64
-	tx := repo.db.Model(&transaksiModel.TransaksiClient{}).Select("sum(grand_total)").Where("client_id = ?", id).Find(&jual)
+	var bonus int64
+	tx := repo.db.Model(&transaksiModel.TransaksiClient{}).Select("sum(grand_total)").Where("client_id = ?", id).Where("tipe_transaksi = ?", "penjualan").Where("status = ?", "sudah_bayar").Find(&jual)
 	if tx.Error != nil {
 		return client.Core{}, nil
 	}
-	data.TotaJual = int(jual)
+	tx = repo.db.Model(&User{}).Select("bonus").Where("id = ?", id).Find(&bonus)
+	if tx.Error != nil {
+		return client.Core{}, nil
+	}
+	data.TotalJual = jual
+	data.Bonus = bonus
 
 	return data, nil
 }
