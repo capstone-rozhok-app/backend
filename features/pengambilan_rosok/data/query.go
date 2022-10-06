@@ -37,7 +37,7 @@ func (repo *pengambilanRosokRepo) GetAll(TransaksiCore pengambilanrosok.Core) (r
 
 	var pengambilanRosokCoreList []pengambilanrosok.Core
 	for _, transaksiRosokClient := range pengambilanRosokModelList {
-		if len(pengambilanRosokModelList[0].UserClient.Alamat) > 0 {
+		if len(transaksiRosokClient.UserClient.Alamat) > 0 {
 			pengambilanRosokCoreList = append(pengambilanRosokCoreList, toCore(transaksiRosokClient))
 		}
 	}
