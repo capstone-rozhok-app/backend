@@ -128,21 +128,25 @@ func ToCore(TransaksiClientModel TransaksiClient) transaksiclient.Core {
 
 	productsCoreList := []transaksiclient.Product{}
 	for _, product := range TransaksiClientModel.DetailTransaksiClient {
-		productsCoreList = append(productsCoreList, transaksiclient.Product{
-			ImageUrl:    product.Produk.Image_url,
-			ProductName: product.Produk.Nama,
-			Qty:         product.Qty,
-			Subtotal:    product.Subtotal,
-		})
+		if product.Qty > 0 {
+			productsCoreList = append(productsCoreList, transaksiclient.Product{
+				ImageUrl:    product.Produk.Image_url,
+				ProductName: product.Produk.Nama,
+				Qty:         product.Qty,
+				Subtotal:    product.Subtotal,
+			})
+		}
 	}
 
 	barangRosokCoreList := []transaksiclient.BarangRosok{}
 	for _, barangRosok := range TransaksiClientModel.DetailTransaksiClient {
-		barangRosokCoreList = append(barangRosokCoreList, transaksiclient.BarangRosok{
-			Kategori: barangRosok.KategoriRosok.NamaKategori,
-			Berat:    barangRosok.Berat,
-			Harga:    barangRosok.Subtotal,
-		})
+		if barangRosok.KategoriID > 1 {
+			barangRosokCoreList = append(barangRosokCoreList, transaksiclient.BarangRosok{
+				Kategori: barangRosok.KategoriRosok.NamaKategori,
+				Berat:    barangRosok.Berat,
+				Harga:    barangRosok.Subtotal,
+			})
+		}
 	}
 
 	transaksiClient.Product = productsCoreList
