@@ -157,3 +157,20 @@ func (r *TransaksiClientData) Update(TransaksiClientCore transaksiclient.Core) (
 
 	return 0, nil
 }
+
+func (r *TransaksiClientData) GetTagihan(TransaksiClientCore transaksiclient.Core) (transaksiclient.Tagihan, error) {
+	var tagihan Tagihan
+
+	tx := r.DB.Model(&TransaksiClient{}).Select("tagihans.*, transaksi_clients.id").Where("transaksi_clients.id = ?", TransaksiClientCore.ID).Joins("JOIN tagihans ON tagihans.id = transaksi_clients.tagihan_id").First(&tagihan)
+	if tx.Error != nil {
+		return transaksiclient.Tagihan{}, tx.Error
+	}
+
+	return transaksiclient.Tagihan{
+		NoVA:           tagihan.NoVa,
+		TipePembayaran: tagihan.TipePembayaran,
+		Bank:           tagihan.Bank,
+		GrandTotal:     tagihan.GrandTotal,
+	}, nil
+
+}

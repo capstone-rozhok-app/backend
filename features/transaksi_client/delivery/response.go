@@ -41,6 +41,22 @@ type Produk struct {
 	Subtotal    int64  `json:"subtotal,omitempty"`
 }
 
+type Tagihan struct {
+	NoVa           string `json:"no_va"`
+	TipePembayaran string `json:"tipe_pembayaran"`
+	TotalHarga     int64  `json:"total_harga"`
+	Bank           string `json:"bank"`
+}
+
+func ToTagihan(TagihanCore transaksiclient.Tagihan) Tagihan {
+	return Tagihan{
+		NoVa:           TagihanCore.NoVA,
+		TipePembayaran: TagihanCore.TipePembayaran,
+		TotalHarga:     TagihanCore.GrandTotal,
+		Bank:           TagihanCore.Bank,
+	}
+}
+
 func FromCore(transaksiCore transaksiclient.Core) Response {
 	transaksiResponse := Response{
 		IdTransaksi:   transaksiCore.ID,

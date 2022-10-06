@@ -20,6 +20,7 @@ func New(e *echo.Echo, usecase transaksiclient.TransaksiClientUsecase) {
 
 	e.GET("/transaksi/client", handler.GetAll, middlewares.JWTMiddleware(), middlewares.IsClient)
 	e.GET("/transaksi/:id/client/:tipe_transaksi", handler.Get, middlewares.JWTMiddleware(), middlewares.IsClient)
+	e.GET("/tagihan/:id", handler.GetTagihan, middlewares.JWTMiddleware(), middlewares.IsClient)
 	e.POST("/transaksi/client", handler.Post, middlewares.JWTMiddleware(), middlewares.IsClient)
 	e.PUT("/transaksi/:id/client", handler.Put, middlewares.JWTMiddleware(), middlewares.IsClient)
 }
@@ -85,4 +86,18 @@ func (d *TransaksiClient) Put(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
 	}
 	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("success update data"))
+}
+
+func (d *TransaksiClient) GetTagihan(c echo.Context) error {
+	idTransaksi := helper.ParamInt(c, "id")
+
+	var TransaksiClient transaksiclient.Core
+	TransaksiClient.ID = uint(idTransaksi)
+
+	tagihan, err := d.Usecase.GetTagihan(TransaksiClient)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
+	}
+
+	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("success get tagihan", ToTagihan(tagihan)))
 }
