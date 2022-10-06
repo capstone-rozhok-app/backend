@@ -84,7 +84,7 @@ func (deliv *Delivery) UpdateCart(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to update cart"))
 	}
 
-	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Updating cart is succes"))
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Updating cart is succes"))
 
 }
 

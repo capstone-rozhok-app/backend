@@ -71,7 +71,7 @@ func (deliv *Delivery) UpdateAdress(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to update address"))
 	}
 
-	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Updating data is succesfull"))
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Updating data is succesfull"))
 
 }
 
