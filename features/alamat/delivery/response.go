@@ -1,6 +1,9 @@
 package delivery
 
-import "rozhok/features/alamat"
+import (
+	"rozhok/features/alamat"
+	"strings"
+)
 
 type AlamatResponse struct {
 	Id        uint   `json:"id" form:"id"`
@@ -19,7 +22,7 @@ func fromCore(dataCore alamat.ResponseCore) AlamatResponse {
 		Kota:      dataCore.Kota,
 		Kecamatan: dataCore.Kecamatan,
 		Jalan:     dataCore.Jalan,
-		Status:    dataCore.Status,
+		Status:    strings.ToLower(dataCore.Status),
 		User:      dataCore.User,
 	}
 }
