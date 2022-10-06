@@ -140,7 +140,7 @@ func ToCore(TransaksiClientModel TransaksiClient) transaksiclient.Core {
 
 	barangRosokCoreList := []transaksiclient.BarangRosok{}
 	for _, barangRosok := range TransaksiClientModel.DetailTransaksiClient {
-		if barangRosok.KategoriID > 1 {
+		if barangRosok.KategoriID > 0 {
 			barangRosokCoreList = append(barangRosokCoreList, transaksiclient.BarangRosok{
 				Kategori: barangRosok.KategoriRosok.NamaKategori,
 				Berat:    barangRosok.Berat,
