@@ -13,6 +13,11 @@ func New(repo payment.PaymentData) *Payment {
 }
 
 func (r *Payment) Create(PaymentData payment.Core) (payment.Core, error) {
+	_, err := r.Repo.GetUserData(PaymentData)
+	if err != nil {
+		return payment.Core{}, err
+	}
+	
 	idTransaksi, err := r.Repo.Insert(PaymentData)
 	if err != nil {
 		return payment.Core{}, err

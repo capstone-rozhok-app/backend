@@ -20,8 +20,8 @@ func New(db *gorm.DB) *PaymentRepo {
 
 func (r *PaymentRepo) GetUserData(PaymentCore payment.Core) (payment.Client, error) {
 	var client User
-	tx := r.DB.Model(&User{}).Preload("Alamat", func(db *gorm.DB) {
-		db.Where("status = ?", "utama")
+	tx := r.DB.Model(&User{}).Preload("Alamat", func(db *gorm.DB) *gorm.DB {
+		return db.Where("alamats.status", "utama")
 	}).Where("id = ?", PaymentCore.Client.ID).First(&client)
 	if tx.Error != nil {
 		return payment.Client{}, tx.Error
@@ -86,6 +86,7 @@ func (r *PaymentRepo) Insert(PaymentData payment.Core) (idTransaksi uint, err er
 	if tx.RowsAffected < 1 {
 		return 0, errors.New("error row affected")
 	}
+
 	// mapping dari keranjang user ke dalam transaksi detail client
 	var transaksiDetail []TransaksiClientDetail
 	for _, keranjangbelanja := range keranjangBelanja {
@@ -109,7 +110,7 @@ func (r *PaymentRepo) Insert(PaymentData payment.Core) (idTransaksi uint, err er
 
 	// hapus data dari keranjang user dengan checklist true
 	var cart Cart
-	tx = r.DB.Model(&Cart{}).Where("user_id = ?", PaymentData.Client.ID).Where("checklist = ?", 1).Delete(&cart)
+	tx = r.DB.Model(&Cart{}).Where("user_id = ?", PaymentData.Client.ID).Where("checklist = ?", 1).Unscoped().Delete(&cart)
 	if tx.Error != nil {
 		return 0, tx.Error
 	}

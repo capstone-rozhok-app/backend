@@ -63,6 +63,10 @@ import (
 	dbadminData "rozhok/features/dbadmin/data"
 	dbadminDelivery "rozhok/features/dbadmin/delivery"
 	dbadminUsecase "rozhok/features/dbadmin/usecase"
+
+	paymentData "rozhok/features/payment/data"
+	paymentDelivery "rozhok/features/payment/delivery"
+	paymentUsecase "rozhok/features/payment/usecase"
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {
@@ -126,4 +130,7 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	transaksiclientUsecaseFactory := transaksiclientUsecase.New(transaksiclientDataFactory)
 	transaksiclientDelivery.New(e, transaksiclientUsecaseFactory)
 
+	paymentDataFactory := paymentData.New(db)
+	paymentUsecaseFactory := paymentUsecase.New(paymentDataFactory)
+	paymentDelivery.New(e, paymentUsecaseFactory)
 }
