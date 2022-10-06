@@ -23,7 +23,7 @@ type Client struct {
 }
 
 type PaymentData interface {
-	GetUserData(PaymentCore Core) (Core, error)
+	GetUserData(PaymentCore Core) (Client, error)
 	GetTagihan(idTransaksi uint) (Core, error)
 	Insert(PaymentData Core) (idTransaksi uint, err error)
 }

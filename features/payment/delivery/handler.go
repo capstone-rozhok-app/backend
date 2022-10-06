@@ -17,7 +17,7 @@ func New(e *echo.Echo, usecase payment.PaymentUsecase) {
 	handler := Payment{
 		Usecase: usecase,
 	}
-	e.POST("/payment", handler.PostPayment)
+	e.POST("/payment", handler.PostPayment, middlewares.JWTMiddleware(), middlewares.IsClient)
 }
 
 func (h *Payment) PostPayment(c echo.Context) error {
