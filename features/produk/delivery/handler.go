@@ -100,7 +100,7 @@ func (deliv *Delivery) UpdateProduk(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to update data"))
 	}
 
-	return c.JSON(http.StatusBadRequest, helper.SuccessResponseHelper("Updating data is succes"))
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("Updating data is succes"))
 
 }
 
