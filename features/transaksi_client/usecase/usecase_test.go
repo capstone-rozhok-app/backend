@@ -154,3 +154,39 @@ func TestPut(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 }
+
+func TestGetTagihan(t *testing.T) {
+	TransaksiClientCore := transaksiclient.Core{}
+	responseData := transaksiclient.Tagihan{
+		NoVA:           "10927401274",
+		TipePembayaran: "bank_tranfer",
+		Bank:           "bca",
+		GrandTotal:     10000,
+	}
+
+	t.Run("success", func(t *testing.T) {
+		repo := new(mocks.TransaksiClient)
+
+		repo.On("GetTagihan", mock.Anything).Return(responseData, nil).Once()
+		usecase := New(repo)
+
+		_, err := usecase.GetTagihan(TransaksiClientCore)
+
+		assert.NoError(t, err)
+
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("failed", func(t *testing.T) {
+		repo := new(mocks.TransaksiClient)
+
+		repo.On("GetTagihan", mock.Anything).Return(transaksiclient.Tagihan{}, errors.New("error")).Once()
+		usecase := New(repo)
+
+		_, err := usecase.GetTagihan(TransaksiClientCore)
+
+		assert.Equal(t, "error", err.Error())
+
+		repo.AssertExpectations(t)
+	})
+}

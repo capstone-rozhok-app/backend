@@ -27,3 +27,7 @@ func (r *TransaksiClient) Create(TransaksiClient transaksiclient.Core) (int, err
 func (r *TransaksiClient) Update(TransaksiClient transaksiclient.Core) (int, error) {
 	return r.Repo.Update(TransaksiClient)
 }
+
+func (r *TransaksiClient) GetTagihan(TransaksiClient transaksiclient.Core) (transaksiclient.Tagihan, error) {
+	return r.Repo.GetTagihan(TransaksiClient)
+}

@@ -57,6 +57,27 @@ func (_m *TransaksiClient) GetAll(TransaksiClient transaksiclient.Core) ([]trans
 	return r0, r1
 }
 
+// GetTagihan provides a mock function with given fields: TransaksiClient
+func (_m *TransaksiClient) GetTagihan(TransaksiClient transaksiclient.Core) (transaksiclient.Tagihan, error) {
+	ret := _m.Called(TransaksiClient)
+
+	var r0 transaksiclient.Tagihan
+	if rf, ok := ret.Get(0).(func(transaksiclient.Core) transaksiclient.Tagihan); ok {
+		r0 = rf(TransaksiClient)
+	} else {
+		r0 = ret.Get(0).(transaksiclient.Tagihan)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(transaksiclient.Core) error); ok {
+		r1 = rf(TransaksiClient)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Insert provides a mock function with given fields: TransaksiClient
 func (_m *TransaksiClient) Insert(TransaksiClient transaksiclient.Core) (int, error) {
 	ret := _m.Called(TransaksiClient)

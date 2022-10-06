@@ -49,6 +49,7 @@ type Product struct {
 type TransaksiClientData interface {
 	GetAll(TransaksiClient Core) ([]Core, error)
 	Get(TransaksiClient Core) (Core, error)
+	GetTagihan(TransaksiClient Core) (Tagihan, error)
 	Insert(TransaksiClient Core) (int, error)
 	Update(TransaksiClient Core) (int, error)
 }
@@ -56,6 +57,7 @@ type TransaksiClientData interface {
 type TransaksiClientUsecase interface {
 	GetAll(TransaksiClient Core) ([]Core, error)
 	Get(TransaksiClient Core) (Core, error)
+	GetTagihan(TransaksiClient Core) (Tagihan, error)
 	Create(TransaksiClient Core) (int, error)
 	Update(TransaksiClient Core) (int, error)
 }
