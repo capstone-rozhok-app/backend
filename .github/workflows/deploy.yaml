@@ -29,6 +29,8 @@ jobs:
             export S3_KEY=${{secrets.S3_KEY}}
             export S3_SECRET=${{secrets.S3_SECRET}}
             export AWS_BUCKET=${{secrets.S3_BUCKET}}
+            export MIDTRANS_SERVER_KEY=${{secrets.MIDTRANS_SERVER_KEY}}
+            export MIDTRANS_ENV=${{secrets.MIDTRANS_ENV}}
             git pull origin main
             go mod tidy
             docker compose down
