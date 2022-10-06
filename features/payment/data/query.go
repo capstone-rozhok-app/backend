@@ -133,3 +133,15 @@ func (r *PaymentRepo) InsertTagihan(PaymentData payment.Core) (idTagihan uint, e
 
 	return tagihan.ID, nil
 }
+
+func (r *PaymentRepo) UpdateTransaksi(PaymentData payment.Core) error {
+	tx := r.DB.Model(&TransaksiClient{}).Where("kode_transaksi = ?", PaymentData.KodeTransaksi).Update("status", PaymentData.StatusTransaksi)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	if tx.RowsAffected < 1 {
+		return errors.New("error affected row")
+	}
+
+	return nil
+}

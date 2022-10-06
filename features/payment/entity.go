@@ -8,15 +8,16 @@ import (
 )
 
 type Core struct {
-	IdTransaksi    uint
-	IdTagihan      uint
-	Bank           string
-	Kurir          string
-	NoVA           string
-	TipePembayaran string
-	GrandTotal     int64
-	ExpiredAt      time.Time
-	KodeTransaksi  string
+	IdTransaksi     uint
+	IdTagihan       uint
+	Bank            string
+	Kurir           string
+	NoVA            string
+	TipePembayaran  string
+	GrandTotal      int64
+	ExpiredAt       time.Time
+	KodeTransaksi   string
+	StatusTransaksi string
 
 	Client Client
 }
@@ -34,10 +35,12 @@ type PaymentData interface {
 	GetGrandTotal(PaymentCore Core) (grandTotal int64, err error)
 	InsertTransaksi(PaymentData Core) error
 	InsertTagihan(PaymentData Core) (idTagihan uint, err error)
+	UpdateTransaksi(PaymentData Core) error
 }
 
 type PaymentUsecase interface {
 	Create(PaymentData Core) (Core, error)
+	PaymentWebHook(OrderID, status string) error
 }
 
 func ToMidtransCore(PaymentCore Core) *coreapi.ChargeReq {

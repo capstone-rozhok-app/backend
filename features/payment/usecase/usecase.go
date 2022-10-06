@@ -83,3 +83,24 @@ func (r *Payment) Create(PaymentData payment.Core) (payment.Core, error) {
 
 	return PaymentData, nil
 }
+
+func (r *Payment) PaymentWebHook(OrderID, status string) error {
+	var PaymentCore payment.Core
+
+	PaymentCore.KodeTransaksi = OrderID
+	switch status {
+	case "settlement":
+		PaymentCore.StatusTransaksi = "dibayar"
+	case "pending":
+		PaymentCore.StatusTransaksi = "belum_dibayar"
+	default:
+		PaymentCore.StatusTransaksi = "dibatalkan"
+	}
+
+	err := r.Repo.UpdateTransaksi(PaymentCore)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
