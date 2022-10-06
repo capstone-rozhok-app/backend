@@ -75,7 +75,9 @@ func (repo *produkData) DeleteProduk(id int) (row int, err error) {
 
 func (repo *produkData) GetFavorite() (data []produk.Core, err error) {
 	var slice [8]produk.Core
-	repo.db.Model(&tsModel.TransaksiClientDetail{}).Joins("Produk").Select("produk_id as id, sum(qty) as total", "nama as nama, image_url as image_url, stok as stok, harga as harga, descr as descr").Group("id").Order("total desc").Find(&slice)
+	repo.db.Model(&tsModel.TransaksiClientDetail{}).Joins("Produk").Select("produk_id as id, sum(qty) as total",
+		"nama as nama, image_url as image_url, stok as stok, harga as harga, `desc` as descr").
+		Group("id").Order("total desc").Find(&slice)
 
 	return slice[:], nil
 }
