@@ -1,6 +1,12 @@
 package usecase
 
-import "rozhok/features/payment"
+import (
+	"rozhok/features/payment"
+	"rozhok/utils/helper"
+
+	"github.com/midtrans/midtrans-go"
+	"github.com/midtrans/midtrans-go/coreapi"
+)
 
 type Payment struct {
 	Repo payment.PaymentData
@@ -13,19 +19,67 @@ func New(repo payment.PaymentData) *Payment {
 }
 
 func (r *Payment) Create(PaymentData payment.Core) (payment.Core, error) {
+
+	// get user data to check that user has inserted alamat with status utama
 	_, err := r.Repo.GetUserData(PaymentData)
 	if err != nil {
 		return payment.Core{}, err
 	}
-	
-	idTransaksi, err := r.Repo.Insert(PaymentData)
+
+	// get grandtotal
+	PaymentData.GrandTotal, err = r.Repo.GetGrandTotal(PaymentData)
 	if err != nil {
 		return payment.Core{}, err
 	}
 
-	Tagihan, err := r.Repo.GetTagihan(idTransaksi)
+	// create payment midtrans
+	PaymentData.KodeTransaksi = helper.GenerateTF(int(PaymentData.Client.ID))
+	midtransCore := payment.ToMidtransCore(PaymentData)
+	switch PaymentData.Bank {
+	case "bca":
+		midtransCore.PaymentType = coreapi.PaymentTypeBankTransfer
+		midtransCore.BankTransfer = &coreapi.BankTransferDetails{
+			Bank: midtrans.BankBca,
+		}
+	case "bni":
+		midtransCore.PaymentType = coreapi.PaymentTypeBankTransfer
+		midtransCore.BankTransfer = &coreapi.BankTransferDetails{
+			Bank: midtrans.BankBni,
+		}
+	case "bri":
+		midtransCore.PaymentType = coreapi.PaymentTypeBankTransfer
+		midtransCore.BankTransfer = &coreapi.BankTransferDetails{
+			Bank: midtrans.BankBri,
+		}
+	case "permata":
+		midtransCore.PaymentType = coreapi.PaymentTypeBankTransfer
+		midtransCore.BankTransfer = &coreapi.BankTransferDetails{
+			Bank: midtrans.BankPermata,
+		}
+	}
+
+	midtransInvoice, errChargeMidtrans := coreapi.ChargeTransaction(midtransCore)
+	if errChargeMidtrans != nil {
+		return payment.Core{}, err
+	}
+
+	// create tagihan
+	if PaymentData.Bank != "permata" {
+		PaymentData.NoVA = midtransInvoice.VaNumbers[0].VANumber
+	} else {
+		PaymentData.NoVA = midtransInvoice.PermataVaNumber
+	}
+	PaymentData.TipePembayaran = midtransInvoice.PaymentType
+	PaymentData.IdTagihan, err = r.Repo.InsertTagihan(PaymentData)
 	if err != nil {
 		return payment.Core{}, err
 	}
-	return Tagihan, nil
+
+	// create transaksi
+	err = r.Repo.InsertTransaksi(PaymentData)
+	if err != nil {
+		return payment.Core{}, err
+	}
+
+	return PaymentData, nil
 }

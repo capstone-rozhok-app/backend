@@ -5,6 +5,8 @@ import (
 	"os"
 	"strconv"
 	"sync"
+
+	"github.com/midtrans/midtrans-go"
 )
 
 type AppConfig struct {
@@ -34,6 +36,17 @@ func GetConfig() *AppConfig {
 }
 
 func initConfig() *AppConfig {
+
+	/*
+		@@ SETUP MIDTRANS GLOBAL
+	*/
+	midtrans.ServerKey = os.Getenv("MIDTRANS_SERVER_KEY")
+	switch os.Getenv("MIDTRANS_ENV") {
+	case "production":
+		midtrans.Environment = midtrans.Production
+	default:
+		midtrans.Environment = midtrans.Sandbox
+	}
 
 	var defaultConfig AppConfig
 

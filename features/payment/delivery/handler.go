@@ -5,6 +5,7 @@ import (
 	"rozhok/features/payment"
 	"rozhok/middlewares"
 	"rozhok/utils/helper"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -34,8 +35,8 @@ func (h *Payment) PostPayment(c echo.Context) error {
 	}
 
 	paymentCore := payment.Core{
-		Bank:  paymentRequest.Bank,
-		Kurir: paymentRequest.Kurir,
+		Bank:  strings.ToLower(paymentRequest.Bank),
+		Kurir: strings.ToLower(paymentRequest.Kurir),
 		Client: payment.Client{
 			ID: uint(uid),
 		},
