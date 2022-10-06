@@ -3,6 +3,7 @@ package payment
 import "time"
 
 type Core struct {
+	IdTransaksi    uint
 	Bank           string
 	Kurir          string
 	NoVA           string
@@ -23,9 +24,10 @@ type Client struct {
 
 type PaymentData interface {
 	GetUserData(PaymentCore Core) (Core, error)
-	Insert(PaymentData Core) (int, error)
+	GetTagihan(idTransaksi uint) (Core, error)
+	Insert(PaymentData Core) (idTransaksi uint, err error)
 }
 
 type PaymentUsecase interface {
-	Create(PaymentData Core) (int, error)
+	Create(PaymentData Core) (Core, error)
 }
