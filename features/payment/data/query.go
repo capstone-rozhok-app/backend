@@ -18,31 +18,29 @@ func New(db *gorm.DB) *PaymentRepo {
 	}
 }
 
-func (r *PaymentRepo) GetUserData(PaymentCore payment.Core) (payment.Core, error) {
+func (r *PaymentRepo) GetUserData(PaymentCore payment.Core) (payment.Client, error) {
 	var client User
 	tx := r.DB.Model(&User{}).Preload("Alamat", func(db *gorm.DB) {
 		db.Where("status = ?", "utama")
 	}).Where("id = ?", PaymentCore.Client.ID).First(&client)
 	if tx.Error != nil {
-		return payment.Core{}, tx.Error
+		return payment.Client{}, tx.Error
 	}
 
 	if len(client.Alamat) < 1 {
-		return payment.Core{}, errors.New("user must have alamat with status utama")
+		return payment.Client{}, errors.New("user must have alamat with status utama")
 	}
 
-	return payment.Core{
-		Client: payment.Client{
-			ID:        client.ID,
-			Username:  client.Username,
-			Provinsi:  client.Alamat[0].Provinsi,
-			Kota:      client.Alamat[0].Kota,
-			Kecamatan: client.Alamat[0].Kecamatan,
-		},
+	return payment.Client{
+		ID:        client.ID,
+		Username:  client.Username,
+		Provinsi:  client.Alamat[0].Provinsi,
+		Kota:      client.Alamat[0].Kota,
+		Kecamatan: client.Alamat[0].Kecamatan,
 	}, nil
 }
 
-func (r *PaymentRepo) Insert(PaymentData payment.Core) (int, error) {
+func (r *PaymentRepo) Insert(PaymentData payment.Core) (idTransaksi uint, err error) {
 	// ambil produk dari keranjang user dengan checklist true
 	var keranjangBelanja []Cart
 	tx := r.DB.Model(&Cart{}).Where("user_id = ?", PaymentData.Client.ID).Where("checklist = ?", 1).Find(&keranjangBelanja)
@@ -70,7 +68,7 @@ func (r *PaymentRepo) Insert(PaymentData payment.Core) (int, error) {
 	if tx.RowsAffected < 1 {
 		return 0, errors.New("error row affected")
 	}
-	
+
 	// masukkan kedalam transaksi master
 	transaksi := TransaksiClient{
 		ClientID:      PaymentData.Client.ID,
@@ -119,5 +117,21 @@ func (r *PaymentRepo) Insert(PaymentData payment.Core) (int, error) {
 		return 0, errors.New("error row affected")
 	}
 
-	return 1, nil
+	return transaksi.ID, nil
+}
+
+func (r *PaymentRepo) GetTagihan(idTransaksi uint) (payment.Core, error) {
+	var transaksi TransaksiClient
+	tx := r.DB.Model(&TransaksiClient{}).Where("id = ?", idTransaksi).Preload("Tagihan").First(&transaksi)
+	if tx.Error != nil {
+		return payment.Core{}, nil
+	}
+
+	return payment.Core{
+		Bank:           transaksi.Tagihan.Bank,
+		Kurir:          transaksi.Kurir,
+		NoVA:           transaksi.Tagihan.NoVa,
+		TipePembayaran: transaksi.Tagihan.TipePembayaran,
+		GrandTotal:     transaksi.GrandTotal,
+	}, nil
 }
