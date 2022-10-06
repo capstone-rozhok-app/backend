@@ -75,7 +75,7 @@ func TestUpdate(t *testing.T) {
 func TestDelete(t *testing.T) {
 	t.Run("success delete", func(t *testing.T) {
 		repo := new(mocks.PorterRepo)
-		repo.On("DeletePorter",mock.Anything).Return(1, nil).Once()
+		repo.On("DeletePorter", mock.Anything).Return(1, nil).Once()
 
 		usecase := New(repo)
 		row, err := usecase.DeletePorter(1)
@@ -101,7 +101,7 @@ func TestDelete(t *testing.T) {
 func TestGetAll(t *testing.T) {
 	responseDataList := []porter.Core{
 		{
-			ID: 1,
+			ID:        1,
 			Username:  "ucup",
 			Email:     "ucup@gmail.com",
 			Password:  "thomasSlebew",
@@ -140,7 +140,7 @@ func TestGetAll(t *testing.T) {
 
 func TestGet(t *testing.T) {
 	responseData := porter.Core{
-		ID: 1,
+		ID:        1,
 		Username:  "ucup",
 		Email:     "ucup@gmail.com",
 		Password:  "thomasSlebew",
@@ -178,10 +178,10 @@ func TestGet(t *testing.T) {
 
 func TestGetPendapatan(t *testing.T) {
 	responseData := porter.Core{
-		ID: 1,
+		ID:             1,
 		TotalPenjualan: 7000,
 		TotalPembelian: 5000,
-		Laba: 2000,
+		Laba:           2000,
 	}
 
 	t.Run("success get data", func(t *testing.T) {
@@ -189,6 +189,58 @@ func TestGetPendapatan(t *testing.T) {
 		repo.On("GetPendapatan", mock.Anything).Return(responseData, nil).Once()
 
 		usecase := New(repo)
+		row, err := usecase.GetPendapatan(responseData)
+
+		assert.NoError(t, err)
+		assert.NotEqual(t, 1, row.ID)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("success get data harian", func(t *testing.T) {
+		repo := new(mocks.PorterRepo)
+		repo.On("GetPendapatan", mock.Anything).Return(responseData, nil).Once()
+
+		usecase := New(repo)
+		responseData.PeriodicFilter = "harian"
+		row, err := usecase.GetPendapatan(responseData)
+
+		assert.NoError(t, err)
+		assert.NotEqual(t, 1, row.ID)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("success get data bulanan", func(t *testing.T) {
+		repo := new(mocks.PorterRepo)
+		repo.On("GetPendapatan", mock.Anything).Return(responseData, nil).Once()
+
+		usecase := New(repo)
+		responseData.PeriodicFilter = "bulanan"
+		row, err := usecase.GetPendapatan(responseData)
+
+		assert.NoError(t, err)
+		assert.NotEqual(t, 1, row.ID)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("success get data mingguan", func(t *testing.T) {
+		repo := new(mocks.PorterRepo)
+		repo.On("GetPendapatan", mock.Anything).Return(responseData, nil).Once()
+
+		usecase := New(repo)
+		responseData.PeriodicFilter = "mingguan"
+		row, err := usecase.GetPendapatan(responseData)
+
+		assert.NoError(t, err)
+		assert.NotEqual(t, 1, row.ID)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("success get data tahunan", func(t *testing.T) {
+		repo := new(mocks.PorterRepo)
+		repo.On("GetPendapatan", mock.Anything).Return(responseData, nil).Once()
+
+		usecase := New(repo)
+		responseData.PeriodicFilter = "tahunan"
 		row, err := usecase.GetPendapatan(responseData)
 
 		assert.NoError(t, err)
