@@ -64,7 +64,7 @@ func (r *TransaksiClientData) Get(TransaksiClientCore transaksiclient.Core) (tra
 	if TransaksiClientCore.TipeTransaksi == "penjualan" {
 		tx.Preload("Porter").Preload("DetailTransaksiClient.KategoriRosok")
 	} else {
-		tx.Preload("DetailTransaksiClient.Produk").Preload("Tagihan")
+		tx.Preload("DetailTransaksiClient.Produk")
 	}
 
 	tx.First(&transaksiClientModel)

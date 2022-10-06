@@ -65,11 +65,10 @@ type Alamat struct {
 
 type Tagihan struct {
 	gorm.Model
-	TransaksiClientID uint
-	NoVa              string
-	TipePembayaran    string
-	Bank              string
-	GrandTotal        int64
+	NoVa           string
+	TipePembayaran string
+	Bank           string
+	GrandTotal     int64
 }
 
 type TransaksiClientDetail struct {
@@ -113,12 +112,6 @@ func ToCore(TransaksiClientModel TransaksiClient) transaksiclient.Core {
 		Porter: transaksiclient.User{
 			Name:   TransaksiClientModel.Porter.Telepon,
 			NoTelp: TransaksiClientModel.Porter.Telepon,
-		},
-		Tagihan: transaksiclient.Tagihan{
-			NoVA:           TransaksiClientModel.Tagihan.NoVa,
-			TipePembayaran: TransaksiClientModel.Tagihan.TipePembayaran,
-			Bank:           TransaksiClientModel.Tagihan.Bank,
-			GrandTotal:     TransaksiClientModel.Tagihan.GrandTotal,
 		},
 	}
 
