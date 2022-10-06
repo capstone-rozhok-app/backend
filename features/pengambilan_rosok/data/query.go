@@ -27,7 +27,7 @@ func (repo *pengambilanRosokRepo) GetAll(TransaksiCore pengambilanrosok.Core) (r
 	}
 
 	//ambil data transaksi client dengan status belum_bayar dan kecamatan,kota,provinsi sesuai porter
-	clientTransactionError := repo.DB.Model(&TransaksiClient{}).Where("status = ?", "belum_bayar").Preload("UserClient.Alamat", func(db *gorm.DB) *gorm.DB {
+	clientTransactionError := repo.DB.Model(&TransaksiClient{}).Where("tipe_transaksi = ?", "penjualan").Where("status = ?", "belum_bayar").Preload("UserClient.Alamat", func(db *gorm.DB) *gorm.DB {
 		return db.Where("alamats.status", "utama").Where("alamats.provinsi", porter.Provinsi).Where("alamats.kota", porter.Kota).Where("alamats.kecamatan", porter.Kecamatan)
 	}).Find(&pengambilanRosokModelList).Error
 
