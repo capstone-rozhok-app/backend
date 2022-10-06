@@ -36,7 +36,7 @@ func main() {
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
 		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
 	}))
-	e.Use(middleware.Recover())
+	// e.Use(middleware.Recover())
 	migration.InitMigrate(db)
 	factory.InitFactory(e, db)
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", cfg.SERVER_PORT)))
