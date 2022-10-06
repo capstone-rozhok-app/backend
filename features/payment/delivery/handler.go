@@ -19,6 +19,7 @@ func New(e *echo.Echo, usecase payment.PaymentUsecase) {
 		Usecase: usecase,
 	}
 	e.POST("/payment", handler.PostPayment, middlewares.JWTMiddleware(), middlewares.IsClient)
+	e.POST("/payment/webhook", handler.PaymentWebHook)
 }
 
 func (h *Payment) PostPayment(c echo.Context) error {
@@ -48,4 +49,20 @@ func (h *Payment) PostPayment(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("success get data", FromCore(invoice)))
+}
+
+func (h *Payment) PaymentWebHook(c echo.Context) error {
+	var webhookRequest MidtransHookRequest
+
+	errBind := c.Bind(&webhookRequest)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponseHelper(errBind.Error()))
+	}
+
+	err := h.Usecase.PaymentWebHook(webhookRequest.OrderID, webhookRequest.TransactionStatus)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
+	}
+
+	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("success update transaction"))
 }
