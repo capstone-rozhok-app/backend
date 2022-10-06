@@ -1,15 +1,22 @@
 package payment
 
-import "time"
+import (
+	"time"
+
+	"github.com/midtrans/midtrans-go"
+	"github.com/midtrans/midtrans-go/coreapi"
+)
 
 type Core struct {
 	IdTransaksi    uint
+	IdTagihan      uint
 	Bank           string
 	Kurir          string
 	NoVA           string
 	TipePembayaran string
 	GrandTotal     int64
 	ExpiredAt      time.Time
+	KodeTransaksi  string
 
 	Client Client
 }
@@ -24,10 +31,20 @@ type Client struct {
 
 type PaymentData interface {
 	GetUserData(PaymentCore Core) (Client, error)
-	GetTagihan(idTransaksi uint) (Core, error)
-	Insert(PaymentData Core) (idTransaksi uint, err error)
+	GetGrandTotal(PaymentCore Core) (grandTotal int64, err error)
+	InsertTransaksi(PaymentData Core) error
+	InsertTagihan(PaymentData Core) (idTagihan uint, err error)
 }
 
 type PaymentUsecase interface {
 	Create(PaymentData Core) (Core, error)
+}
+
+func ToMidtransCore(PaymentCore Core) *coreapi.ChargeReq {
+	return &coreapi.ChargeReq{
+		TransactionDetails: midtrans.TransactionDetails{
+			OrderID:  PaymentCore.KodeTransaksi,
+			GrossAmt: PaymentCore.GrandTotal,
+		},
+	}
 }
