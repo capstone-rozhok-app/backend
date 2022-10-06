@@ -1,6 +1,9 @@
 package delivery
 
-import "rozhok/features/alamat"
+import (
+	"rozhok/features/alamat"
+	"strings"
+)
 
 type AlamatRequest struct {
 	Provinsi  string `json:"provinsi" form:"provinsi" validate:"required"`
@@ -17,7 +20,7 @@ func toCore(dataRequest AlamatRequest) alamat.Core {
 		Kota:      dataRequest.Kota,
 		Kecamatan: dataRequest.Kecamatan,
 		Jalan:     dataRequest.Jalan,
-		Status:    dataRequest.Status,
+		Status:    strings.ToLower(dataRequest.Status),
 		UserId:    dataRequest.UserId,
 	}
 }
