@@ -22,14 +22,14 @@ func (repo *addressData) InsertAddress(address alamat.Core) (int, error) {
 	var count int64
 
 	if address.Status == "utama" {
-		txUtama := repo.db.Model(&Alamat{}).Where("status = ?", "utama").Count(&count)
+		txUtama := repo.db.Model(&Alamat{}).Where("user_id = ?", address.UserId).Where("status = ?", "utama").Count(&count)
 		if txUtama.Error != nil {
 			if !errors.Is(txUtama.Error, gorm.ErrRecordNotFound) {
 				return 0, txUtama.Error
 			}
 		}
 		if count > 0 {
-			return 0, errors.New("Status utama has used")
+			return 0, errors.New("status utama has used")
 		}
 	}
 
@@ -45,7 +45,7 @@ func (repo *addressData) UpdateAdress(data alamat.Core, id, userId int) (row int
 	var addressModel Alamat
 
 	if data.Status == "utama" {
-		txUtama := repo.db.Model(&Alamat{}).Where("status = ?", "utama").First(&addressModel)
+		txUtama := repo.db.Model(&Alamat{}).Where("user_id = ?", userId).Where("status = ?", "utama").First(&addressModel)
 		if txUtama.Error != nil {
 			return 0, txUtama.Error
 		}
@@ -80,7 +80,7 @@ func (repo *addressData) DeleteDataAddress(id, userId int) (row int, err error) 
 
 func (repo *addressData) GetAllAddress(userId int) ([]alamat.ResponseCore, error) {
 	var allAddressData []Alamat
-	tx := repo.db.Where("user_id = ?", userId).Preload("User").Find(&allAddressData) //.Where("userId = ?", userId)
+	tx := repo.db.Where("user_id = ?", userId).Preload("User").Find(&allAddressData)
 
 	if tx.Error != nil {
 		return nil, tx.Error
