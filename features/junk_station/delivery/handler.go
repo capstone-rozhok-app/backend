@@ -22,7 +22,7 @@ func NewHandller(e *echo.Echo, data js.UsecaseInterface) {
 	}
 	e.GET("junk-station", handler.GetJunkStationAll, middlewares.JWTMiddleware())
 	e.POST("junk-station", handler.CreateJunkStation)
-	e.GET("junk-station/:id", handler.GetJunkStationById, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
+	e.GET("junk-station/profile", handler.GetJunkStationById, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
 	e.PUT("junk-station/:id", handler.PutJunkStation, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
 	e.PUT("kemitraan/:id", handler.PutKemitraan, middlewares.JWTMiddleware(), middlewares.IsAdmin)
 }
