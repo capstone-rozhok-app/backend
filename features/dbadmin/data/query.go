@@ -1,6 +1,7 @@
 package data
 
 import (
+	"errors"
 	"rozhok/features/dbadmin"
 
 	"gorm.io/gorm"
@@ -42,4 +43,66 @@ func (repo *data) GetUsers() (dbadmin.ResponseCore, error) {
 	userCores.Grafik = sliceGrafik
 
 	return userCores, nil
+}
+
+func (r *data) GetTransaksiDetail(TransaksiData dbadmin.TransaksiCore) (dbadmin.TransaksiCore, error) {
+	transaksiClientModel := TransaksiClient{}
+	transaksiClientModel.ID = TransaksiData.ID
+
+	tx := r.db.Model(&TransaksiClient{}).Preload("Client.Alamat", func(db *gorm.DB) *gorm.DB {
+		return db.Where("alamats.status", "utama")
+	})
+	tx.Preload("DetailTransaksiClient.Produk")
+
+	tx.First(&transaksiClientModel)
+
+	if tx.Error != nil {
+		return dbadmin.TransaksiCore{}, tx.Error
+	}
+
+	return ToCore(transaksiClientModel), nil
+}
+
+func (r *data) GetTransaksi(TransaksiData dbadmin.TransaksiCore) ([]dbadmin.TransaksiCore, error) {
+	transaksiClientModelList := []TransaksiClient{}
+
+	tx := r.db.Model(&TransaksiClient{})
+
+	if TransaksiData.StartDate != "" {
+		tx.Where("created_at >=", TransaksiData.StartDate)
+	}
+
+	if TransaksiData.EndDate != "" {
+		tx.Where("created_at <=", TransaksiData.EndDate)
+	}
+
+	if TransaksiData.TipeTransaksi != "" {
+		tx.Where("tipe_transaksi = ?", TransaksiData.TipeTransaksi)
+	}
+
+	tx.Find(&transaksiClientModelList)
+
+	if tx.Error != nil {
+		return []dbadmin.TransaksiCore{}, tx.Error
+	}
+
+	transaksiClientCoreList := []dbadmin.TransaksiCore{}
+	for _, transaksiClient := range transaksiClientModelList {
+		transaksiClientCoreList = append(transaksiClientCoreList, ToCore(transaksiClient))
+	}
+
+	return transaksiClientCoreList, nil
+}
+
+func (repo *data) UpdateTransaksi(TransaksiData dbadmin.TransaksiCore) error {
+	tx := repo.db.Model(&TransaksiClient{}).Where("id = ?", TransaksiData.ID).Where("status = ?", "dibayar").Update("status", "dikirim")
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	if tx.RowsAffected < 1 {
+		return errors.New("error affected row")
+	}
+
+	return nil
 }
