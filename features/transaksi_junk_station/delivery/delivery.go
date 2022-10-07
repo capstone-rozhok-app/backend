@@ -18,9 +18,9 @@ func New(e *echo.Echo, usecase transaksijunkstation.TransaksiJunkStationUsecase)
 		Usecase: usecase,
 	}
 
-	e.POST("/transaksi/junk-station", handler.Create, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
-	e.GET("/transaksi/junk-station", handler.GetAll, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
-	e.GET("/transaksi/:id/junk-station", handler.Get, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
+	e.POST("/transaksi/junk-station", handler.Create, middlewares.JWTMiddleware(), middlewares.IsJunkStationVerified)
+	e.GET("/transaksi/junk-station", handler.GetAll, middlewares.JWTMiddleware(), middlewares.IsJunkStationVerified)
+	e.GET("/transaksi/:id/junk-station", handler.Get, middlewares.JWTMiddleware(), middlewares.IsJunkStationVerified)
 
 }
 
