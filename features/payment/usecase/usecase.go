@@ -26,6 +26,12 @@ func (r *Payment) Create(PaymentData payment.Core) (payment.Core, error) {
 		return payment.Core{}, err
 	}
 
+	// update stok produk
+	errUpdateStok := r.Repo.UpdateStokProduct(PaymentData)
+	if errUpdateStok != nil {
+		return payment.Core{}, errUpdateStok
+	}
+
 	// get grandtotal
 	PaymentData.GrandTotal, err = r.Repo.GetGrandTotal(PaymentData)
 	if err != nil {

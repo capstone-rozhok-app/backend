@@ -39,12 +39,50 @@ func (r *PaymentRepo) GetUserData(PaymentCore payment.Core) (payment.Client, err
 	}, nil
 }
 
+func (r *PaymentRepo) UpdateStokProduct(PaymentCore payment.Core) error {
+	// ambil produk dari keranjang user dengan checklist true
+	var keranjangBelanja []Cart
+	tx := r.DB.Model(&Cart{}).Where("user_id = ?", PaymentCore.Client.ID).Where("checklist = ?", 1).Find(&keranjangBelanja)
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	// ambil produk berdasarkan id_produk didalam keranjang
+	var ProdukDataList []Produk
+	for _, keranjang := range keranjangBelanja {
+		produkData := Produk{}
+		tx := r.DB.Model(&Produk{}).Where("id = ?", keranjang.ProdukId).First(&produkData)
+		if tx.Error != nil {
+			return tx.Error
+		}
+		produkData.Stok -= int(keranjang.Qty)
+		if produkData.Stok < 0 {
+			return errors.New("product with name " + produkData.Nama + " is out of stock")
+		}
+		ProdukDataList = append(ProdukDataList, produkData)
+	}
+
+	// update data produk
+	for _, produk := range ProdukDataList {
+		tx := r.DB.Model(&Produk{}).Select("stok").Where("id = ?", produk.ID).Updates(&produk)
+		if tx.Error != nil {
+			return tx.Error
+		}
+	}
+
+	return nil
+}
+
 func (r *PaymentRepo) GetGrandTotal(PaymentCore payment.Core) (grandTotal int64, err error) {
 	// ambil produk dari keranjang user dengan checklist true
 	var keranjangBelanja []Cart
 	tx := r.DB.Model(&Cart{}).Where("user_id = ?", PaymentCore.Client.ID).Where("checklist = ?", 1).Find(&keranjangBelanja)
 	if tx.Error != nil {
 		return 0, tx.Error
+	}
+
+	if len(keranjangBelanja) < 1 {
+		return 0, errors.New("cart no value")
 	}
 
 	// hitung grand total
@@ -135,6 +173,25 @@ func (r *PaymentRepo) InsertTagihan(PaymentData payment.Core) (idTagihan uint, e
 }
 
 func (r *PaymentRepo) UpdateTransaksi(PaymentData payment.Core) error {
+	// ketika status dibatalkan maka akan mengembalikan qty yg di beli ke stok produk
+	if PaymentData.StatusTransaksi == "dibatalkan" {
+		var TransaksiClient TransaksiClient
+		tx := r.DB.Model(&TransaksiClient).Preload("DetailTransaksiClient.Produk").Where("kode_transaksi = ?", PaymentData.KodeTransaksi).First(&TransaksiClient)
+		if tx.Error != nil {
+			return tx.Error
+		}
+
+		// update produk dengan mengembalikan qty aslinya
+		for _, transaksidetail := range TransaksiClient.DetailTransaksiClient {
+			transaksidetail.Produk.Stok += int(transaksidetail.Qty)
+			tx := r.DB.Model(&Produk{}).Select("stok").Where("id = ?", transaksidetail.Produk.ID).Update("stok", transaksidetail.Produk.Stok)
+			if tx.Error != nil {
+				return tx.Error
+			}
+		}
+
+	}
+
 	tx := r.DB.Model(&TransaksiClient{}).Where("kode_transaksi = ?", PaymentData.KodeTransaksi).Update("status", PaymentData.StatusTransaksi)
 	if tx.Error != nil {
 		return tx.Error

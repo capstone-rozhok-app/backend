@@ -29,6 +29,8 @@ type TransaksiClientDetail struct {
 	Berat             int64
 	Qty               uint
 	Subtotal          int64
+
+	Produk Produk
 }
 
 type Tagihan struct {
@@ -65,6 +67,15 @@ type User struct {
 	Bonus           int64
 
 	Alamat []Alamat
+}
+
+type Produk struct {
+	gorm.Model
+	Nama      string
+	Image_url string
+	Stok      int
+	Harga     int64
+	Desc      string
 }
 
 type Alamat struct {

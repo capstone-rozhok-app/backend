@@ -35,6 +35,7 @@ type PaymentData interface {
 	GetGrandTotal(PaymentCore Core) (grandTotal int64, err error)
 	InsertTransaksi(PaymentData Core) error
 	InsertTagihan(PaymentData Core) (idTagihan uint, err error)
+	UpdateStokProduct(PaymentData Core) error
 	UpdateTransaksi(PaymentData Core) error
 }
 
