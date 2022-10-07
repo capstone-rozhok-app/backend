@@ -3,6 +3,7 @@ package usecase
 import (
 	"errors"
 	js "rozhok/features/junk_station"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -50,10 +51,29 @@ func (u *Usecase) PutJunkStation(id int, data js.Core) (int, error) {
 	return result, err
 }
 
-func (u *Usecase) PutKemitraan(id int)(int, error) {
+func (u *Usecase) PutKemitraan(id int) (int, error) {
 	result, err := u.jsData.UpdateKemitraan(id)
 	if err != nil {
 		return -1, errors.New("failed to update kemitraan")
 	}
 	return result, err
+}
+
+func (u *Usecase) Dashboard(data js.Core) (int64, error) {
+	switch data.FilterPeriodic {
+	case "harian":
+		data.StartDate = time.Now().AddDate(0, 0, -1).Format("2006-01-02")
+		data.EndDate = time.Now().AddDate(0, 0, 1).Format("2006-01-02")
+	case "mingguan":
+		data.StartDate = time.Now().AddDate(0, 0, -7).Format("2006-01-02")
+		data.EndDate = time.Now().AddDate(0, 0, 1).Format("2006-01-02")
+	case "bulanan":
+		data.StartDate = time.Now().AddDate(0, -1, 0).Format("2006-01-02")
+		data.EndDate = time.Now().AddDate(0, 0, 1).Format("2006-01-02")
+	case "tahunan":
+		data.StartDate = time.Now().AddDate(-1, 0, 0).Format("2006-01-02")
+		data.EndDate = time.Now().AddDate(0, 0, 1).Format("2006-01-02")
+	}
+
+	return u.jsData.Dashboard(data)
 }
