@@ -20,11 +20,29 @@ func NewHandller(e *echo.Echo, data js.UsecaseInterface) {
 	handler := &JunkHandler{
 		JunkInterface: data,
 	}
+	e.GET("junk-station/dashboard", handler.Dashboard, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
 	e.GET("junk-station", handler.GetJunkStationAll, middlewares.JWTMiddleware())
 	e.POST("junk-station", handler.CreateJunkStation)
 	e.GET("junk-station/profile", handler.GetJunkStationById, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
 	e.PUT("junk-station/:id", handler.PutJunkStation, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
 	e.PUT("kemitraan/:id", handler.PutKemitraan, middlewares.JWTMiddleware(), middlewares.IsAdmin)
+}
+
+func (h *JunkHandler) Dashboard(c echo.Context) error {
+	uid, _, _ := middlewares.ExtractToken(c)
+	core := js.Core{
+		JunkStationID:  uid,
+		FilterPeriodic: c.QueryParam("filter"),
+	}
+
+	grandTotal, err := h.JunkInterface.Dashboard(core)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
+	}
+
+	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("success get dashboard", map[string]interface{}{
+		"total_pembelian": grandTotal,
+	}))
 }
 
 func (h *JunkHandler) CreateJunkStation(c echo.Context) error {
