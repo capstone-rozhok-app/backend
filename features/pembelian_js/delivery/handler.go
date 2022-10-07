@@ -9,29 +9,29 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type PembelianHandler struct{
-	PembelianInterface  pjs.UsecaseInterface
+type PembelianHandler struct {
+	PembelianInterface pjs.UsecaseInterface
 }
 
-func New(e *echo.Echo, data pjs.UsecaseInterface)  {
+func New(e *echo.Echo, data pjs.UsecaseInterface) {
 	handler := &PembelianHandler{
 		PembelianInterface: data,
 	}
-	e.POST("pembelian/junk-station", handler.CreatePembelian, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
+	e.POST("pembelian/junk-station", handler.CreatePembelian, middlewares.JWTMiddleware(), middlewares.IsJunkStationVerified)
 	e.GET("pembelian/junk-station", handler.GetPembelian, middlewares.JWTMiddleware())
-	e.PUT("pembelian/:id/junk-station", handler.PutPembelian, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
-	e.DELETE("pembelian/:id/junk-station", handler.DeletePembelian, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
+	e.PUT("pembelian/:id/junk-station", handler.PutPembelian, middlewares.JWTMiddleware(), middlewares.IsJunkStationVerified)
+	e.DELETE("pembelian/:id/junk-station", handler.DeletePembelian, middlewares.JWTMiddleware(), middlewares.IsJunkStationVerified)
 }
 
-func (h *PembelianHandler) CreatePembelian(c echo.Context) error{
-	idToken, _, _:=  middlewares.ExtractToken(c)
+func (h *PembelianHandler) CreatePembelian(c echo.Context) error {
+	idToken, _, _ := middlewares.ExtractToken(c)
 	var PjsRequest PembelianRequest
 	errBind := c.Bind(&PjsRequest)
 	if errBind != nil {
 		return c.JSON(400, helper.FailedResponseHelper(errBind.Error()))
 	}
 
-	if  err := c.Validate(PjsRequest); err != nil{
+	if err := c.Validate(PjsRequest); err != nil {
 		return c.JSON(400, helper.FailedResponseHelper(err.Error()))
 	}
 
@@ -45,9 +45,9 @@ func (h *PembelianHandler) CreatePembelian(c echo.Context) error{
 }
 
 func (h *PembelianHandler) GetPembelian(c echo.Context) error {
-	idToken, _, _:=  middlewares.ExtractToken(c)
+	idToken, _, _ := middlewares.ExtractToken(c)
 
-	result, err:= h.PembelianInterface.GetPembelian(idToken)
+	result, err := h.PembelianInterface.GetPembelian(idToken)
 	pembelianResult := []PembelianResponse{}
 	for _, v := range result {
 		pembelianResult = append(pembelianResult, ToResponse(v))
@@ -58,7 +58,7 @@ func (h *PembelianHandler) GetPembelian(c echo.Context) error {
 	return c.JSON(200, helper.SuccessDataResponseHelper("Success Get Data", pembelianResult))
 }
 
-func (h *PembelianHandler) PutPembelian(c echo.Context)error {	
+func (h *PembelianHandler) PutPembelian(c echo.Context) error {
 	idParam := c.Param("id")
 	idConv, errConv := strconv.Atoi(idParam)
 	if errConv != nil || idConv == 0 {
@@ -70,19 +70,19 @@ func (h *PembelianHandler) PutPembelian(c echo.Context)error {
 	if errBind != nil {
 		return c.JSON(400, helper.FailedResponseHelper("status bad request for update"))
 	}
-	
+
 	if errValidation := c.Validate(pjsUpdate); errValidation != nil {
 		return c.JSON(400, helper.FailedResponseHelper(errValidation.Error()))
 	}
 
 	row, err := h.PembelianInterface.PutPembelian(idConv, ToCore(pjsUpdate))
-	if err != nil || row == 0{
+	if err != nil || row == 0 {
 		return c.JSON(400, helper.FailedResponseHelper("Failed to update pembelian"))
 	}
 	return c.JSON(200, helper.SuccessResponseHelper("Success update data pembelian"))
 }
 
-func (h *PembelianHandler) DeletePembelian(c echo.Context)error {
+func (h *PembelianHandler) DeletePembelian(c echo.Context) error {
 	var pjsDelete PembelianRequest
 
 	row, err := h.PembelianInterface.DeletePembelian(helper.ParamInt(c, "id"), ToCore(pjsDelete))
