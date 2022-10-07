@@ -40,8 +40,8 @@ func IsJunkStation(next echo.HandlerFunc) echo.HandlerFunc {
 func IsJunkStationVerified(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		_, role, status := ExtractToken(c)
-		if role != "junk_station" && status != "terverifikasi" {
-			return c.JSON(http.StatusForbidden, helper.FailedResponseHelper("role not junk_station"))
+		if role != "junk_station" || status != "terverifikasi" {
+			return c.JSON(http.StatusForbidden, helper.FailedResponseHelper("status kemitraan not verified yet."))
 		}
 		return next(c)
 	}
