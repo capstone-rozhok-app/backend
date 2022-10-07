@@ -66,7 +66,7 @@ func (r *data) GetTransaksiDetail(TransaksiData dbadmin.TransaksiCore) (dbadmin.
 func (r *data) GetTransaksi(TransaksiData dbadmin.TransaksiCore) ([]dbadmin.TransaksiCore, error) {
 	transaksiClientModelList := []TransaksiClient{}
 
-	tx := r.db.Model(&TransaksiClient{})
+	tx := r.db.Model(&TransaksiClient{}).Where("tipe_transaksi = ?", "pembelian")
 
 	if TransaksiData.StartDate != "" {
 		tx.Where("created_at >=", TransaksiData.StartDate)
@@ -74,10 +74,6 @@ func (r *data) GetTransaksi(TransaksiData dbadmin.TransaksiCore) ([]dbadmin.Tran
 
 	if TransaksiData.EndDate != "" {
 		tx.Where("created_at <=", TransaksiData.EndDate)
-	}
-
-	if TransaksiData.TipeTransaksi != "" {
-		tx.Where("tipe_transaksi = ?", TransaksiData.TipeTransaksi)
 	}
 
 	tx.Find(&transaksiClientModelList)
