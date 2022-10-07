@@ -84,11 +84,7 @@ func (h *JunkHandler) GetJunkStationAll(c echo.Context) error {
 }
 
 func (h *JunkHandler) GetJunkStationById(c echo.Context) error {
-	idParam := c.Param("id")
-	idConv, errConv := strconv.Atoi(idParam)
-	if errConv != nil {
-		return c.JSON(400, helper.FailedResponseHelper("error get by param"))
-	}
+	idConv, _, _ := middlewares.ExtractToken(c)
 	result, err := h.JunkInterface.GetJunkStationById(idConv)
 	if err != nil {
 		return c.JSON(400, helper.FailedResponseHelper("error Get data"))
