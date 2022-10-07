@@ -13,7 +13,7 @@ type KeranjangRosok struct {
 	Berat           int
 	Subtotal        int64
 
-	KategoriRosok KategoriRosok
+	KategoriRosok KategoriRosok `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 type TransaksiClient struct {
@@ -25,12 +25,12 @@ type TransaksiClient struct {
 	TipeTransaksi string
 	GrandTotal    int64
 	Status        string
-	KodeTransaksi string
+	KodeTransaksi string `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 
-	Client                User
-	Porter                User
-	Tagihan               Tagihan
-	DetailTransaksiClient []TransaksiClientDetail
+	Client                User                    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Porter                User                    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Tagihan               Tagihan                 `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	DetailTransaksiClient []TransaksiClientDetail `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 type User struct {
@@ -50,7 +50,7 @@ type User struct {
 	Bonus           int64
 	AlamatID        uint
 
-	Alamat []Alamat
+	Alamat []Alamat `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 type Alamat struct {
@@ -81,7 +81,7 @@ type TransaksiClientDetail struct {
 	Subtotal          int64
 
 	Produk        Produk
-	KategoriRosok KategoriRosok `gorm:"foreignKey:KategoriID"`
+	KategoriRosok KategoriRosok `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:KategoriID"`
 }
 
 type Produk struct {

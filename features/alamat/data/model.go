@@ -14,14 +14,14 @@ type Alamat struct {
 	Jalan     string
 	UserId    uint
 	Status    string
-	User      User
+	User      User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 type User struct {
 	gorm.Model
 	Username string
 	Telepon  string
-	Alamat   []Alamat
+	Alamat   []Alamat `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 func fromCore(dataCore alamat.Core) Alamat {
