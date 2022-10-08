@@ -20,6 +20,24 @@ func New(db *gorm.DB) cart.DataInterface {
 }
 
 func (repo *cartData) CreateCart(cart cart.Core) (int, error) {
+	var dbFind Cart
+	txFind := repo.db.Model(&Cart{}).Where("produk_id", cart.ProdukId).Where("user_id", cart.UserId).Preload("Produk").First(&dbFind)
+	if txFind.Error != nil {
+		if !errors.Is(txFind.Error, gorm.ErrRecordNotFound) {
+			return 0, txFind.Error
+		}
+	}
+
+	if dbFind.ID != 0 {
+		dbFind.Qty = dbFind.Qty + 1
+		dbFind.Subtotal = int64(dbFind.Qty) * dbFind.Produk.Harga
+		txUpd := repo.db.Model(&Cart{}).Where("id = ?", dbFind.ID).Updates(&dbFind)
+		if txUpd.Error != nil {
+			return 0, txUpd.Error
+		}
+		return int(txUpd.RowsAffected), nil
+	}
+
 	var dbCek produkModel.Produk
 	repo.db.First(&dbCek, "id = ?", cart.ProdukId)
 
