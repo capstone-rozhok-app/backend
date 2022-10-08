@@ -88,12 +88,12 @@ func (q *DataJS) UpdateKemitraan(id int) (int, error) {
 
 func (junk *DataJS) Dashboard(data js.Core) (int64, error) {
 	var grandTotal int64
-	var tx = junk.db.Where("user_id = ?", data.JunkStationID)
+	var tx = junk.db
 
 	if data.StartDate != "" && data.EndDate != "" {
-		tx = junk.db.Raw("SELECT SUM(grand_total) grand_total FROM transaksi_junk_stations WHERE created_at >= ? AND created_at <= ?", data.StartDate, data.EndDate).Scan(&grandTotal)
+		tx = tx.Raw("SELECT SUM(grand_total) grand_total FROM transaksi_junk_stations WHERE created_at >= ? AND created_at <= ? AND user_id = ", data.StartDate, data.EndDate, data.JunkStationID).Scan(&grandTotal)
 	} else {
-		tx = junk.db.Raw("SELECT SUM(grand_total) grand_total FROM transaksi_junk_stations").Scan(&grandTotal)
+		tx = tx.Raw("SELECT SUM(grand_total) grand_total FROM transaksi_junk_stations WHERE user_id = ?", data.JunkStationID).Scan(&grandTotal)
 	}
 
 	if tx.Error != nil {
