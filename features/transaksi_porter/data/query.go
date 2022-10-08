@@ -141,6 +141,10 @@ func (repo *transaksiPorterRepo) UpdateTransaksiPembelian(TransaksiCore transaks
 		return row, tx.Error
 	}
 
+	if len(transaksiPorterModel.TransaksiPorterDetail) < 1 {
+		return 0, errors.New("transaksi porter detail is empty")
+	}
+
 	//looping untuk kalkulasi subtotal (harga kategori client * berat)
 	barangRosokList := []TransaksiPorterDetail{}
 	var grandTotal int64
