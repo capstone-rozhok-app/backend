@@ -29,6 +29,7 @@ func InitMigrate(db *gorm.DB) {
 		new(transaksiclientmodel.TransaksiClientDetail),
 		new(transaksiportermodel.TransaksiPorter),
 		new(transaksiportermodel.TransaksiPorterDetail),
+		new(transaksiportermodel.LogBonus),
 		new(cartModel.Cart),
 		new(transaksijunkstationModel.TransaksiJunkStation),
 		new(transaksijunkstationModel.TransaksiJunkStationDetail),

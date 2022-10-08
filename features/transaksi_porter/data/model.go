@@ -78,6 +78,14 @@ type TransaksiClient struct {
 	Status        string
 }
 
+type LogBonus struct {
+	gorm.Model
+	PorterID   uint
+	ClientID   uint
+	Bonus      int64
+	BonusHarga int64
+}
+
 func FromCore(transaksiPorterCore transaksiporter.Core) TransaksiPorter {
 	transaksiPorterModel := TransaksiPorter{
 		ClientID:      transaksiPorterCore.Client.ID,
