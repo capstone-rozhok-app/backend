@@ -23,7 +23,8 @@ func NewHandller(e *echo.Echo, data js.UsecaseInterface) {
 	e.GET("junk-station/dashboard", handler.Dashboard, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
 	e.GET("junk-station", handler.GetJunkStationAll, middlewares.JWTMiddleware())
 	e.POST("junk-station", handler.CreateJunkStation)
-	e.GET("junk-station/profile", handler.GetJunkStationById, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
+	e.GET("junk-station/profile", handler.GetJunkStationByToken, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
+	e.GET("junk-station/:id", handler.GetJunkStationById, middlewares.JWTMiddleware())
 	e.PUT("junk-station/:id", handler.PutJunkStation, middlewares.JWTMiddleware(), middlewares.IsJunkStation)
 	e.PUT("kemitraan/:id", handler.PutKemitraan, middlewares.JWTMiddleware(), middlewares.IsAdmin)
 }
@@ -101,9 +102,18 @@ func (h *JunkHandler) GetJunkStationAll(c echo.Context) error {
 	return c.JSON(200, helper.SuccessDataResponseHelper(("succses get data"), CoreList(res)))
 }
 
-func (h *JunkHandler) GetJunkStationById(c echo.Context) error {
+func (h *JunkHandler) GetJunkStationByToken(c echo.Context) error {
 	idConv, _, _ := middlewares.ExtractToken(c)
 	result, err := h.JunkInterface.GetJunkStationById(idConv)
+	if err != nil {
+		return c.JSON(400, helper.FailedResponseHelper("error Get data"))
+	}
+	return c.JSON(200, helper.SuccessDataResponseHelper(("Succses get data"), FromCoreToResponse(result)))
+}
+
+func (h *JunkHandler) GetJunkStationById(c echo.Context) error {
+	id := helper.ParamInt(c, "id")
+	result, err := h.JunkInterface.GetJunkStationById(id)
 	if err != nil {
 		return c.JSON(400, helper.FailedResponseHelper("error Get data"))
 	}
