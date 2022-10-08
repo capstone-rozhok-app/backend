@@ -13,7 +13,6 @@ type Core struct {
 	NoVA            string
 	TipePembayaran  string
 	GrandTotal      int64
-	ExpiredAt       string
 	KodeTransaksi   string
 	StatusTransaksi string
 
