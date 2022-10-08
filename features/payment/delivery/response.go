@@ -7,6 +7,7 @@ type Response struct {
 	TipePembayaran string `json:"tipe_pembayaran"`
 	TotalHarga     int64  `json:"total_harga"`
 	Bank           string `json:"bank"`
+	ExpireAt       string `json:"batas_pembayaran"`
 }
 
 func FromCore(paymentCore payment.Core) Response {
@@ -15,5 +16,6 @@ func FromCore(paymentCore payment.Core) Response {
 		TipePembayaran: paymentCore.TipePembayaran,
 		TotalHarga:     paymentCore.GrandTotal,
 		Bank:           paymentCore.Bank,
+		ExpireAt:       paymentCore.ExpiredAt,
 	}
 }

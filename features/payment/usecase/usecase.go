@@ -3,6 +3,7 @@ package usecase
 import (
 	"rozhok/features/payment"
 	"rozhok/utils/helper"
+	"time"
 
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
@@ -24,12 +25,6 @@ func (r *Payment) Create(PaymentData payment.Core) (payment.Core, error) {
 	_, err := r.Repo.GetUserData(PaymentData)
 	if err != nil {
 		return payment.Core{}, err
-	}
-
-	// update stok produk
-	errUpdateStok := r.Repo.UpdateStokProduct(PaymentData)
-	if errUpdateStok != nil {
-		return payment.Core{}, errUpdateStok
 	}
 
 	// get grandtotal
@@ -64,9 +59,23 @@ func (r *Payment) Create(PaymentData payment.Core) (payment.Core, error) {
 		}
 	}
 
+	orderTime := time.Now()
+	PaymentData.ExpiredAt = orderTime.Add(24 * time.Hour).Format("Monday 02, January 15:04:05")
+	midtransCore.CustomExpiry = &coreapi.CustomExpiry{
+		OrderTime:      orderTime.Format("2006-01-02 15:04:05 Z0700"),
+		ExpiryDuration: 24,
+		Unit:           "hours",
+	}
+
 	midtransInvoice, errChargeMidtrans := coreapi.ChargeTransaction(midtransCore)
 	if errChargeMidtrans != nil {
 		return payment.Core{}, err
+	}
+
+	// update stok produk
+	errUpdateStok := r.Repo.UpdateStokProduct(PaymentData)
+	if errUpdateStok != nil {
+		return payment.Core{}, errUpdateStok
 	}
 
 	// create tagihan

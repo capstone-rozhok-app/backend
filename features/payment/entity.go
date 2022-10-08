@@ -1,8 +1,6 @@
 package payment
 
 import (
-	"time"
-
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 )
@@ -15,7 +13,7 @@ type Core struct {
 	NoVA            string
 	TipePembayaran  string
 	GrandTotal      int64
-	ExpiredAt       time.Time
+	ExpiredAt       string
 	KodeTransaksi   string
 	StatusTransaksi string
 
