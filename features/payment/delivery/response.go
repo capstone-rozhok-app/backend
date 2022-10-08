@@ -16,6 +16,5 @@ func FromCore(paymentCore payment.Core) Response {
 		TipePembayaran: paymentCore.TipePembayaran,
 		TotalHarga:     paymentCore.GrandTotal,
 		Bank:           paymentCore.Bank,
-		ExpireAt:       paymentCore.ExpiredAt,
 	}
 }
