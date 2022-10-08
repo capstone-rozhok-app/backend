@@ -8,11 +8,12 @@ import (
 
 type TransaksiPorter struct {
 	gorm.Model
-	PorterID      uint
-	ClientID      uint
-	TipeTransaksi string
-	GrandTotal    int64
-	Status        string
+	PorterID          uint
+	ClientID          uint
+	TransaksiClientID uint
+	TipeTransaksi     string
+	GrandTotal        int64
+	Status            string
 
 	UserClient            User `gorm:"foreignKey:ClientID"`
 	TransaksiPorterDetail []TransaksiPorterDetail

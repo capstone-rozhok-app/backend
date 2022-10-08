@@ -58,6 +58,7 @@ func (repo *pengambilanRosokRepo) Get(TransaksiCore pengambilanrosok.Core) (row 
 	return toCore(transaksiClientModel), nil
 }
 
+// pengambilan rosok dari transaksi client ke dalam transaksi porter
 func (repo *pengambilanRosokRepo) CreatePengambilanRosok(TransaksiCore pengambilanrosok.Core) (row int, err error) {
 	// ambil data transaksi client
 	var transaksiClientModel TransaksiClient
@@ -69,10 +70,11 @@ func (repo *pengambilanRosokRepo) CreatePengambilanRosok(TransaksiCore pengambil
 
 	// masukkan data transaksi client ke dalam transaksi porter dengan status "unpaid"
 	transaksiPorterModel := TransaksiPorter{
-		ClientID:      transaksiClientModel.ClientID,
-		PorterID:      TransaksiCore.PorterID,
-		TipeTransaksi: "pembelian",
-		Status:        "belum_bayar",
+		ClientID:          transaksiClientModel.ClientID,
+		PorterID:          TransaksiCore.PorterID,
+		TransaksiClientID: transaksiClientModel.ID,
+		TipeTransaksi:     "pembelian",
+		Status:            "belum_bayar",
 	}
 
 	txTransaksiPorter := repo.DB.Model(&TransaksiPorter{}).Create(&transaksiPorterModel)
