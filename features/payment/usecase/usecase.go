@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"fmt"
 	"rozhok/features/payment"
 	"rozhok/utils/helper"
 	"time"
@@ -60,6 +61,7 @@ func (r *Payment) Create(PaymentData payment.Core) (payment.Core, error) {
 	}
 
 	orderTime := time.Now()
+	fmt.Println(orderTime.Format("2006-01-02 15:04:05 Z0700"))
 	PaymentData.ExpiredAt = orderTime.Add(24 * time.Hour).Format("Monday 02, January 15:04:05")
 	midtransCore.CustomExpiry = &coreapi.CustomExpiry{
 		OrderTime:      orderTime.Format("2006-01-02 15:04:05 Z0700"),
