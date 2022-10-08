@@ -55,7 +55,7 @@ func (repo *cartData) UpdateCart(data cart.Core, id, userId int) (row int, err e
 
 	if data.Counter == "increment" {
 		dbCek.Qty += 1
-	} else if dbCek.Qty > 1 {
+	} else if dbCek.Qty > 1 && data.Counter == "decrement" {
 		dbCek.Qty -= 1
 	}
 
@@ -63,6 +63,7 @@ func (repo *cartData) UpdateCart(data cart.Core, id, userId int) (row int, err e
 	dataModel.Qty = dbCek.Qty
 	dataModel.Subtotal = dbCek.Produk.Harga * int64(dbCek.Qty)
 
+	dataModel.Checklist = dbCek.Checklist
 	if data.Checklist != "" {
 		checklist, err := strconv.ParseBool(data.Checklist)
 		if err != nil {
@@ -71,7 +72,7 @@ func (repo *cartData) UpdateCart(data cart.Core, id, userId int) (row int, err e
 		dataModel.Checklist = checklist
 	}
 
-	tx := repo.db.Model(&Cart{}).Where("id = ?", id).Select("qty", "checklist").Updates(&dataModel)
+	tx := repo.db.Model(&Cart{}).Where("id = ?", id).Select("qty", "checklist", "subtotal").Updates(&dataModel)
 	if tx.Error != nil {
 		return -1, tx.Error
 	}
