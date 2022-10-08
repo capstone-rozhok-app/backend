@@ -176,6 +176,42 @@ func (repo *transaksiPorterRepo) UpdateTransaksiPembelian(TransaksiCore transaks
 		return int(tx3.RowsAffected), errors.New("failed to insert data")
 	}
 
+	// get client dan ambil bonus
+	var bonus int64
+	txClient := repo.DB.Model(&User{}).Select("bonus").Where("id = ?", transaksiPorterModel.ClientID).First(&bonus)
+	if txClient.Error != nil {
+		return row, tx.Error
+	}
+	// check bonus jika lebih dari 100kg maka reset dari 0 dan tambahkan bonus 5% dari harga awal
+	prebonus := bonus + totalBerat
+	var bonusHarga int64
+	if prebonus >= 100 {
+		bonusHarga = grandTotal - (grandTotal / 100)
+		if prebonus == 100 {
+			bonus = 0
+		} else {
+			bonus = prebonus / 100
+			bonusHarga = bonus * bonusHarga
+		}
+	}
+	// insert bonus ke log bonus
+	logBonus := LogBonus{
+		PorterID:   transaksiPorterModel.PorterID,
+		ClientID:   transaksiPorterModel.ClientID,
+		Bonus:      bonus,
+		BonusHarga: bonusHarga,
+	}
+	txLog := repo.DB.Model(&LogBonus{}).Create(&logBonus)
+	if txLog != nil {
+		return 0, tx.Error
+	}
+
+	// update bonus di client
+	tx = repo.DB.Model(&User{}).Where("id = ?", transaksiPorterModel.ClientID).Update("bonus", bonus)
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
+
 	//update transaksi porter
 	transaksiPorterModel.GrandTotal = grandTotal
 	transaksiPorterModel.Status = "dibayar"
