@@ -8,11 +8,12 @@ import (
 
 type TransaksiPorter struct {
 	gorm.Model
-	PorterID      uint
-	ClientID      uint
-	TipeTransaksi string
-	GrandTotal    int64
-	Status        string
+	PorterID          uint
+	TransaksiClientID uint
+	ClientID          uint
+	TipeTransaksi     string
+	GrandTotal        int64
+	Status            string
 
 	UserClient            User `gorm:"foreignKey:ClientID"`
 	TransaksiPorterDetail []TransaksiPorterDetail
@@ -66,6 +67,17 @@ type Alamat struct {
 	Status    string
 }
 
+type TransaksiClient struct {
+	gorm.Model
+	PorterID      uint
+	ClientID      uint
+	TagihanID     uint
+	Kurir         string
+	TipeTransaksi string
+	GrandTotal    int64
+	Status        string
+}
+
 func FromCore(transaksiPorterCore transaksiporter.Core) TransaksiPorter {
 	transaksiPorterModel := TransaksiPorter{
 		ClientID:      transaksiPorterCore.Client.ID,
@@ -115,11 +127,16 @@ func toCore(transaksiPorterModel TransaksiPorter) transaksiporter.Core {
 	transaksiDetailPorterCoreList := []transaksiporter.DetailTransaksiPorter{}
 	for _, detailTransaksiModel := range transaksiPorterModel.TransaksiPorterDetail {
 		barangRosok := transaksiporter.DetailTransaksiPorter{
-			Nama:          detailTransaksiModel.KategoriRosok.NamaKategori,
-			Berat:         int64(detailTransaksiModel.Berat),
-			Subtotal:      detailTransaksiModel.Subtotal,
-			HargaKategori: detailTransaksiModel.KategoriRosok.HargaClient,
+			Nama:     detailTransaksiModel.KategoriRosok.NamaKategori,
+			Berat:    int64(detailTransaksiModel.Berat),
+			Subtotal: detailTransaksiModel.Subtotal,
 		}
+		if transaksiPorterCore.TipeTransaksi == "pembelian" {
+			barangRosok.HargaKategori = detailTransaksiModel.KategoriRosok.HargaClient
+		} else {
+			barangRosok.HargaKategori = detailTransaksiModel.KategoriRosok.HargaMitra
+		}
+
 		barangRosok.Id = detailTransaksiModel.ID
 		transaksiDetailPorterCoreList = append(transaksiDetailPorterCoreList, barangRosok)
 	}

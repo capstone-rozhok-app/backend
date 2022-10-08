@@ -67,6 +67,7 @@ func (repo *transaksiPorterRepo) Get(TransaksiCore transaksiporter.Core) (row tr
 	return toCore(transaksiPorterModel), nil
 }
 
+// jual rosok ke junk-station
 func (repo *transaksiPorterRepo) CreateTransaksiPenjualan(TransaksiCore transaksiporter.Core) (row int, err error) {
 	var transaksiPorterModel TransaksiPorter
 
@@ -78,7 +79,7 @@ func (repo *transaksiPorterRepo) CreateTransaksiPenjualan(TransaksiCore transaks
 		return row, tx.Error
 	}
 
-	if transaksiPorterModel.Status != "sudah_bayar" {
+	if transaksiPorterModel.Status != "dibayar" {
 		return 0, errors.New("failed status not sudah_dibayar")
 	}
 
@@ -129,6 +130,7 @@ func (repo *transaksiPorterRepo) CreateTransaksiPenjualan(TransaksiCore transaks
 	return int(tx3.RowsAffected), nil
 }
 
+// update transaksi porter input berat dan harga ke transaksi porter
 func (repo *transaksiPorterRepo) UpdateTransaksiPembelian(TransaksiCore transaksiporter.Core) (row int, err error) {
 	var transaksiPorterModel TransaksiPorter
 	transaksiPorterModel.ID = TransaksiCore.ID
@@ -170,7 +172,7 @@ func (repo *transaksiPorterRepo) UpdateTransaksiPembelian(TransaksiCore transaks
 
 	//buat ulang barang rosok by transaksi porter id
 	transaksiPorterModel.GrandTotal = grandTotal
-	transaksiPorterModel.Status = "sudah_bayar"
+	transaksiPorterModel.Status = "dibayar"
 	tx4 := repo.DB.Model(&TransaksiPorter{}).Where("id =  ?", transaksiPorterModel.ID).Updates(&transaksiPorterModel)
 	if tx4.Error != nil {
 		return row, tx.Error
@@ -178,6 +180,12 @@ func (repo *transaksiPorterRepo) UpdateTransaksiPembelian(TransaksiCore transaks
 
 	if tx4.RowsAffected < 1 {
 		return int(tx4.RowsAffected), errors.New("failed to insert data")
+	}
+
+	// update transaksi client dengan status sudah_bayar
+	txTransaksiClient := repo.DB.Model(&TransaksiClient{}).Where("id = ?", transaksiPorterModel.TransaksiClientID).Update("status", "dibayar")
+	if txTransaksiClient.Error != nil {
+		return row, txTransaksiClient.Error
 	}
 
 	return int(tx4.RowsAffected), nil
