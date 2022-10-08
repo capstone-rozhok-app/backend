@@ -74,10 +74,10 @@ func (repo *produkData) DeleteProduk(id int) (row int, err error) {
 }
 
 func (repo *produkData) GetFavorite() (data []produk.Core, err error) {
-	var slice [8]produk.Core
-	repo.db.Model(&tsModel.TransaksiClientDetail{}).Joins("Produk").Select("produk_id as id, sum(qty) as total",
-		"nama as nama, image_url as image_url, stok as stok, harga as harga, `desc` as descr").
-		Group("id").Order("total desc").Find(&slice)
+	var slice []produk.Core
+	repo.db.Model(&tsModel.TransaksiClient{}).Select("produk_id as id, sum(qty) as total",
+		"nama as nama, image_url as image_url, stok as stok, harga as harga, `desc` as descr").Where("tipe_transaksi = ?", "pembelian").Where("status = ?", "diterima").Joins("JOIN transaksi_client_details ON transaksi_client_details.transaksi_client_id = transaksi_clients.id").Joins("JOIN produks ON produks.id = transaksi_client_details.produk_id").
+		Group("id").Order("total desc").Limit(8).Find(&slice)
 
-	return slice[:], nil
+	return slice, nil
 }
