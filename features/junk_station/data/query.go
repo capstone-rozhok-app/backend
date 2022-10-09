@@ -2,6 +2,7 @@ package data
 
 import (
 	"errors"
+	"fmt"
 	js "rozhok/features/junk_station"
 
 	"gorm.io/gorm"
@@ -75,8 +76,9 @@ func (junk *DataJS) UpdateJunkStation(id int, data js.Core) (int, error) {
 	return int(tx.RowsAffected), nil
 }
 
-func (q *DataJS) UpdateKemitraan(id int) (int, error) {
-	tx := q.db.Model(&User{}).Where("id = ?", id).Update("status_kemitraan", "terverifikasi")
+func (q *DataJS) UpdateKemitraan(id int, status string) (int, error) {
+	fmt.Println(status)
+	tx := q.db.Model(&User{}).Where("id = ?", id).Update("status_kemitraan", status)
 	if tx.Error != nil {
 		return -1, tx.Error
 	}
