@@ -63,7 +63,7 @@ func (repo *produkData) GetProduk(id int) (produk.Core, error) {
 }
 
 func (repo *produkData) DeleteProduk(id int) (row int, err error) {
-	tx := repo.db.Where("id = ?", id).Delete(&Produk{})
+	tx := repo.db.Unscoped().Where("id = ?", id).Delete(&Produk{})
 	if tx.Error != nil {
 		return -1, tx.Error
 	}
