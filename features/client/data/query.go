@@ -56,7 +56,7 @@ func (repo *clientData) GetClient(id int) (data client.Core, err error) {
 	var jual int64
 	var bonus int64
 	var username string
-	tx := repo.db.Model(&transaksiModel.TransaksiClient{}).Select("sum(grand_total)").Where("client_id = ?", id).Where("tipe_transaksi = ?", "penjualan").Where("status = ?", "sudah_bayar").Find(&jual)
+	tx := repo.db.Model(&transaksiModel.TransaksiClient{}).Select("sum(grand_total)").Where("client_id = ?", id).Where("tipe_transaksi = ?", "penjualan").Where("status = ?", "dibayar").Find(&jual)
 	if tx.Error != nil {
 		if errors.Is(tx.Error, gorm.ErrInvalidData) {
 			return client.Core{}, nil
