@@ -146,7 +146,8 @@ func (h *JunkHandler) PutJunkStation(c echo.Context) error {
 }
 
 func (h *JunkHandler) PutKemitraan(c echo.Context) error {
-	row, err := h.JunkInterface.PutKemitraan(helper.ParamInt(c, "id"))
+	status := c.QueryParam("status_kemitraan")
+	row, err := h.JunkInterface.PutKemitraan(helper.ParamInt(c, "id"), status)
 	if err != nil || row == 0 {
 		return c.JSON(400, helper.FailedResponseHelper("failed to update kemitraan"))
 	}

@@ -189,7 +189,7 @@ func (r *PaymentRepo) UpdateTransaksi(PaymentData payment.Core) error {
 				return tx.Error
 			}
 		}
-
+		return nil
 	}
 
 	tx := r.DB.Model(&TransaksiClient{}).Where("kode_transaksi = ?", PaymentData.KodeTransaksi).Update("status", PaymentData.StatusTransaksi)
