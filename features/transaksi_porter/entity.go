@@ -5,7 +5,7 @@ type Core struct {
 	PorterID              uint
 	TipeTransaksi         string
 	Status                string
-	GrandTotal            int64
+	GrandTotal            float64
 	StartDate             string
 	EndDate               string
 	DetailTransaksiPorter []DetailTransaksiPorter

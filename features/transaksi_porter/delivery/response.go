@@ -3,10 +3,10 @@ package delivery
 import transaksiporter "rozhok/features/transaksi_porter"
 
 type Response struct {
-	IdTransaksi   uint   `json:"id_transaksi"`
-	TipeTransaksi string `json:"tipe_transaksi"`
-	Status        string `json:"status"`
-	GrandTotal    int64  `json:"grand_total"`
+	IdTransaksi   uint    `json:"id_transaksi"`
+	TipeTransaksi string  `json:"tipe_transaksi"`
+	Status        string  `json:"status"`
+	GrandTotal    float64 `json:"grand_total"`
 
 	Client      Client        `json:"client"`
 	BarangRosok []BarangRosok `json:"barang_rosok"`
