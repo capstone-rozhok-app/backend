@@ -81,7 +81,7 @@ func (deliv *Delivery) GetClient(c echo.Context) error {
 
 	result, err := deliv.clientUsecase.GetClient(idUser)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("Failed to get data"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper(err.Error()))
 	}
 
 	return c.JSON(http.StatusOK, helper.SuccessDataResponseHelper("Succes get data", fromCore(result)))
