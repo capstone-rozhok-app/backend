@@ -12,7 +12,7 @@ type TransaksiPorter struct {
 	TransaksiClientID uint
 	ClientID          uint
 	TipeTransaksi     string
-	GrandTotal        int64
+	GrandTotal        float64
 	Status            string
 
 	UserClient            User `gorm:"foreignKey:ClientID"`
@@ -74,16 +74,26 @@ type TransaksiClient struct {
 	TagihanID     uint
 	Kurir         string
 	TipeTransaksi string
-	GrandTotal    int64
+	GrandTotal    float64
 	Status        string
+}
+
+type TransaksiClientDetail struct {
+	gorm.Model
+	TransaksiClientID uint
+	KategoriID        uint
+	ProdukID          uint
+	Berat             int64
+	Qty               uint
+	Subtotal          int64
 }
 
 type LogBonus struct {
 	gorm.Model
 	PorterID   uint
 	ClientID   uint
-	Bonus      int64
-	BonusHarga int64
+	TotalBerat int64
+	BonusHarga float64
 }
 
 func FromCore(transaksiPorterCore transaksiporter.Core) TransaksiPorter {
@@ -91,7 +101,7 @@ func FromCore(transaksiPorterCore transaksiporter.Core) TransaksiPorter {
 		ClientID:      transaksiPorterCore.Client.ID,
 		PorterID:      transaksiPorterCore.PorterID,
 		TipeTransaksi: transaksiPorterCore.TipeTransaksi,
-		GrandTotal:    transaksiPorterCore.GrandTotal,
+		GrandTotal:    float64(transaksiPorterCore.GrandTotal),
 		Status:        transaksiPorterCore.Status,
 	}
 	transaksiPorterModel.ID = transaksiPorterCore.ID

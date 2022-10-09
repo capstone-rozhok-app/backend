@@ -117,7 +117,7 @@ func (deliv *TransaksiPorter) PutTransaksiPembelian(c echo.Context) error {
 	}
 
 	if row < 1 {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("failed to update data"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponseHelper("failed affected rows"))
 	}
 
 	return c.JSON(http.StatusOK, helper.SuccessResponseHelper("success update data"))

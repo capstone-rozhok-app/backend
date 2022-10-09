@@ -80,7 +80,7 @@ type TransaksiClientDetail struct {
 	Qty               uint
 	Subtotal          int64
 
-	Produk        Produk
+	Produk        Produk        `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:KategoriID"`
 	KategoriRosok KategoriRosok `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:KategoriID"`
 }
 
