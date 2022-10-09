@@ -24,11 +24,11 @@ func (r *TransaksiJunkStationRepo) GetAll(TransaksiJunkStationCore transaksijunk
 	tx := r.DB.Model(&TransaksiJunkStation{}).Where("user_id = ?", TransaksiJunkStationCore.UserID).Preload("TransaksiJunkStationDetail.KategoriRosok")
 
 	if TransaksiJunkStationCore.StartDate != "" {
-		tx.Where("created_at >=", TransaksiJunkStationCore.StartDate)
+		tx.Where("created_at >= ?", TransaksiJunkStationCore.StartDate)
 	}
 
 	if TransaksiJunkStationCore.EndDate != "" {
-		tx.Where("created_at <=", TransaksiJunkStationCore.EndDate)
+		tx.Where("created_at <= ?", TransaksiJunkStationCore.EndDate)
 	}
 
 	tx.Find(&transaksiModelList)
