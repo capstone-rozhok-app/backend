@@ -28,6 +28,7 @@ func (deliv *TransaksiPorter) GetAll(c echo.Context) error {
 	startDate := c.QueryParam("start_date")
 	endDate := c.QueryParam("end_date")
 	tipeTransaksi := c.QueryParam("type_transaction")
+	Status := c.QueryParam("status")
 	idPorter, _, _ := middlewares.ExtractToken(c)
 
 	var TransaksiPorterCore transaksiporter.Core
@@ -35,6 +36,7 @@ func (deliv *TransaksiPorter) GetAll(c echo.Context) error {
 	TransaksiPorterCore.StartDate = startDate
 	TransaksiPorterCore.EndDate = endDate
 	TransaksiPorterCore.TipeTransaksi = tipeTransaksi
+	TransaksiPorterCore.Status = Status
 	TransaksiPorterCore.PorterID = uint(idPorter)
 
 	transaksiList, err := deliv.Usecase.GetAll(TransaksiPorterCore)
